@@ -25,7 +25,7 @@ Navigate and Copy paste the config files to home dir (/home/user/)
   cd dotfiles && cp .zshrc ~/.zshrc   
 ```
 
-TO-DO: Add symlink shortcut files at default file locations to reduce redundancy
+**TO-DO:** Add symlink shortcut files at default file locations to reduce redundancy
 
 ### List of files  
 
