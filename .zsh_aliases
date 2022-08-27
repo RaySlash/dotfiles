@@ -1,0 +1,5 @@
+alias ls="exa --icons"
+alias vim="helix"
+alias gc="git clone"
+alias gl="git log"
+alias kill="pkill"
