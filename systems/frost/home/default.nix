@@ -18,7 +18,11 @@
     vesktop
   ];
 
-  custom.hyprland-addons.enable = true;
+  custom = {
+    hyprland-addons.enable = true;
+    neovide.enable = true;
+    # emacs-addons.enable = true;
+  };
 
   programs = {
     obs-studio = {

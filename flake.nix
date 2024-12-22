@@ -102,6 +102,9 @@
 
     # Applications
     # wezterm.url = "github:wez/wezterm?dir=nix";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+    };
     firefox-nightly = {
       url = "github:nix-community/flake-firefox-nightly";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

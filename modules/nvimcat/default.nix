@@ -93,7 +93,7 @@
         statuscol-nvim
         nvim-treesitter-context
         nvim-colorizer-lua
-        neo-tree-nvim
+        oil-nvim
       ];
       deps = with pkgs.vimPlugins; [
         repeat
@@ -117,6 +117,7 @@
         nvim-ts-context-commentstring
         nvim-unception
         which-key-nvim
+        hardtime-nvim
       ];
     };
 
