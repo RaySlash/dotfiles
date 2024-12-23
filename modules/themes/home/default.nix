@@ -26,12 +26,8 @@ in {
         size = 12;
       };
       theme = {
-        name = "Catppuccin-Mocha-Standard-Lavender-Dark";
-        package = pkgs.catppuccin-gtk.override {
-          accents = ["lavender"];
-          size = "standard";
-          variant = "mocha";
-        };
+        name = "Kanagawa-BL";
+        package = pkgs.kanagawa-gtk-theme;
       };
     };
 
