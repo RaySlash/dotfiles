@@ -42,11 +42,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1734801033,
-        "narHash": "sha256-CUA7hFEseT4lUdxHf1n9b2fNgPYCLvpuZ8x02UrC63o=",
+        "lastModified": 1734858647,
+        "narHash": "sha256-aNjb0mYepYrGQaXxOvZbV2O7pDJr6Vh9Ct7qmWtmufg=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "1d3ff271d875b7bfacafbc1f4a5dff7ce54ef95d",
+        "rev": "f1941db6f24f6a1ca138b373dd7c25ffd48530c3",
         "type": "github"
       },
       "original": {
@@ -66,11 +66,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1734787224,
-        "narHash": "sha256-j6ORpmRbPk9lE/XkI9QdNP5qjz1cg9B8t7+D8j92eSw=",
+        "lastModified": 1734830215,
+        "narHash": "sha256-TPNhPVN64RYbUbpsNtzJGuqKaH/L5XWGknNFkT7wlqc=",
         "owner": "nix-community",
         "repo": "flake-firefox-nightly",
-        "rev": "d442478b1c0e0d89dad9072e75d593c061554c04",
+        "rev": "c4f96d92f6074bae9531a022b25b02f2fffbe214",
         "type": "github"
       },
       "original": {
@@ -241,11 +241,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1734425854,
-        "narHash": "sha256-nzE5UbJ41aPEKf8R2ZFYtLkqPmF7EIUbNEdHMBLg0Ig=",
+        "lastModified": 1734797603,
+        "narHash": "sha256-ulZN7ps8nBV31SE+dwkDvKIzvN6hroRY8sYOT0w+E28=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "0ddd26d0925f618c3a5d85a4fa5eb1e23a09491d",
+        "rev": "f0f0dc4920a903c3e08f5bdb9246bb572fcae498",
         "type": "github"
       },
       "original": {
@@ -319,6 +319,22 @@
         "type": "github"
       }
     },
+    "kanagawa-yazi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1732668557,
+        "narHash": "sha256-3hqNPyzHjRce2HaCT27J2hzP0mqH1JMwI3+YRyUL5+s=",
+        "owner": "marcosvnmelo",
+        "repo": "kanagawa-dragon.yazi",
+        "rev": "2ddff30cc00b095916aec7da5baa5f02bb8923f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "marcosvnmelo",
+        "repo": "kanagawa-dragon.yazi",
+        "type": "github"
+      }
+    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -367,11 +383,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1734740039,
-        "narHash": "sha256-hXt72ZmJeu7gv3cCIEDwY892xe0U9bin6LIXwjXlQ7U=",
+        "lastModified": 1734826015,
+        "narHash": "sha256-zWVO1JQKqaH6i2zj9BiZzwuixb6GM0k+UvzHNQtFfcg=",
         "owner": "nix-community",
         "repo": "neovim-nightly-overlay",
-        "rev": "57e5021f82590f4c6ac0a220ac8787bc28e0a94d",
+        "rev": "9b76a3d348f8687f1d863fe7db722fbdff618df0",
         "type": "github"
       },
       "original": {
@@ -383,11 +399,11 @@
     "neovim-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1734709720,
-        "narHash": "sha256-isblUJ6somE7siX9YVZuy6FNLJTBtkgK1shmEqrm7dI=",
+        "lastModified": 1734793318,
+        "narHash": "sha256-33cvzFskIECPyDBmwwegyuQE+ifc7sTCqmlS6hOnun8=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "e1c2179dd93ed2cd787b1cd016606b1901a1acfe",
+        "rev": "fd05c7f19d942edce39a2c99b5c064b71e66bc31",
         "type": "github"
       },
       "original": {
@@ -403,11 +419,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1734234111,
-        "narHash": "sha256-icEMqBt4HtGH52PU5FHidgBrNJvOfXH6VQKNtnD1aw8=",
+        "lastModified": 1734838217,
+        "narHash": "sha256-zvMLS8BGn+kMG7tLLT3PJ67/S9yqZ9B7V8hKBa9cRRY=",
         "owner": "Mic92",
         "repo": "nix-index-database",
-        "rev": "311d6cf3ad3f56cb051ffab1f480b2909b3f754d",
+        "rev": "d583b2d142f0428313df099f4a2dcf2a0496aa78",
         "type": "github"
       },
       "original": {
@@ -433,11 +449,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1734352517,
-        "narHash": "sha256-mfv+J/vO4nqmIOlq8Y1rRW8hVsGH3M+I2ESMjhuebDs=",
+        "lastModified": 1734862644,
+        "narHash": "sha256-04xesW7HITdF5WUmNM39WD4tkEERk3Ez2W1nNvdIvIw=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "b12e314726a4226298fe82776b4baeaa7bcf3dcd",
+        "rev": "e8516a23524cc9083f5a02a8d64d14770e4c7c09",
         "type": "github"
       },
       "original": {
@@ -448,11 +464,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1734424634,
-        "narHash": "sha256-cHar1vqHOOyC7f1+tVycPoWTfKIaqkoe1Q6TnKzuti4=",
+        "lastModified": 1734649271,
+        "narHash": "sha256-4EVBRhOjMDuGtMaofAIqzJbg4Ql7Ai0PSeuVZTHjyKQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d3c42f187194c26d9f0309a8ecc469d6c878ce33",
+        "rev": "d70bd19e0a38ad4790d3913bf08fcbfc9eeca507",
         "type": "github"
       },
       "original": {
@@ -495,11 +511,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1734424634,
-        "narHash": "sha256-cHar1vqHOOyC7f1+tVycPoWTfKIaqkoe1Q6TnKzuti4=",
+        "lastModified": 1734649271,
+        "narHash": "sha256-4EVBRhOjMDuGtMaofAIqzJbg4Ql7Ai0PSeuVZTHjyKQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d3c42f187194c26d9f0309a8ecc469d6c878ce33",
+        "rev": "d70bd19e0a38ad4790d3913bf08fcbfc9eeca507",
         "type": "github"
       },
       "original": {
@@ -534,11 +550,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1734824825,
-        "narHash": "sha256-zql22rZpth0P+Gvx66r3NSpGekF8ITLURcqCdN5rz3U=",
+        "lastModified": 1734863800,
+        "narHash": "sha256-VsBC5M12WlJJ4kYI2ZeYW/xd1tvoRZSwGQgXjkOcqpE=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "c49cb9a301da03f51c3bb32a86d96ec2d619b750",
+        "rev": "45ac6a78988950c729623b6b97d9c680858d114f",
         "type": "github"
       },
       "original": {
@@ -570,6 +586,7 @@
         "firefox-nightly": "firefox-nightly",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
+        "kanagawa-yazi": "kanagawa-yazi",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-index-database": "nix-index-database",
         "nixCats": "nixCats",

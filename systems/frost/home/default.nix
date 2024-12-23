@@ -20,7 +20,7 @@
 
   custom = {
     hyprland-addons.enable = true;
-    neovide.enable = true;
+    # neovide.enable = true;
     # emacs-addons.enable = true;
   };
 

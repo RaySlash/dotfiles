@@ -105,6 +105,10 @@
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };
+    kanagawa-yazi = {
+      url = "github:marcosvnmelo/kanagawa-dragon.yazi";
+      flake = false;
+    };
     firefox-nightly = {
       url = "github:nix-community/flake-firefox-nightly";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

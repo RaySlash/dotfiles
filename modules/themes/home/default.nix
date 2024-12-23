@@ -13,7 +13,7 @@ in {
     gtk = {
       enable = true;
       cursorTheme = {
-        name = "macOS-Monterey-White";
+        name = "macOS-White";
         package = pkgs.apple-cursor;
         size = 32;
       };
@@ -42,12 +42,12 @@ in {
           enable = true;
           defaultCursor = "X_cursor";
         };
-        name = "macOS-Monterey-White";
+        name = "macOS-White";
         package = pkgs.apple-cursor;
         size = 32;
       };
 
-      packages = with pkgs; [papirus-icon-theme catppuccin-gtk apple-cursor];
+      packages = with pkgs; [papirus-icon-theme];
     };
   };
 }

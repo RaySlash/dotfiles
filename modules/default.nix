@@ -3,6 +3,7 @@
 in {
   osModules = {
     emacs = import ./emacs/module.nix;
+    yazi = import ./yazi/module.nix;
     hyprland-custom = import ./hyprland/module.nix;
     nixcats = nvimcat.nixosModules.default;
     nix-essentials = import ./nix/module.nix;

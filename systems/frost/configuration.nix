@@ -66,12 +66,12 @@
       preferences = {"widget.use-xdg-desktop-portal.file-picker" = 1;};
     };
     kdeconnect.enable = true;
-    yazi.enable = true;
     nix-ld.enable = true;
   };
 
   custom = {
     hyprland.enable = true;
+    yazi.enable = true;
     # emacs.enable = true;
   };
 
