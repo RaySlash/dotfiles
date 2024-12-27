@@ -33,7 +33,7 @@ local function preview_location_callback(_, result)
 	end
 	local buf, _ = vim.lsp.util.preview_location(result[1])
 	if buf then
-		local cur_buf = vim.api.nvim_get_current_buf()
+		local cur_buf = api.nvim_get_current_buf()
 		vim.bo[buf].filetype = vim.bo[cur_buf].filetype
 	end
 end
@@ -49,15 +49,15 @@ local function peek_type_definition()
 end
 
 --- Don't create a comment string when hitting <Enter> on a comment line
-vim.api.nvim_create_autocmd("BufEnter", {
-	group = vim.api.nvim_create_augroup("DisableNewLineAutoCommentString", {}),
+api.nvim_create_autocmd("BufEnter", {
+	group = api.nvim_create_augroup("DisableNewLineAutoCommentString", {}),
 	callback = function()
 		vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
 	end,
 })
 
-vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+api.nvim_create_autocmd("LspAttach", {
+	group = api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
 		local bufnr = ev.buf
 		local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 		local group = api.nvim_create_augroup(string.format("lsp-%s-%s", bufnr, client.id), {})
 		if client.server_capabilities.codeLensProvider then
-			vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePost", "TextChanged" }, {
+			api.nvim_create_autocmd({ "InsertLeave", "BufWritePost", "TextChanged" }, {
 				group = group,
 				callback = function()
 					vim.lsp.codelens.refresh({ bufnr = bufnr })
@@ -124,17 +124,28 @@ api.nvim_create_autocmd("BufWritePost", {
 	group = api.nvim_create_augroup("__formatter__", { clear = true }),
 	callback = function()
 		vim.cmd([[Format]])
-		vim.cmd("checktime")
+		-- vim.cmd("checktime")
 	end,
 })
 
--- Check and reload any externally changed files
--- api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
--- 	callback = function()
--- 		vim.cmd("checktime")
--- 	end,
--- })
+-- Disable file change warnings
+api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
+	pattern = "*",
+	callback = function()
+		if not vim.bo.modified then
+			-- Check for external changes without showing the warning
+			vim.cmd("silent! checktime")
+		end
+	end,
+})
 
+-- Optional: Add a custom message instead of the popup
+api.nvim_create_autocmd("FileChangedShellPost", {
+	pattern = "*",
+	callback = function()
+		api.nvim_echo({ { "File reloaded due to external changes.", "WarningMsg" } }, false, {})
+	end,
+})
 -- Toggle between relative/absolute line numbers
 -- Show relative line numbers in the current buffer,
 -- absolute line numbers in inactive buffers
@@ -143,7 +154,7 @@ api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeav
 	pattern = "*",
 	group = numbertoggle,
 	callback = function()
-		if vim.o.nu and vim.api.nvim_get_mode().mode ~= "i" then
+		if vim.o.nu and api.nvim_get_mode().mode ~= "i" then
 			vim.opt.relativenumber = true
 		end
 	end,

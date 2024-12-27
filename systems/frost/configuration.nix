@@ -58,15 +58,14 @@
   };
 
   programs = {
-    java.enable = true;
+    # java.enable = true;
+    kdeconnect.enable = true;
     dconf.enable = true;
     firefox = {
       enable = true;
       package = inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin;
       preferences = {"widget.use-xdg-desktop-portal.file-picker" = 1;};
     };
-    kdeconnect.enable = true;
-    nix-ld.enable = true;
   };
 
   custom = {

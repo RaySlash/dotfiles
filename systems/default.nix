@@ -1,5 +1,5 @@
 {inputs, ...}: let
-  inherit (import ../utils/builders.nix {inherit inputs;}) mkNixos;
+  inherit (import ../utils/lib.nix {inherit inputs;}) mkNixos;
 in {
   frost = mkNixos {
     modules = [./frost/configuration.nix];
