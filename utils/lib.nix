@@ -1,11 +1,11 @@
-{inputs, ...}: {
+{inputs, ...}: let
+  inherit (inputs.nixpkgs.lib) nixosSystem;
+in {
   mkNixos = args: let
     inherit (builtins) attrNames attrValues elem;
-    # moduleSet: Function that takes inputs as args and return a
-    # set that has all custom osModules, homeModules, pkgs.
     moduleSet = import ../modules {inherit inputs;};
   in
-    inputs.nixpkgs.lib.nixosSystem {
+    nixosSystem {
       specialArgs = {inherit inputs;};
       modules =
         args.modules

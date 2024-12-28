@@ -61,7 +61,8 @@
 
     startupPlugins = {
       git = [
-        (mkNvimPlugin inputs.plugins-neogit "neogit")
+        # (mkNvimPlugin inputs.plugins-neogit "neogit")
+        pkgs.vimPlugins.neogit
       ];
       lsp = with pkgs.vimPlugins; [
         nvim-lspconfig

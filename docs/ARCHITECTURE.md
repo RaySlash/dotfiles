@@ -5,6 +5,7 @@
 - [Overview](#overview)
   - [System Builders](#builders)
   - [Modules](#modules)
+  - [Common Configurations](#common-configurations)
 
 ## Overview
 
@@ -75,7 +76,7 @@ for `nixos` are loaded as `moduleSet.osModules`.
 
 > By default, all modules are loaded which are defined in `modules/default.nix`.
 
-### Common Configurations
+### Common-Configurations
 
 There are common configurations that need to be enabled for every system. These
 configuration are loaded by default and live at `systems/common/`. These configurations

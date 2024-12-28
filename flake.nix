@@ -118,9 +118,5 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    plugins-neogit = {
-      url = "github:NeogitOrg/neogit";
-      flake = false;
-    };
   };
 }
