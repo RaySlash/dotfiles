@@ -147,7 +147,6 @@ in {
       };
       eww = {
         enable = true;
-        package = pkgs.unstable.eww;
         configDir = ./eww;
       };
       fzf = {
@@ -169,15 +168,12 @@ in {
         libva-utils
         fuseiso
         gsettings-desktop-schemas
-        qt5.qtwayland
-        libsForQt5.qt5.qtgraphicaleffects
-        libsForQt5.polkit-kde-agent
-        qt6.qmake
-        qt6.qtwayland
         pwvucontrol
 
+        inputs.meteorbom.packages.${pkgs.system}.default
         #eww dependencies
         jq
+        lm_sensors
         python3
         socat
       ];

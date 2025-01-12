@@ -10,6 +10,9 @@ local settings = {
 	c = {
 		require("formatter.filetypes.c").clangformat,
 	},
+	dart = {
+		require("formatter.filetypes.dart").dartformat,
+	},
 	cpp = {
 		require("formatter.filetypes.cpp").clangformat,
 	},
@@ -32,7 +35,7 @@ local settings = {
 				},
 				stdin = false,
 				cwd = vim.fn.getcwd(),
-        async = true,
+				async = true,
 			}
 		end,
 	},
@@ -99,15 +102,15 @@ local settings = {
 		-- "formatter.filetypes.any" defines default configurations for any
 		-- filetype
 		require("formatter.filetypes.any").remove_trailing_whitespace,
-    -- Format using lsp if not preconfigured
-    function()
-      -- Ignore already configured types.
-      local defined_types = require("formatter.config").values.filetype
-      if defined_types[vim.bo.filetype] ~= nil then
-        return nil
-      end
-      vim.lsp.buf.format({ async = true })
-    end,
+		-- Format using lsp if not preconfigured
+		function()
+			-- Ignore already configured types.
+			local defined_types = require("formatter.config").values.filetype
+			if defined_types[vim.bo.filetype] ~= nil then
+				return nil
+			end
+			vim.lsp.buf.format({ async = true })
+		end,
 		-- Remove trailing whitespace without 'sed'
 		-- require("formatter.filetypes.any").substitute_trailing_whitespace,
 	},

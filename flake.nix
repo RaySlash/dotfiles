@@ -102,6 +102,10 @@
 
     # Applications
     # wezterm.url = "github:wez/wezterm?dir=nix";
+    meteorbom = {
+      url = "git+ssh://git@github.com/rayslash/meteorbom?ref=master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
     };

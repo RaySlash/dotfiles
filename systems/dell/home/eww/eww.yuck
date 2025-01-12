@@ -48,8 +48,7 @@
 (defwidget launcher []
   (box :orientation "h"
     :class "launcher"
-  (button :onclick 'fuzzel --icon-theme="Papirus-Dark" -f="AtkinsonHyperlegible" --background-color="1d2021ee" --text-color="f9f5d7ff" --selection-color="9d0006ee" --selection-text-color="f9f5d7ff" --selection-match-color="000000ee" --border-color="cc241dee" --border-radius="15px" -x 20 -y 20 -P 30 --line-height="30" --show-actions'
-  " ")))
+  (button :onclick 'fuzzel' " ")))
 
 (defwidget title []
   (box :orientation "h"

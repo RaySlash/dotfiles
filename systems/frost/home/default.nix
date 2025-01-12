@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     htop
+    obsidian
     fd
     ripgrep
     lazygit

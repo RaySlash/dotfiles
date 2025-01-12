@@ -10,6 +10,7 @@ lspconfig.cssls.setup({
 	css = { validate = true },
 	scss = { validate = true },
 })
+lspconfig.dartls.setup({})
 lspconfig.elmls.setup({})
 lspconfig.html.setup({})
 lspconfig.hls.setup({})

@@ -1,11 +1,11 @@
 {inputs, ...}: let
-  inherit (inputs.nixpkgs.lib) nixosSystem;
+  lib = inputs.nixpkgs.lib;
 in {
   mkNixos = args: let
     inherit (builtins) attrNames attrValues elem;
     moduleSet = import ../modules {inherit inputs;};
   in
-    nixosSystem {
+    lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules =
         args.modules
@@ -15,7 +15,9 @@ in {
           inputs.home-manager.nixosModules.home-manager
           {
             config.nixpkgs = {
-              overlays = [inputs.self.overlays.default inputs.nurpkgs.overlays.default inputs.emacs-overlay.overlays.default];
+              overlays = [inputs.self.overlays.default 
+              inputs.nurpkgs.overlays.default 
+              inputs.emacs-overlay.overlays.default];
               config = {allowUnfree = true;};
             };
           }
@@ -33,7 +35,7 @@ in {
                   config,
                   ...
                 }:
-                  inputs.nixpkgs.lib.recursiveUpdate
+                  lib.recursiveUpdate
                   (import args.home {inherit inputs pkgs config;})
                   (import ../systems/common/hm.nix {inherit inputs pkgs config;});
 

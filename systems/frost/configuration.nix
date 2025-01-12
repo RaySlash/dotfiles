@@ -19,7 +19,10 @@
     };
   };
 
-  hardware.graphics.enable32Bit = true;
+  hardware = {
+    xone.enable = true;
+    graphics.enable32Bit = true;
+  };
 
   services = {
     udev.packages = with pkgs; [openrgb-with-all-plugins];

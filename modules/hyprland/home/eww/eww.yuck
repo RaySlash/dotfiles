@@ -1,6 +1,10 @@
-(defpoll spercent :interval "2s" "wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
+(defpoll spercent :interval "1s" "wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
+(defpoll cputemp :interval "5s" `echo "$(sensors -j | jq -r '."k10temp-pci-00c3".Tctl.temp1_input' | head -c4)C"`)
+(defpoll gputemp :interval "5s" `echo "$(sensors -j | jq -r '."amdgpu-pci-2d00".edge.temp1_input' | head -c4)C"`)
+(defpoll totalmem :interval "0" `echo $(awk '/MemTotal/ {gsub(/[ \t]+/, "", $2); print $2/1024/1024}' /proc/meminfo | head -c4)GB`)
+(defpoll usedmem :interval "5s" `echo $(awk '/MemTotal/ {total=$2} /MemFree/ {free=$2} /Buffers/ {buffers=$2} /Cached/ {cached=$2} END {used=(total-free-buffers-cached)/1024/1024; print used}' /proc/meminfo | head -c4)GB`)
 (defpoll getinitialvolume :interval "0" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -oP '\\d+%' | tr -d '%'`)
-(defpoll mpercent :interval "2s" "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
+(defpoll mpercent :interval "1s" "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
 (defpoll NETWORK :interval "2s" `nmcli c | head -n2 | tail -n +2 | awk -F'  +' '{printf "{\\"name\\": \\"%s\\", \\"type\\": \\"%s\\", \\"interface\\": \\"%s\\"}", $1, $3, $4}'`)
 (defpoll IP :interval "20s" `ip addr show \$(nmcli c | head -n2 | tail -n +2 | awk -F'  +' '{print $4}') | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}'`)
 (defpoll WIFI_QUALITY :interval "10s" `nmcli dev wifi | grep "*" | awk -F'  +' '{print $7}'`)
@@ -22,50 +26,50 @@
   :namespace "bar"
 (fullbar))
 
-(defwindow menu
-  :monitor 0
-  :geometry (geometry :x "85%"
-                      :y "0.5%")
-  :stacking "ov"
-  :exclusive true
-  :focusable true
-  :namespace "menu"
-  (menu))
-
-(defwidget menu []
-  (box :orientation "v"
-       :class "powercontainer"
-       :space-evenly false
-       (statusbar)
-       (powerbar)))
-
-(defwidget statusbar []
-  (box :class "statusbar"
-       :orientation "h"
-       :space-evenly true
-    (button :class "closebtn"
-            :onclick "eww close menu" " ")
-    (box)
-    (color-button :class "colorbtn"
-                  " ")))
-
-
-(defwidget powerbar []
-  (box :class "powerbar"
-       :orientation "v"
-       :space-evenly false
-    (eventbox :class "powerbar-item"
-              :onclick "systemctl poweroff"
-              "󰐥 Shutdown")
-    (eventbox :class "powerbar-item"
-              :onclick "systemctl reboot"
-              "󰜉 Restart")
-    (eventbox :class "powerbar-item"
-              :onclick "systemctl soft-reboot"
-              "󰍃 LogOut")
-    (eventbox :class "powerbar-item"
-              :onclick "systemctl suspend"
-              "󰒲 Sleep")))
+; (defwindow menu
+;   :monitor 0
+;   :geometry (geometry :x "85%"
+;                       :y "0.5%")
+;   :stacking "ov"
+;   :exclusive true
+;   :focusable true
+;   :namespace "menu"
+;   (menu))
+;
+; (defwidget menu []
+;   (box :orientation "v"
+;        :class "powercontainer"
+;        :space-evenly false
+;        (statusbar)
+;        (powerbar)))
+;
+; (defwidget statusbar []
+;   (box :class "statusbar"
+;        :orientation "h"
+;        :space-evenly true
+;     (button :class "closebtn"
+;             :onclick "eww close menu" " ")
+;     (box)
+;     (color-button :class "colorbtn"
+;                   " ")))
+;
+;
+; (defwidget powerbar []
+;   (box :class "powerbar"
+;        :orientation "v"
+;        :space-evenly false
+;     (eventbox :class "powerbar-item"
+;               :onclick "systemctl poweroff"
+;               "󰐥 Shutdown")
+;     (eventbox :class "powerbar-item"
+;               :onclick "systemctl reboot"
+;               "󰜉 Restart")
+;     (eventbox :class "powerbar-item"
+;               :onclick "systemctl soft-reboot"
+;               "󰍃 LogOut")
+;     (eventbox :class "powerbar-item"
+;               :onclick "systemctl suspend"
+;               "󰒲 Sleep")))
 
 (defwidget fullbar []
   (box :orientation "h"
@@ -95,8 +99,7 @@
 (defwidget launcher []
   (box :orientation "h"
     :class "launcher"
-  (button :onclick 'fuzzel --icon-theme="Papirus-Dark" -f="AtkinsonHyperlegible" --background-color="1d2021ee" --text-color="f9f5d7ff" --selection-color="9d0006ee" --selection-text-color="f9f5d7ff" --selection-match-color="000000ee" --border-color="cc241dee" --border-radius="15px" -x 20 -y 20 -P 30 --line-height="30" --show-actions &'
-  " ")))
+  (button :onclick 'fuzzel &' " ")))
 
 (defwidget title []
   (box :orientation "h"
@@ -124,10 +127,25 @@
   (box :class "customicons"
        :orientation "h"
        :space-evenly false
-    (tooltip :class "tooltip" "  ${spercent} |  ${mpercent}" (eventbox :class "tray-item" " " ))
-    (tooltip :class "tooltip" "  ${round(EWW_RAM.used_mem_perc, 0)}%" (eventbox :class "tray-item" " " ))
-    (tooltip :class "tooltip" "  ${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%" (eventbox :class "tray-item" " "))
-    (button :class "tray-item" :onclick "eww open menu" "")))
+       (audioinfo)
+       (tempinfo)))
+    ; (tooltip :class "tooltip" "  ${round(EWW_RAM.used_mem_perc, 0)}%" (eventbox :class "tray-item" " " ))
+    ; (tooltip :class "tooltip" "  ${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%" (eventbox :class "tray-item" " "))
+    ; (button :class "tray-item" :onclick "eww open menu" "")
+
+(defwidget audioinfo []
+  (box :class "audioinfo"
+       :orientation "h"
+       :space-evenly false
+       (label :class "vol" :text "   ${spercent}")
+       (label :class "mic" :text " ${mpercent}")))
+
+(defwidget tempinfo []
+  (box :class "tempinfo"
+       :orientation "h"
+       :space-evenly false
+       (label :class "cputemp" :text "   ${cputemp}")
+       (label :class "gputemp" :text "   ${gputemp}")))
 
 (defwidget tray []
 (box :class "sidestuff" :orientation "h" :space-evenly false :spacing  20

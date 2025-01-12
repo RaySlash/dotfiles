@@ -50,6 +50,7 @@
         vscode-langservers-extracted
         tailwindcss-language-server
         elmPackages.elm-language-server
+        dart
         nodePackages.typescript-language-server
         zls
 
