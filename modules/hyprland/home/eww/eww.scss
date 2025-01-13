@@ -36,6 +36,12 @@ $color_nix: #7eb2df;
   background-color: $color_bg-secondary;
 }
 
+.weatherinfo {
+  background-color: $color_bg-secondary;
+  padding: 0 1rem;
+  border-radius: 1rem;
+}
+
 .workspaces-widget {
   padding: 0 0.5rem;
   border-radius: 1rem;

@@ -1,5 +1,7 @@
 (defvar temp_shown false)
 
+(defpoll weather_desc :interval "1h" "meteorbom -p 4103 bar | awk '{print $1}'")
+(defpoll weather_temp :interval "1h" "meteorbom -p 4103 bar | awk '{print $2}'")
 (defpoll net_name :interval "5s" "nmcli | grep ^wlo | sed 's/\ connected\ to\ //g' | cut -d ':' -f2")
 (defpoll spercent :interval "1s" "wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
 (defpoll mpercent :interval "1s" "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | sed 's/Volume: //;s/0.00/0/;s/0\\.//;s/\\.//;s/$/%/;s/.* //;s/]%/]/'")
@@ -34,7 +36,8 @@
        :space-evenly false
        :spacing 10
        (launcher)
-       (workspaces)))
+       (workspaces)
+       (weatherinfo)))
 
 (defwidget rightbar []
   (box :orientation "h"
@@ -61,6 +64,18 @@
        :visible {net_name == "" ? false : true}
        (label :class "icon"
               :text "󰈀   ${net_name}")))
+
+(defwidget weatherinfo []
+  (box :class "weatherinfo"
+       :orientation "h"
+       :space-evenly false
+       (label :class "weather-desc"
+              :text "${matches(weather_desc, "storm") ? "  " :
+              matches(weather_desc, "clear") ? "󰖨  " :
+              matches(weather_desc, "rain") ? "  " :
+              matches(weather_desc, "cloud") ? "  " : ""}")
+       (label :class "weather-temp"
+              :text "${weather_temp > -100 ? "${weather_temp}C" : ""}")))
 
 (defwidget customtray []
   (box :class "customicons"
