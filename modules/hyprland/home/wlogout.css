@@ -1,0 +1,56 @@
+* {
+    font-family: "AtkinsonHyperlegible", "IoveskaTerm Nerd Font", sans-serif;
+    background-image: none;
+    transition: 20ms;
+    box-shadow: none;
+}
+
+button {
+    color: #c5c9c5;
+    font-size: 20px;
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-size: 25%;
+    border-style: solid;
+    background-color: #393836;
+    border: 3px solid #1D1C19;
+    box-shadow: 0 4px 8px 0 #1D1C19, 0 6px 20px 0 #1D1C19;
+}
+
+button:focus,
+button:active,
+button:hover {
+    color: #c5c9c5;
+    background-color: #393836;
+    border: 3px solid #1D1C19;
+}
+
+/*
+ -----------------------------------------------------
+ Buttons
+ -----------------------------------------------------
+ */
+
+#lock {
+    margin: 10px;
+    border-radius: 20px;
+    background-image: image(url("/home/smj/dotfiles/modules/hyprland/icons/lock_white.png"));
+}
+
+#logout {
+    margin: 10px;
+    border-radius: 20px;
+    background-image: image(url("/home/smj/dotfiles/modules/hyprland/icons/logout_white.png"));
+}
+
+#shutdown {
+    margin: 10px;
+    border-radius: 20px;
+    background-image: image(url("/home/smj/dotfiles/modules/hyprland/icons/shutdown_white.png"));
+}
+
+#reboot {
+    margin: 10px;
+    border-radius: 20px;
+    background-image: image(url("/home/smj/dotfiles/modules/hyprland/icons/reboot_white.png"));
+}

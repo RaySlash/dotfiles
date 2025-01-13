@@ -79,6 +79,9 @@ in {
     };
 
     programs = {
+      wlogout = {
+        enable = true;
+      };
       fuzzel = {
         enable = true;
         settings = {
@@ -163,7 +166,6 @@ in {
         hyprpolkitagent
         wl-clipboard
         wlr-randr
-        wlogout
         wirelesstools
         grim
         slurp
