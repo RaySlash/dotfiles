@@ -19,26 +19,26 @@ $color_nix: #7eb2df;
 }
 .launcher {
   color: $color_nix;
+  background-color: $color_bg-secondary;
+  padding: 0 .5rem;
+  border-radius: 1rem;
   font-size: 1.2rem;
 }
 
 .leftbar,
 .rightbar {
   border-radius: 1rem;
-  padding: 0 1rem;
-}
-
-.tray {
-  padding: 0 1rem;
 }
 
 .systray {
   padding: 0 0.5rem;
+  border-radius: 1rem;
   background-color: $color_bg-secondary;
 }
 
-.tooltip {
+.workspaces-widget {
   padding: 0 0.5rem;
+  border-radius: 1rem;
 }
 
 .workspace-e:hover {
@@ -54,14 +54,6 @@ tooltip {
   padding: 0.3rem;
 }
 
-.tray-item {
-  padding: 0.2rem;
-}
-
-.tray-item:hover {
-  color: $color_primary;
-}
-
 .current {
   color: $color_primary;
   font-weight: 700;
@@ -72,26 +64,8 @@ tooltip {
   border-radius: 1rem;
 }
 
-.powercontainer {
-  background-color: $color_bg;
-  color: $color_fg;
-  padding: 1rem;
+.datetime {
+  background-color: $color_bg-secondary;
+  padding: 0 0.5rem;
   border-radius: 1rem;
-}
-
-.colorbtn {
-  background-color: $color_bg-secondary;
-  color: $color_fg;
-}
-
-.powerbar {
-  background-color: $color_bg-secondary;
-}
-
-.statusbar {
-  margin-bottom: 1rem;
-}
-
-.powerbar-item {
-  margin: 1rem;
 }
