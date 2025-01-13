@@ -29,18 +29,20 @@ in {
             offset = "30x50";
             origin = "top-right";
             transparency = 10;
-            frame_color = "#eceff1";
+            frame_color = "#1D1C19";
             font = "AtkinsonHyperlegible";
           };
 
           urgency_normal = {
-            background = "#37474f";
-            foreground = "#eceff1";
+            background = "#0d0c0c";
+            foreground = "#c5c9c5";
             timeout = 10;
           };
         };
-        iconTheme.name = "Papirus-Dark";
-        iconTheme.package = pkgs.papirus-icon-theme;
+        iconTheme = {
+          name = "Papirus-Dark";
+          package = pkgs.papirus-icon-theme;
+        };
       };
       kdeconnect = {
         enable = true;
