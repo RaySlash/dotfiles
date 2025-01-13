@@ -25,7 +25,7 @@ in {
         shellAliases = {
           ls = "eza --icons";
           ll = "eza --icons -l";
-          vim = "nvim";
+          ffd = "cd $(fd -t d --max-depth 4 . ~/Projects | fzf)";
           gl = "git log";
           gs = "git status";
           gc = "git commit";
