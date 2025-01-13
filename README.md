@@ -50,5 +50,5 @@ sudo nixos-install --flake .#<host>
 
 ## Images
 
-![Hyprland setup Screenshot](./ss_grim.png)
-![Hyprland Fuzzel](./ss_fuzzel_grim.png)
+![Hyprland setup Screenshot](./docs/ss_nvim.png)
+![Hyprland](./docs/ss_ff.png)
