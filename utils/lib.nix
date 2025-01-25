@@ -13,6 +13,7 @@ in {
         ++ [
           ../systems/common/os.nix
           inputs.home-manager.nixosModules.home-manager
+	  inputs.nixos-wsl.nixosModules.default
           {
             config.nixpkgs = {
               overlays = [inputs.self.overlays.default 

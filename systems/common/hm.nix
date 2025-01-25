@@ -15,10 +15,7 @@
   };
 
   custom = {
-    firefox.enable = true;
-    kitty.enable = true;
     nix-addons.enable = true;
-    themes-addons.enable = true;
     users.smj.enable = true;
   };
 

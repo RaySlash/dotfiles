@@ -5,6 +5,10 @@ in {
     modules = [./frost/configuration.nix];
     home = ./frost/home;
   };
+  wsl = mkNixos {
+    modules = [./wsl/configuration.nix];
+    home = ./wsl/home;
+  };
   rpi = mkNixos {
     modules = [./rpi/configuration.nix];
     home = ./rpi/home;

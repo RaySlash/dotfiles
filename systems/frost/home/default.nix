@@ -20,6 +20,9 @@
   ];
 
   custom = {
+    firefox.enable = true;
+    kitty.enable = true;
+    themes-addons.enable = true;
     hyprland-addons.enable = true;
     # neovide.enable = true;
     # emacs-addons.enable = true;
