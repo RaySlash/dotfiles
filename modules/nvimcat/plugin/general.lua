@@ -23,4 +23,3 @@ require("mini.surround").setup()
 require("which-key").setup({
 	preset = "helix",
 })
-require("hardtime").setup()

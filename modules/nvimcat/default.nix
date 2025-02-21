@@ -45,6 +45,7 @@
         nixd
         ccls
         rust-analyzer
+        jdt-language-server
         haskell-language-server
         lua-language-server
         vscode-langservers-extracted
@@ -119,7 +120,6 @@
         nvim-ts-context-commentstring
         nvim-unception
         which-key-nvim
-        hardtime-nvim
       ];
     };
 
@@ -147,7 +147,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = true;

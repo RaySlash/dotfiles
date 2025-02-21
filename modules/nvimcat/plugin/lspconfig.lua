@@ -19,6 +19,7 @@ lspconfig.tailwindcss.setup({})
 lspconfig.nil_ls.setup({})
 lspconfig.nixd.setup({})
 lspconfig.purescriptls.setup({})
+lspconfig.jdtls.setup({})
 lspconfig.zls.setup({})
 lspconfig.rust_analyzer.setup({
 	settings = {
