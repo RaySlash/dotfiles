@@ -12,6 +12,17 @@ in {
   options.custom.firefox = {enable = mkEnableOption "firefox";};
 
   config = mkIf cfg.enable {
+    xdg.mime = {
+      enable = true;
+      # associations.added = {
+      #   "application/pdf" = ["firefox-nightly.desktop"];
+      # };
+      # defaultApplications = {
+      #   "application/pdf" =[ "firefox-nightly.desktop"];
+      #   "image/png" = "imv";
+      # };
+    };
+
     programs.firefox = {
       enable = true;
       package = inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin;

@@ -5,6 +5,7 @@ in {
     emacs = import ./emacs/module.nix;
     yazi = import ./yazi/module.nix;
     hyprland-custom = import ./hyprland/module.nix;
+    minecraft-servers = import ./minecraft/module.nix;
     nixcats = nvimcat.nixosModules.default;
     nix-essentials = import ./nix/module.nix;
     theme-custom = import ./themes/module.nix;

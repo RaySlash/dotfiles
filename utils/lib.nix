@@ -13,12 +13,16 @@ in {
         ++ [
           ../systems/common/os.nix
           inputs.home-manager.nixosModules.home-manager
-	  inputs.nixos-wsl.nixosModules.default
+          inputs.nixos-wsl.nixosModules.default
+          inputs.nix-minecraft.nixosModules.minecraft-servers
           {
             config.nixpkgs = {
-              overlays = [inputs.self.overlays.default 
-              inputs.nurpkgs.overlays.default 
-              inputs.emacs-overlay.overlays.default];
+              overlays = [
+                inputs.self.overlays.default
+                inputs.nix-minecraft.overlay
+                inputs.nurpkgs.overlays.default
+                inputs.emacs-overlay.overlays.default
+              ];
               config = {allowUnfree = true;};
             };
           }

@@ -70,9 +70,14 @@
        :orientation "h"
        :space-evenly false
        (label :class "weather-desc"
-              :text "${matches(weather_desc, "storm") ? "  " :
-              matches(weather_desc, "clear") ? "󰖨  " :
-              matches(weather_desc, "rain") ? "  " :
+              :text "${
+              matches(weather_desc, "storm" ) ? "  " :
+              matches(weather_desc, "lightning" ) ? "  " :
+              matches(weather_desc, "clear" ) ? "󰖨  " :
+              matches(weather_desc, "sun") ? "󰖨  " :
+              matches(weather_desc, "wind" ) ? "  " :
+              matches(weather_desc, "rain" ) ? "  " :
+              matches(weather_desc, "shower") ? "  " :
               matches(weather_desc, "cloud") ? "  " : ""}")
        (label :class "weather-temp"
               :text "${weather_temp > -100 ? "${weather_temp}C" : ""}")))

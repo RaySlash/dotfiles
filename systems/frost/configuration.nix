@@ -5,11 +5,20 @@
 }: {
   imports = [./hardware-configuration.nix];
 
-  networking.hostName = "frost";
+  networking = {
+    hostName = "frost";
+    nftables.enable = true;
+    firewall = {
+      enable = false;
+      allowedTCPPorts = [25565];
+      allowedUDPPorts = [25565];
+    };
+  };
 
   boot = {
     kernelPackages = pkgs.linuxPackages_xanmod;
     kernelModules = ["i2c-dev"];
+    supportedFilesystems = ["ntfs"];
   };
   boot.loader = {
     efi.canTouchEfiVariables = true;
@@ -61,7 +70,6 @@
   };
 
   programs = {
-    # java.enable = true;
     kdeconnect.enable = true;
     dconf.enable = true;
     firefox = {
@@ -74,6 +82,7 @@
   custom = {
     hyprland.enable = true;
     yazi.enable = true;
+    minecraft-servers.enable = true;
     # emacs.enable = true;
   };
 

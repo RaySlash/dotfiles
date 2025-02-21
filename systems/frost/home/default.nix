@@ -17,6 +17,7 @@
     wineWowPackages.waylandFull
     vlc
     vesktop
+    prismlauncher
   ];
 
   custom = {
@@ -38,6 +39,10 @@
         obs-gstreamer
         obs-pipewire-audio-capture
       ];
+    };
+    java = {
+      enable = true;
+      package = pkgs.jdk23;
     };
   };
   dconf.settings = {
