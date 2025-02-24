@@ -1,20 +1,19 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    htop
+    btop
     obsidian
     fd
     ripgrep
     lazygit
     unzip
-    p7zip
     wget
     imv
     helvum
     openrgb-with-all-plugins
-    chromium
     libreoffice-fresh
     stremio
-    wineWowPackages.waylandFull
+    # wineWowPackages.waylandFull
+    virt-manager
     vlc
     vesktop
     prismlauncher
@@ -25,8 +24,6 @@
     kitty.enable = true;
     themes-addons.enable = true;
     hyprland-addons.enable = true;
-    # neovide.enable = true;
-    # emacs-addons.enable = true;
   };
 
   programs = {
@@ -39,10 +36,6 @@
         obs-gstreamer
         obs-pipewire-audio-capture
       ];
-    };
-    java = {
-      enable = true;
-      package = pkgs.jdk23;
     };
   };
   dconf.settings = {

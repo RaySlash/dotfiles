@@ -18,12 +18,12 @@
 
       imports = [
         inputs.flake-parts.flakeModules.flakeModules
-        inputs.devshell.flakeModule
       ];
 
       perSystem = {
         system,
         inputs',
+        pkgs,
         ...
       }: let
         nvimcat =
@@ -32,32 +32,17 @@
         formatter = inputs'.nixpkgs.legacyPackages.alejandra;
         packages = import ./packages/default.nix inputs'.nixpkgs.legacyPackages // nvimcat;
 
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            coreutils
+            fd
+            ripgrep
+          ];
+        };
+
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [unstable-overlay packages-overlay];
-        };
-
-        devshells.default = {
-          devshell = {
-            name = "nixos-config-shell";
-            meta.description = "Dev Environment for nixos-config";
-          };
-          commands = [
-            {
-              help = ''
-                USAGE: nix-switch [DOTFILE_DIR]#[HOSTNAME]
-                INFO: Rebuilds given host (Wrapper for nixos-rebuild)
-              '';
-              name = "nix-switch";
-              command = "sudo nixos-rebuild switch --flake";
-            }
-          ];
-          env = [
-            {
-              name = "EDITOR";
-              value = "nvim";
-            }
-          ];
         };
       };
 
@@ -91,11 +76,7 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    devshell = {
-      url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-    # sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.url = "github:Mic92/sops-nix";
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -113,10 +94,6 @@
     kanagawa-yazi = {
       url = "github:marcosvnmelo/kanagawa-dragon.yazi";
       flake = false;
-    };
-    firefox-nightly = {
-      url = "github:nix-community/flake-firefox-nightly";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";

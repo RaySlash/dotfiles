@@ -1,17 +1,13 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [./hardware-configuration.nix];
 
   networking = {
     hostName = "frost";
     nftables.enable = true;
     firewall = {
-      enable = false;
-      allowedTCPPorts = [25565];
-      allowedUDPPorts = [25565];
+      enable = true;
+      # allowedTCPPorts = [25565];
+      # allowedUDPPorts = [25565];
     };
   };
 
@@ -72,22 +68,16 @@
   programs = {
     kdeconnect.enable = true;
     dconf.enable = true;
-    firefox = {
-      enable = true;
-      package = inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin;
-      preferences = {"widget.use-xdg-desktop-portal.file-picker" = 1;};
-    };
   };
 
   custom = {
     hyprland.enable = true;
     yazi.enable = true;
     minecraft-servers.enable = true;
-    # emacs.enable = true;
   };
 
   environment = {
-    systemPackages = with pkgs; [virt-manager man-pages man-pages-posix];
+    systemPackages = with pkgs; [man-pages man-pages-posix];
   };
 
   system.stateVersion = "23.05";

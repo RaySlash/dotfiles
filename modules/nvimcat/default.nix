@@ -48,6 +48,7 @@
         jdt-language-server
         haskell-language-server
         lua-language-server
+        marksman
         vscode-langservers-extracted
         tailwindcss-language-server
         elmPackages.elm-language-server
@@ -87,6 +88,7 @@
       ];
       ui = with pkgs.vimPlugins; [
         render-markdown-nvim
+        dashboard-nvim
         dressing-nvim
         noice-nvim
         nui-nvim
@@ -128,7 +130,7 @@
     #   general = with pkgs.vimPlugins; [];
     # };
 
-    sharedLibraries = {general = with pkgs; [libgit2];};
+    sharedLibraries = {general = with pkgs; [libgit2 raylib];};
 
     environmentVariables = {general = {EDITOR = "nvim";};};
 
@@ -147,7 +149,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = true;

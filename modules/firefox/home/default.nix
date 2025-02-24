@@ -12,20 +12,9 @@ in {
   options.custom.firefox = {enable = mkEnableOption "firefox";};
 
   config = mkIf cfg.enable {
-    xdg.mime = {
-      enable = true;
-      # associations.added = {
-      #   "application/pdf" = ["firefox-nightly.desktop"];
-      # };
-      # defaultApplications = {
-      #   "application/pdf" =[ "firefox-nightly.desktop"];
-      #   "image/png" = "imv";
-      # };
-    };
-
     programs.firefox = {
       enable = true;
-      package = inputs.firefox-nightly.packages.${pkgs.system}.firefox-nightly-bin;
+      package = pkgs.firefox-bin;
       profiles.smj = {
         name = "smj";
         isDefault = true;
@@ -165,16 +154,7 @@ in {
           # SmoothFox
           "apz.overscroll.enabled" = true;
           "general.smoothScroll" = true;
-          "general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS" = 12;
-          "general.smoothScroll.msdPhysics.enabled" = true;
-          "general.smoothScroll.msdPhysics.motionBeginSpringConstant" = 600;
-          "general.smoothScroll.msdPhysics.regularSpringConstant" = 650;
-          "general.smoothScroll.msdPhysics.slowdownMinDeltaMS" = 25;
-          "general.smoothScroll.msdPhysics.slowdownMinDeltaRatio" = "2";
-          "general.smoothScroll.msdPhysics.slowdownSpringConstant" = 250;
-          "general.smoothScroll.currentVelocityWeighting" = "1";
-          "general.smoothScroll.stopDecelerationWeighting" = "1";
-          "mousewheel.default.delta_multiplier_y" = 300;
+          "mousewheel.default.delta_multiplier_y" = 275;
         };
         extensions = with pkgs.nur.repos.rycee.firefox-addons; [
           ublock-origin

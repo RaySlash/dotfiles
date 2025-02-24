@@ -13,6 +13,7 @@ in {
         ++ [
           ../systems/common/os.nix
           inputs.home-manager.nixosModules.home-manager
+          inputs.sops-nix.nixosModules.sops
           inputs.nixos-wsl.nixosModules.default
           inputs.nix-minecraft.nixosModules.minecraft-servers
           {

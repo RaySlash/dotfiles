@@ -84,3 +84,13 @@ require("noice").setup({
 		lsp_doc_border = true, -- add a border to hover docs and signature help
 	},
 })
+
+require("dashboard").setup({
+	theme = "hyper",
+	shortcut_type = "number",
+	config = {
+		shortcut = {},
+		week_header = { enable = true },
+		packages = { enable = false },
+	},
+})

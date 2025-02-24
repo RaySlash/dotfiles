@@ -22,7 +22,7 @@ in {
 
       servers = {
         fabandfun = {
-          enable = true;
+          enable = false;
           jvmOpts = "-Xms2G -Xmx12G";
           package = pkgs.fabricServers.fabric-1_21_1;
           symlinks = {
