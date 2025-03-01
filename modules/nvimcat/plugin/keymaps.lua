@@ -8,12 +8,6 @@ local fn = vim.fn
 local keymap = vim.keymap
 local diagnostic = vim.diagnostic
 
--- STOP USING ARROW KEYS
--- keymap.set('n', '<Up>', '')
--- keymap.set('n', '<Down>', '')
--- keymap.set('n', '<Left>', '')
--- keymap.set('n', '<Right>', '')
-
 -- Better navigation
 keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
@@ -28,7 +22,9 @@ keymap.set(
 	"<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
 	{ desc = "Redraw / Clear hlsearch / Diff Update" }
 )
-keymap.set("n", "<leader>ut", "<cmd>UndotreeToggle<cr>")
+if require("nixCats").cats.general.git == true then
+	keymap.set("n", "<leader>ut", "<cmd>UndotreeToggle<cr>")
+end
 
 -- Yank from current position till end of current line
 keymap.set("n", "Y", "y$", { silent = true, desc = "[Y]ank to end of line" })
@@ -202,20 +198,3 @@ local function toggle_spell_check()
 end
 
 keymap.set("n", "<leader>S", toggle_spell_check, { noremap = true, silent = true, desc = "toggle [S]pell" })
--- keymap.set("n", "<C-n>", "<C-n>zz", { noremap = true, desc = "move [d]own half-page and center" })
--- keymap.set("n", "<C-p>", "<C-p>zz", { noremap = true, desc = "move [u]p half-page and center" })
--- keymap.set('n', '<C-N>', '<C-f>zz', { noremap = true, desc = 'move DOWN [f]ull-page and center' })
--- keymap.set('n', '<C-P>', '<C-b>zz', { noremap = true, desc = 'move UP full-page and center' })
-
---- Disabled keymaps [enable at your own risk]
-
--- Automatic management of search highlight
--- XXX: This is not so nice if you use j/k for navigation
--- (you should be using <C-d>/<C-u> and relative line numbers instead ;)
---
--- local auto_hlsearch_nameleader = vim.api.nvim_create_nameleader('auto_hlsearch')
--- vim.on_key(function(char)
---   if vim.fn.mode() == 'n' then
---     vim.opt.hlsearch = vim.tbl_contains({ '<CR>', 'n', 'N', '*', '#', '?', '/' }, vim.fn.keytrans(char))
---   end
--- end, auto_hlsearch_nameleader)

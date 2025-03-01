@@ -109,7 +109,6 @@
           nvim-web-devicons
           nvim-autopairs
           mini-surround
-          undotree
           oil-nvim
           nvim-unception
           which-key-nvim
@@ -129,6 +128,7 @@
         ];
         git = with pkgs.vimPlugins; [
           neogit
+          undotree
         ];
       };
     };
