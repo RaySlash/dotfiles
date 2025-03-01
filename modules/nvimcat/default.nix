@@ -91,6 +91,7 @@
           nui-nvim
           kanagawa-nvim
           lualine-nvim
+          leap-nvim
           statuscol-nvim
         ];
         addons = with pkgs.vimPlugins; [
@@ -112,6 +113,7 @@
           oil-nvim
           nvim-unception
           which-key-nvim
+          auto-session
         ];
         treesitter = with pkgs.vimPlugins; [
           nvim-treesitter.withAllGrammars

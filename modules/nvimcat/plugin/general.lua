@@ -19,6 +19,19 @@ require("which-key").setup({
 	preset = "helix",
 })
 
+-- Leap
+vim.keymap.set({ "n", "x" }, "s", "<Plug>(leap)", { desc = "Leap Search Bidirectionally", noremap = true })
+vim.keymap.set("n", "S", "<Plug>(leap-from-window)", { desc = "Leap Search Bidirectionally", noremap = true })
+vim.keymap.set("o", "s", "<Plug>(leap-forward)", { desc = "Leap Search Bidirectionally", noremap = true })
+vim.keymap.set("o", "S", "<Plug>(leap-backward)", { desc = "Leap Search Bidirectionally", noremap = true })
+
+-- Auto Session
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+require("auto-session").setup({
+  suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/"},
+  bypass_save_filetypes = { 'dashboard', "netrw", "oil" },
+})
+
 if require("nixCats").cats.general.addons == true then
 	require("nvim-highlight-colors").setup({
 		enable_tailwind = true,
