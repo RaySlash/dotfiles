@@ -1,4 +1,4 @@
-if vim.g.did_load_oil_plugin then
+if require("nixCats").cats.general.core ~= true or vim.g.did_load_oil_plugin then
 	return
 end
 vim.g.did_load_oil_plugin = true

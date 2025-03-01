@@ -23,12 +23,11 @@
 
   categoryDefinitions = {
     pkgs,
-    mkNvimPlugin,
+    mkNvimPlugin, # (mkNvimPlugin inputs.plugins-neogit "neogit")
     ...
   } @ packageDef: {
     lspsAndRuntimeDeps = {
-      general = with pkgs; [
-        # Formatters
+      formatter = with pkgs; [
         alejandra
         clang-tools
         elmPackages.elm-format
@@ -39,8 +38,8 @@
         shfmt
         sql-formatter
         taplo
-
-        # Lsp
+      ];
+      lsp = with pkgs; [
         nil
         nixd
         ccls
@@ -55,24 +54,19 @@
         dart
         nodePackages.typescript-language-server
         zls
-
-        # Image Previews
+      ];
+      image-preview = with pkgs; [
         imagemagick
         curl
       ];
     };
 
     startupPlugins = {
-      git = [
-        # (mkNvimPlugin inputs.plugins-neogit "neogit")
-        pkgs.vimPlugins.neogit
-      ];
       lsp = with pkgs.vimPlugins; [
         nvim-lspconfig
         markdown-preview-nvim
         trouble-nvim
         lazydev-nvim
-        formatter-nvim
         luasnip
         nvim-cmp
         cmp_luasnip
@@ -86,53 +80,75 @@
         cmp-cmdline
         cmp-cmdline-history
       ];
-      ui = with pkgs.vimPlugins; [
-        render-markdown-nvim
-        dashboard-nvim
-        dressing-nvim
-        noice-nvim
-        nui-nvim
-        nvim-highlight-colors
-        kanagawa-nvim
-        lualine-nvim
-        statuscol-nvim
-        nvim-treesitter-context
-        nvim-colorizer-lua
-        oil-nvim
+      formatter = with pkgs.vimPlugins; [
+        formatter-nvim
       ];
-      deps = with pkgs.vimPlugins; [
-        repeat
+      ui = {
+        core = with pkgs.vimPlugins; [
+          dashboard-nvim
+          dressing-nvim
+          noice-nvim
+          nui-nvim
+          kanagawa-nvim
+          lualine-nvim
+          statuscol-nvim
+        ];
+        addons = with pkgs.vimPlugins; [
+          render-markdown-nvim
+          nvim-highlight-colors
+          nvim-colorizer-lua
+        ];
+      };
+      image-preview = with pkgs.vimPlugins; [
         image-nvim
-        plenary-nvim
-        nvim-web-devicons
       ];
-      langs = with pkgs.vimPlugins; [
-        nvim-treesitter.withAllGrammars
-        yuck-vim
-      ];
-      general = with pkgs.vimPlugins; [
-        nvim-autopairs
-        mini-surround
-        telescope-nvim
-        telescope-fzy-native-nvim
-        telescope-frecency-nvim
-        undotree
-        telescope-undo-nvim
-        nvim-treesitter-textobjects
-        nvim-ts-context-commentstring
-        nvim-unception
-        which-key-nvim
+      general = {
+        core = with pkgs.vimPlugins; [
+          repeat
+          plenary-nvim
+          nvim-web-devicons
+          nvim-autopairs
+          mini-surround
+          undotree
+          oil-nvim
+          nvim-unception
+          which-key-nvim
+        ];
+        treesitter = with pkgs.vimPlugins; [
+          nvim-treesitter.withAllGrammars
+          nvim-treesitter-textobjects
+          nvim-ts-context-commentstring
+          nvim-treesitter-context
+          yuck-vim
+        ];
+        telescope = with pkgs.vimPlugins; [
+          telescope-nvim
+          telescope-fzy-native-nvim
+          telescope-frecency-nvim
+          telescope-undo-nvim
+        ];
+        git = with pkgs.vimPlugins; [
+          neogit
+        ];
+      };
+    };
+
+    sharedLibraries = {
+      general = {
+        core = with pkgs; [
+          libgit2
+        ];
+      };
+      lsp = with pkgs; [
+        raylib
       ];
     };
 
-    # optionalPlugins = {
-    #   gitPlugins = with pkgs.neovimPlugins; [];
-    #   general = with pkgs.vimPlugins; [];
-    # };
-
-    sharedLibraries = {general = with pkgs; [libgit2 raylib];};
-
-    environmentVariables = {general = {EDITOR = "nvim";};};
+    environmentVariables = {
+      general.core = {
+        EDITOR = "nvim";
+      };
+    };
 
     extraWrapperArgs = {
       # https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
@@ -144,7 +160,6 @@
   };
 
   packageDefinitions = {
-    # see :help nixCats.flake.outputs.settings
     nvimcat = {pkgs, ...}: {
       settings = {
         wrapRc = true;
@@ -152,24 +167,35 @@
         neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
-        general = true;
-        git = true;
-        ui = true;
+        general = {
+          core = true;
+          treesitter = true;
+          telescope = true;
+          git = true;
+        };
+        ui = {
+          core = true;
+          addons = true;
+        };
+        image-preview = true;
+        formatter = true;
         lsp = true;
-        deps = true;
-        langs = true;
       };
-      extra = {};
     };
     nvim-minimal = {pkgs, ...}: {
       settings = {
         wrapRc = true;
-        aliases = ["vim" "nvim"];
+        aliases = ["vi" "vim" "nvim"];
+        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
-        general = true;
-        deps = true;
-        langs = true;
+        general = {
+          core = true;
+          treesitter = true;
+          telescope = true;
+          git = true;
+        };
+        ui.core = true;
       };
     };
   };

@@ -1,7 +1,48 @@
-if vim.g.did_load_lspconfig_plugin then
+if require("nixCats").cats.lsp ~= true or vim.g.did_load_lspconfig_plugin then
 	return
 end
 vim.g.did_load_lspconfig_plugin = true
+
+require("lazydev").setup({
+	enabled = function(root_dir)
+		return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+	end,
+	-- Only load luvit types when the `vim.uv` word is found
+	{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+})
+
+require("trouble").setup({})
+local keymap = vim.keymap
+keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", {
+	desc = "Diagnostics (Trouble)",
+	noremap = true,
+	silent = true,
+})
+keymap.set("n", "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", {
+	desc = "Buffer Diagnostics (Trouble)",
+	noremap = true,
+	silent = true,
+})
+keymap.set("n", "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>", {
+	desc = "Symbols (Trouble)",
+	noremap = true,
+	silent = true,
+})
+keymap.set("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", {
+	desc = "LSP Definitions / References (Trouble)",
+	noremap = true,
+	silent = true,
+})
+keymap.set("n", "<leader>xL", "<cmd>Trouble loclist toggle<cr>", {
+	desc = "Location List (Trouble)",
+	noremap = true,
+	silent = true,
+})
+keymap.set("n", "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", {
+	desc = "Quickfix List (Trouble)",
+	noremap = true,
+	silent = true,
+})
 
 local lspconfig = require("lspconfig")
 lspconfig.ccls.setup({})
