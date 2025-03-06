@@ -1,11 +1,3 @@
-if require("nixCats").cats.general.core ~= true or vim.g.did_load_oil_plugin then
-	return
-end
-vim.g.did_load_oil_plugin = true
-
-local oil = require("oil")
-
--- Declare a global function to retrieve the current directory
 function _G.get_oil_winbar()
 	local dir = require("oil").get_current_dir()
 	if dir then
@@ -16,7 +8,6 @@ function _G.get_oil_winbar()
 	end
 end
 
--- helper function to parse output
 local function parse_output(proc)
 	local result = proc:wait()
 	local ret = {}
@@ -67,41 +58,56 @@ end
 
 local detail = false
 
-oil.setup({
-	skip_confirm_for_simple_edits = true,
-	win_options = {
-		winbar = "%!v:lua.get_oil_winbar()",
-	},
-	view_options = {
-		is_hidden_file = function(name, bufnr)
-			local dir = require("oil").get_current_dir(bufnr)
-			local is_dotfile = vim.startswith(name, ".") and name ~= ".."
-			-- if no local directory (e.g. for ssh connections), just hide dotfiles
-			if not dir then
-				return is_dotfile
-			end
-			-- dotfiles are considered hidden unless tracked
-			if is_dotfile then
-				return not git_status[dir].tracked[name]
-			else
-				-- Check if file is gitignored
-				return git_status[dir].ignored[name]
-			end
+return {
+	{
+		"oil",
+		for_cat = "general.core",
+		cmd = { "Oil" },
+		keys = {
+			{ "<leader>e", "<cmd>Oil<CR>", mode = { "n" }, noremap = true, desc = "Open oil filetree" },
+		},
+		before = function()
+			vim.g.loaded_netrw = 1
+			vim.g.loaded_netrwPlugin = 1
+		end,
+		after = function(_)
+			local oil = require("oil")
+			oil.setup({
+				skip_confirm_for_simple_edits = true,
+				win_options = {
+					winbar = "%!v:lua.get_oil_winbar()",
+				},
+				view_options = {
+					is_hidden_file = function(name, bufnr)
+						local dir = require("oil").get_current_dir(bufnr)
+						local is_dotfile = vim.startswith(name, ".") and name ~= ".."
+						-- if no local directory (e.g. for ssh connections), just hide dotfiles
+						if not dir then
+							return is_dotfile
+						end
+						-- dotfiles are considered hidden unless tracked
+						if is_dotfile then
+							return not git_status[dir].tracked[name]
+						else
+							-- Check if file is gitignored
+							return git_status[dir].ignored[name]
+						end
+					end,
+				},
+				keymaps = {
+					["gd"] = {
+						desc = "Toggle file detail view",
+						callback = function()
+							detail = not detail
+							if detail then
+								require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+							else
+								require("oil").set_columns({ "icon" })
+							end
+						end,
+					},
+				},
+			})
 		end,
 	},
-	keymaps = {
-		["gd"] = {
-			desc = "Toggle file detail view",
-			callback = function()
-				detail = not detail
-				if detail then
-					require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
-				else
-					require("oil").set_columns({ "icon" })
-				end
-			end,
-		},
-	},
-})
-
-vim.keymap.set("n", "<leader>e", "<cmd>Oil<CR>", { desc = "Open File Browser", noremap = true })
+}

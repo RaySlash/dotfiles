@@ -11,12 +11,9 @@
   };
   inherit
     (forEachSystem (system: let
-      dependencyOverlays =
-        # see :help nixCats.flake.outputs.overlays
-        # (import ./overlays inputs) ++
-        [
-          (utils.standardPluginOverlay inputs)
-        ];
+      dependencyOverlays = [
+        (utils.sanitizedPluginOverlay inputs)
+      ];
     in {inherit dependencyOverlays;}))
     dependencyOverlays
     ;
@@ -59,6 +56,10 @@
         imagemagick
         curl
       ];
+      general.telescope = with pkgs; [
+        ripgrep
+        fd
+      ];
     };
 
     startupPlugins = {
@@ -67,18 +68,8 @@
         markdown-preview-nvim
         trouble-nvim
         lazydev-nvim
-        luasnip
-        nvim-cmp
-        cmp_luasnip
-        lspkind-nvim
         nvim-ts-autotag
-        cmp-nvim-lsp
-        cmp-nvim-lsp-signature-help
-        cmp-buffer
-        cmp-path
-        cmp-nvim-lua
-        cmp-cmdline
-        cmp-cmdline-history
+        blink-cmp
       ];
       formatter = with pkgs.vimPlugins; [
         formatter-nvim
@@ -109,11 +100,14 @@
           plenary-nvim
           nvim-web-devicons
           nvim-autopairs
-          mini-surround
+          nvim-surround
           oil-nvim
           nvim-unception
           which-key-nvim
           auto-session
+          lze
+          lzextras
+          startup-nvim
         ];
         treesitter = with pkgs.vimPlugins; [
           nvim-treesitter.withAllGrammars
@@ -219,9 +213,11 @@ in
     devShells = {
       default = pkgs.mkShell {
         name = defaultPackageName;
-        packages = [defaultPackage];
+        packages = [(nixCatsBuilder defaultPackageName)];
         inputsFrom = [];
-        shellHook = "";
+        shellHook = ''
+          exec ${pkgs.zsh}/bin/zsh
+        '';
       };
     };
   })
@@ -256,6 +252,4 @@ in
         nixpkgs
         ;
     };
-    inherit utils;
-    inherit (utils) templates;
   }
