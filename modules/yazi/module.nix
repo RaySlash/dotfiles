@@ -13,7 +13,6 @@ in {
   config = mkIf cfg.enable {
     programs.yazi = {
       enable = true;
-      package = pkgs.unstable.yazi;
       flavors = {
         "kanagawa-dragon.yazi" = inputs.kanagawa-yazi;
       };
