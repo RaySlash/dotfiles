@@ -12,7 +12,7 @@ in {
   config = mkIf cfg.enable {
     programs.kitty = {
       enable = true;
-      themeFile = "3024_Night";
+      themeFile = "kanagawa_dragon";
       shellIntegration.enableZshIntegration = true;
 
       font = {

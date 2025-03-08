@@ -21,7 +21,7 @@ return {
 		for_cat = "lsp",
 		event = "LspAttach",
 		keys = {
-			{ "<leader>xx", "<cmd>Trouble diagnostic toggle<CR>", mode = { "n" }, desc = "Diagnostics [Trouble]" },
+			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<CR>", mode = { "n" }, desc = "Diagnostics [Trouble]" },
 			{
 				"<leader>xl",
 				"<cmd>Trouble lsp toggle focus=false win.position=right<CR>",

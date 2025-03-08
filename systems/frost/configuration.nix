@@ -12,15 +12,15 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_xanmod;
+    # kernelPackages = pkgs.linuxPackages_xanmod;
     kernelModules = ["i2c-dev"];
     supportedFilesystems = ["ntfs"];
-  };
-  boot.loader = {
-    efi.canTouchEfiVariables = true;
-    systemd-boot = {
-      enable = true;
-      configurationLimit = 8;
+    loader = {
+      efi.canTouchEfiVariables = true;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 8;
+      };
     };
   };
 

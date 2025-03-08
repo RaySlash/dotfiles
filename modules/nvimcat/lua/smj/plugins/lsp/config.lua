@@ -18,8 +18,8 @@ return {
 		on_require = { "lspconfig" },
 		lsp = function(plugin)
 			require("lspconfig")[plugin.name].setup(vim.tbl_extend("force", {
-				capabilities = require("smj.utils.lspUtils").get_capabilities(plugin.name),
-				on_attach = require("smj.utils.lspUtils").on_attach,
+				capabilities = require("smj.utils.lsp").get_capabilities(plugin.name),
+				on_attach = require("smj.utils.lsp").on_attach,
 			}, plugin.lsp or {}))
 		end,
 	},

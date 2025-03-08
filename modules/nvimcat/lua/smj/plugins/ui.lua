@@ -74,6 +74,15 @@ return {
 		end,
 	},
 	{
+		"vim-startuptime",
+		for_cat = "ui.core",
+		before = function(_)
+			vim.g.startuptime_event_width = 0
+			vim.g.startuptime_tries = 10
+			vim.g.startuptime_exe_path = require("nixCats").packageBinPath
+		end,
+	},
+	{
 		"kanagawa",
 		for_cat = "ui.core",
 		event = "UIEnter",
@@ -84,7 +93,10 @@ return {
 			---@diagnostic disable: missing-fields
 			require("kanagawa").setup({
 				transparent = true,
-				theme = "dragon",
+				background = {
+					dark = "dragon",
+					light = "lotus",
+				},
 				overrides = function(colors)
 					local theme = colors.theme
 					local makeDiagnosticColor = function(color)

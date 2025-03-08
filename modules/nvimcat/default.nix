@@ -76,6 +76,7 @@
       ui = {
         core = with pkgs.vimPlugins; [
           dashboard-nvim
+          vim-startuptime
           dressing-nvim
           noice-nvim
           nui-nvim

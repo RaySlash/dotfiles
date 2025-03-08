@@ -1,18 +1,8 @@
 return {
 	{
-		"vim-startuptime",
-		for_cat = "general.core",
-		cmd = { "StartupTime" },
-		before = function(_)
-			vim.g.startuptime_event_width = 0
-			vim.g.startuptime_tries = 10
-			vim.g.startuptime_exe_path = require("nixCats").packageBinPath
-		end,
-	},
-	{
 		"undotree",
 		for_cat = "general.core",
-		-- cmd = { "UndotreeToggle", "UndotreeHide", "UndotreeShow", "UndotreeFocus", "UndotreePersistUndo" },
+    event = "DeferredUIEnter",
 		keys = { { "<leader>ut", "<cmd>UndotreeToggle<CR>", mode = { "n" }, desc = "Undo Tree", noremap = true } },
 		before = function(_)
 			vim.g.undotree_WindowLayout = 1
