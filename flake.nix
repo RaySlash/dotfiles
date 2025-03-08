@@ -2,12 +2,6 @@
   description = "Personal Flake NixOS config - RaySlash";
 
   outputs = {flake-parts, ...} @ inputs: let
-    unstable-overlay = final: _prev: {
-      unstable = import inputs.nixpkgs-unstable {
-        system = final.system;
-        config.allowUnfree = true;
-      };
-    };
     packages-overlay = final: _prev: {
       custom = import ./packages final.pkgs;
     };
@@ -42,14 +36,13 @@
 
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [unstable-overlay packages-overlay];
+          overlays = [packages-overlay];
         };
       };
 
       flake = {...}: {
         overlays = {
-          default = final: prev: (inputs.self.overlays.unstable final prev) // (inputs.self.overlays.custom-pkgs final prev);
-          unstable = unstable-overlay;
+          default = final: prev: (inputs.self.overlays.custom-pkgs final prev);
           custom-pkgs = packages-overlay;
         };
 
@@ -58,23 +51,22 @@
     };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nurpkgs = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # Flake Add-ons
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
     nix-index-database = {
@@ -86,7 +78,7 @@
     # wezterm.url = "github:wez/wezterm?dir=nix";
     meteorbom = {
       url = "git+ssh://git@github.com/rayslash/meteorbom?ref=master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
@@ -99,7 +91,6 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 }

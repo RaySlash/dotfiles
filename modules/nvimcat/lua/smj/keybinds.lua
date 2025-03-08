@@ -1,12 +1,6 @@
-if vim.g.did_load_keymaps_plugin then
-	return
-end
-vim.g.did_load_keymaps_plugin = true
-
 local api = vim.api
 local fn = vim.fn
 local keymap = vim.keymap
-local diagnostic = vim.diagnostic
 
 -- Better navigation
 keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -22,9 +16,6 @@ keymap.set(
 	"<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
 	{ desc = "Redraw / Clear hlsearch / Diff Update" }
 )
-if require("nixCats").cats.general.git == true then
-	keymap.set("n", "<leader>ut", "<cmd>UndotreeToggle<cr>")
-end
 
 -- Yank from current position till end of current line
 keymap.set("n", "Y", "y$", { silent = true, desc = "[Y]ank to end of line" })
@@ -148,49 +139,6 @@ end, { expr = true, desc = "expand to current buffer's directory" })
 
 keymap.set("n", "<leader>tn", vim.cmd.tabnew, { desc = "[t]ab: [n]ew" })
 keymap.set("n", "<leader>tq", vim.cmd.tabclose, { desc = "[t]ab: [q]uit/close" })
-
-local severity = diagnostic.severity
-
-keymap.set("n", "<leader>sd", function()
-	local _, winid = diagnostic.open_float(nil, { scope = "line" })
-	if not winid then
-		vim.notify("no diagnostics found", vim.log.levels.INFO)
-		return
-	end
-	vim.api.nvim_win_set_config(winid or 0, { focusable = true })
-end, { noremap = true, silent = true, desc = "diagnostics floating window" })
-keymap.set("n", "[d", diagnostic.goto_prev, { noremap = true, silent = true, desc = "previous [d]iagnostic" })
-keymap.set("n", "]d", diagnostic.goto_next, { noremap = true, silent = true, desc = "next [d]iagnostic" })
-keymap.set("n", "[e", function()
-	diagnostic.goto_prev({
-		severity = severity.ERROR,
-	})
-end, { noremap = true, silent = true, desc = "previous [e]rror diagnostic" })
-keymap.set("n", "]e", function()
-	diagnostic.goto_next({
-		severity = severity.ERROR,
-	})
-end, { noremap = true, silent = true, desc = "next [e]rror diagnostic" })
-keymap.set("n", "[w", function()
-	diagnostic.goto_prev({
-		severity = severity.WARN,
-	})
-end, { noremap = true, silent = true, desc = "previous [w]arning diagnostic" })
-keymap.set("n", "]w", function()
-	diagnostic.goto_next({
-		severity = severity.WARN,
-	})
-end, { noremap = true, silent = true, desc = "next [w]arning diagnostic" })
-keymap.set("n", "[h", function()
-	diagnostic.goto_prev({
-		severity = severity.HINT,
-	})
-end, { noremap = true, silent = true, desc = "previous [h]int diagnostic" })
-keymap.set("n", "]h", function()
-	diagnostic.goto_next({
-		severity = severity.HINT,
-	})
-end, { noremap = true, silent = true, desc = "next [h]int diagnostic" })
 
 local function toggle_spell_check()
 	---@diagnostic disable-next-line: param-type-mismatch

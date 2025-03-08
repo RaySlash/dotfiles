@@ -12,7 +12,6 @@ in {
   config = mkIf cfg.enable {
     programs.neovide = {
       enable = true;
-      package = pkgs.unstable.neovide;
       settings = {
         srgb = true;
         tabs = true;

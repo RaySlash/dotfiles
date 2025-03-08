@@ -17,7 +17,7 @@ in {
 
       font = {
         name = "IosevkaTerm Nerd Font";
-        package = pkgs.nerdfonts.override {fonts = ["IosevkaTerm"];};
+        package = pkgs.nerd-fonts.iosevka-term;
         size = 14;
       };
 

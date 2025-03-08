@@ -13,8 +13,7 @@ in {
   config = mkIf cfg.enable {
     programs.neovim = {
       enable = true;
-      package = pkgs.unstable.neovim-unwrapped;
-      extraPackages = with pkgs.unstable; [
+      extraPackages = with pkgs; [
         coreutils
         fd
         fzf
@@ -32,10 +31,10 @@ in {
         zls
       ];
 
-      plugins = with pkgs.unstable.vimPlugins; [lazy-nvim];
+      plugins = with pkgs.vimPlugins; [lazy-nvim];
 
       extraLuaConfig = let
-        plugins = with pkgs.unstable.vimPlugins; [
+        plugins = with pkgs.vimPlugins; [
           nvim-nio
           nvim-dap
           nvim-dap-ui
@@ -157,7 +156,7 @@ in {
     xdg.configFile."nvim/parser".source = let
       parsers = pkgs.symlinkJoin {
         name = "treesitter-parsers";
-        paths = pkgs.unstable.vimPlugins.nvim-treesitter.withAllGrammars;
+        paths = pkgs.vimPlugins.nvim-treesitter.withAllGrammars;
       };
     in "${parsers}/parser";
 

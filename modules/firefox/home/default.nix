@@ -12,6 +12,14 @@ in {
   options.custom.firefox = {enable = mkEnableOption "firefox";};
 
   config = mkIf cfg.enable {
+
+    xdg.mimeApps.defaultApplications = {
+      "text/html" = ["firefox.desktop"];
+      "text/xml" = ["firefox.desktop"];
+      "x-scheme-handler/http" = ["firefox.desktop"];
+      "x-scheme-handler/https" = ["firefox.desktop"];
+    };
+
     programs.firefox = {
       enable = true;
       package = pkgs.firefox-bin;
@@ -150,21 +158,23 @@ in {
           "browser.menu.showViewImageInfo" = true;
           "findbar.highlightAll" = true;
           "layout.word_select.eat_space_to_next_word" = false;
-
+          "extensions.autoDisableScopes" = 0;
           # SmoothFox
           "apz.overscroll.enabled" = true;
           "general.smoothScroll" = true;
           "mousewheel.default.delta_multiplier_y" = 275;
         };
-        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-          ublock-origin
-          bitwarden
-          darkreader
-          sponsorblock
-          sidebery
-          tridactyl
-          enhancer-for-youtube
-        ];
+        extensions = {
+          packages = with pkgs.nur.repos.rycee.firefox-addons; [
+            ublock-origin
+            bitwarden
+            darkreader
+            sponsorblock
+            sidebery
+            tridactyl
+            enhancer-for-youtube
+          ];
+        };
       };
     };
   };
