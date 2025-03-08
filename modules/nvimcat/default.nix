@@ -1,9 +1,8 @@
 # Copyright (c) 2023 BirdeeHub
 # Licensed under the MIT license
 {inputs, ...} @ attrs: let
-  inherit (inputs) nixpkgs-unstable;
+  inherit (inputs) nixpkgs;
   inherit (inputs.nixCats) utils;
-  nixpkgs = nixpkgs-unstable;
   luaPath = "${./.}";
   forEachSystem = utils.eachSystem nixpkgs.lib.platforms.all;
   extra_pkg_config = {
@@ -176,6 +175,9 @@
         image-preview = true;
         formatter = true;
         lsp = true;
+      };
+      extra = {
+        nixdExtras.nixpkgs = nixpkgs;
       };
     };
     nvim-minimal = {pkgs, ...}: {

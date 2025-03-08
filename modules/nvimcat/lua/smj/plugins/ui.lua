@@ -76,7 +76,7 @@ return {
 	{
 		"kanagawa",
 		for_cat = "ui.core",
-		event = "DeferredUIEnter",
+		event = "UIEnter",
 		before = function()
 			vim.o.background = "dark"
 		end,

@@ -1,5 +1,99 @@
 return {
-	-- TODO: Upon adding settings to server, we get error. Fix it
+	{
+		"ccls",
+		lsp = {
+			filetypes = { "c", "cpp" },
+		},
+	},
+	{
+		"cssls",
+		lsp = {
+			filetypes = { "css", "less", "scss" },
+			settings = {
+				less = { validate = true },
+				css = { validate = true },
+				scss = { validate = true },
+			},
+		},
+	},
+	{
+		"elmls",
+		lsp = {
+			filetypes = { "elm" },
+		},
+	},
+	{
+		"html",
+		lsp = {
+			filetypes = { "html" },
+		},
+	},
+	{
+		"hls",
+		lsp = {
+			filetypes = { "haskell", "hs" },
+		},
+	},
+	{
+		"marksman",
+		lsp = {
+			filetypes = { "markdown", "mdx" },
+		},
+	},
+	{
+		"ts_ls",
+		lsp = {
+			filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+		},
+	},
+	{
+		"tailwindcss",
+		lsp = {
+			filetypes = { "typescriptreact", "javascriptreact" },
+		},
+	},
+	{
+		"puresciptls",
+		lsp = {
+			filetypes = { "purescipt", "purs" },
+		},
+	},
+	{
+		"jdtls",
+		lsp = {
+			filetypes = { "java" },
+		},
+	},
+	{
+		"zls",
+		lsp = {
+			filetypes = {
+				"zig",
+			},
+		},
+	},
+	{
+		"rust_analyzer",
+		lsp = {
+			filetypes = { "rust" },
+			settings = {
+				settings = {
+					["rust-analyzer"] = {
+						lens = { enable = true, implementations = true },
+						diagnostics = { enable = true },
+						procMacro = {
+							enable = true,
+							ignored = {
+								leptos_macro = {
+									"server",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
 	{
 		"lua_ls",
 		lsp = {

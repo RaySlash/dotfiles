@@ -4,6 +4,7 @@ return {
 		for_cat = "lsp",
 		after = function()
 			require("blink.cmp").setup({
+				sources = { default = { "lsp", "buffer", "snippets", "path" } },
 				keymap = {
 					preset = "enter",
 				},
