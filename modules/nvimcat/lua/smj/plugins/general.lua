@@ -2,7 +2,7 @@ return {
 	{
 		"undotree",
 		for_cat = "general.core",
-    event = "DeferredUIEnter",
+		event = "DeferredUIEnter",
 		keys = { { "<leader>ut", "<cmd>UndotreeToggle<CR>", mode = { "n" }, desc = "Undo Tree", noremap = true } },
 		before = function(_)
 			vim.g.undotree_WindowLayout = 1
@@ -12,7 +12,8 @@ return {
 	{
 		"nvim-autopairs",
 		on_cat = "general.core",
-		event = "DeferredUIEnter",
+		event = "InsertEnter",
+		on_require = { "nvim-autopairs" },
 		after = function(_)
 			require("nvim-autopairs").setup({})
 		end,
@@ -26,7 +27,7 @@ return {
 		end,
 	},
 	{
-		"which-key",
+		"which-key.nvim",
 		on_cat = "general.core",
 		event = "DeferredUIEnter",
 		after = function(_)
@@ -36,7 +37,7 @@ return {
 		end,
 	},
 	{
-		"leap",
+		"leap.nvim",
 		on_cat = "general.core",
 		event = "DeferredUIEnter",
 		keys = {

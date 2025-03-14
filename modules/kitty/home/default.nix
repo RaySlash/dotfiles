@@ -25,6 +25,7 @@ in {
         editor = "nvim";
         shell = "zsh";
         dynamic_background_opacity = true;
+        background = "#000000";
         background_opacity = 0.8;
         background_blur = 32;
         hide_window_decorations = true;

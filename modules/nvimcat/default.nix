@@ -36,6 +36,7 @@
         taplo
       ];
       lsp = with pkgs; [
+        pyright
         nil
         nixd
         ccls
@@ -62,41 +63,19 @@
     };
 
     startupPlugins = {
-      lsp = with pkgs.vimPlugins; [
-        nvim-lspconfig
-        markdown-preview-nvim
-        trouble-nvim
-        lazydev-nvim
-        nvim-ts-autotag
-        blink-cmp
-      ];
-      formatter = with pkgs.vimPlugins; [
-        formatter-nvim
-      ];
-      ui = {
+      general = {
         core = with pkgs.vimPlugins; [
-          dashboard-nvim
-          vim-startuptime
-          dressing-nvim
-          noice-nvim
-          nui-nvim
-          kanagawa-nvim
-          lualine-nvim
-          leap-nvim
-          statuscol-nvim
-        ];
-        addons = with pkgs.vimPlugins; [
-          render-markdown-nvim
-          nvim-highlight-colors
-          nvim-colorizer-lua
+          lze
+          lzextras
         ];
       };
-      image-preview = with pkgs.vimPlugins; [
-        image-nvim
-      ];
+    };
+
+    optionalPlugins = {
       general = {
         core = with pkgs.vimPlugins; [
           repeat
+          auto-session
           plenary-nvim
           nvim-web-devicons
           nvim-autopairs
@@ -104,10 +83,6 @@
           oil-nvim
           nvim-unception
           which-key-nvim
-          auto-session
-          lze
-          lzextras
-          startup-nvim
         ];
         treesitter = with pkgs.vimPlugins; [
           nvim-treesitter.withAllGrammars
@@ -127,6 +102,38 @@
           undotree
         ];
       };
+      ui = {
+        core = with pkgs.vimPlugins; [
+          dashboard-nvim
+          vim-startuptime
+          dressing-nvim
+          noice-nvim
+          nui-nvim
+          kanagawa-nvim
+          lualine-nvim
+          leap-nvim
+          statuscol-nvim
+        ];
+        addons = with pkgs.vimPlugins; [
+          render-markdown-nvim
+          nvim-highlight-colors
+          nvim-colorizer-lua
+        ];
+      };
+      lsp = with pkgs.vimPlugins; [
+        nvim-lspconfig
+        markdown-preview-nvim
+        trouble-nvim
+        lazydev-nvim
+        nvim-ts-autotag
+        blink-cmp
+      ];
+      formatter = with pkgs.vimPlugins; [
+        conform-nvim
+      ];
+      image-preview = with pkgs.vimPlugins; [
+        image-nvim
+      ];
     };
 
     sharedLibraries = {

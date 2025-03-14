@@ -31,13 +31,13 @@ return {
 	{
 		"hls",
 		lsp = {
-			filetypes = { "haskell", "hs" },
+			filetypes = { "haskell" },
 		},
 	},
 	{
 		"marksman",
 		lsp = {
-			filetypes = { "markdown", "mdx" },
+			filetypes = { "markdown" },
 		},
 	},
 	{
@@ -128,7 +128,7 @@ return {
 		after = function()
 			vim.api.nvim_create_user_command("StartNilLSP", function()
 				require("lspconfig").nil_ls.setup({
-					capabilities = require("smj.utils.lspUtils").get_capabilities("nil_ls"),
+					capabilities = require("smj.utils.lsp").get_capabilities("nil_ls"),
 				})
 			end, { desc = "Run nil-ls (when you really need docs for the builtins and nixd refuse)" })
 		end,

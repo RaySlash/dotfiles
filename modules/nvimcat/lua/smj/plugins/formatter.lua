@@ -1,129 +1,103 @@
 return {
 	{
-		"formatter",
-		for_cat = "formatter",
-		event = "DeferredUIEnter",
+		"conform.nvim",
+		event = "BufWritePre",
+		cmd = { "ConformInfo" },
 		keys = {
-			{ "<C-f>", "<cmd>Format<CR>", mode = { "n" }, desc = "Format current buffer", noremap = true },
+			{
+				"<C-f>",
+				function()
+					require("conform").format({ async = true })
+				end,
+				mode = { "n", "i" },
+				desc = "Format buffer",
+			},
 		},
+		before = function()
+			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+		end,
 		after = function()
-			local formatter = require("formatter")
-			local util = require("formatter.util")
+			vim.api.nvim_create_user_command("FormatDisable", function(args)
+				if args.bang then
+					vim.b.disable_autoformat = true
+				else
+					vim.g.disable_autoformat = true
+				end
+			end, {
+				desc = "Disable autoformat-on-save",
+				bang = true,
+			})
+			vim.api.nvim_create_user_command("FormatEnable", function()
+				vim.b.disable_autoformat = false
+				vim.g.disable_autoformat = false
+			end, {
+				desc = "Re-enable autoformat-on-save",
+			})
 
-			local settings = {
-				c = {
-					require("formatter.filetypes.c").clangformat,
-				},
-				dart = {
-					require("formatter.filetypes.dart").dartformat,
-				},
-				cpp = {
-					require("formatter.filetypes.cpp").clangformat,
-				},
-				css = {
-					require("formatter.filetypes.css").prettierd,
-				},
-				less = {
-					require("formatter.filetypes.css").prettierd,
-				},
-				scss = {
-					require("formatter.filetypes.css").prettierd,
-				},
-				elm = {
-					function()
-						return {
-							exe = "elm-format",
-							args = {
-								util.escape_path(util.get_current_buffer_file_path()),
-								"--yes",
-							},
-							stdin = false,
-							cwd = vim.fn.getcwd(),
-							async = true,
-						}
+			---@param bufnr integer
+			---@param ... string
+			---@return string
+			local function first(bufnr, ...)
+				local conform = require("conform")
+				for i = 1, select("#", ...) do
+					local formatter = select(i, ...)
+					if conform.get_formatter_info(formatter, bufnr).available then
+						return formatter
+					end
+				end
+				return select(1, ...)
+			end
+
+			require("conform").setup({
+				formatters_by_ft = {
+					c = { "clang-tools" },
+					cpp = { "clang-tools" },
+					elm = { "elm-format" },
+					rust = { "rustfmt" },
+					lua = { "stylua" },
+					nix = { "alejandra" },
+					python = function(bufnr)
+						return { first(bufnr, "pyright", "prettierd") }
+					end,
+					javascript = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
+					end,
+					javascriptreact = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
+					end,
+					typescript = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
+					end,
+					typescriptreact = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
+					end,
+					sh = { "shfmt" },
+					sql = { "sql-formatter" },
+					toml = { "taplo" },
+					markdown = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
 					end,
 				},
-				javascript = {
-					require("formatter.filetypes.javascript").prettierd,
+				format_on_save = function(bufnr)
+					-- Disable autoformat on certain filetypes
+					-- local ignore_filetypes = { "sql" }
+					-- if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
+					--   return
+					-- end
+					-- Disable autoformat for files in a certain path
+					local bufname = vim.api.nvim_buf_get_name(bufnr)
+					if bufname:match("/node_modules/") then
+						return
+					end
+					-- Disable with a global or buffer-local variable
+					if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+						return
+					end
+					return { timeout_ms = 500, lsp_format = "fallback" }
+				end,
+				default_format_opts = {
+					lsp_format = "fallback",
 				},
-				javascriptreact = {
-					require("formatter.filetypes.javascriptreact").prettierd,
-				},
-				typescript = {
-					require("formatter.filetypes.typescript").prettierd,
-				},
-				typescriptreact = {
-					require("formatter.filetypes.typescriptreact").prettierd,
-				},
-				json = {
-					require("formatter.filetypes.json").prettierd,
-				},
-				markdown = {
-					require("formatter.filetypes.markdown").prettierd,
-				},
-				nix = {
-					require("formatter.filetypes.nix").alejandra,
-				},
-				rust = {
-					require("formatter.filetypes.rust").rustfmt,
-					function()
-						local project_root = vim.fn.getcwd()
-						local leptosfmt_config = project_root .. "/leptosfmt.toml"
-
-						if vim.fn.filereadable(leptosfmt_config) == 1 then
-							return {
-								exe = "leptosfmt",
-								args = { "--stdin" },
-								stdin = true,
-								cwd = project_root,
-							}
-						end
-					end,
-				},
-				sh = {
-					require("formatter.filetypes.sh").shfmt,
-				},
-				sql = {
-					require("formatter.filetypes.sql").sql_formatter,
-				},
-				toml = {
-					require("formatter.filetypes.toml").taplo,
-				},
-				html = {
-					require("formatter.filetypes.html").prettierd,
-				},
-				zig = {
-					require("formatter.filetypes.zig").zigfmt,
-				},
-				yaml = {
-					require("formatter.filetypes.yaml").prettierd,
-				},
-				lua = {
-					require("formatter.filetypes.lua").stylua,
-				},
-
-				["*"] = {
-					-- "formatter.filetypes.any" defines default configurations for any
-					-- filetype
-					require("formatter.filetypes.any").remove_trailing_whitespace,
-					-- Format using lsp if not preconfigured
-					function()
-						-- Ignore already configured types.
-						local defined_types = require("formatter.config").values.filetype
-						if defined_types[vim.bo.filetype] ~= nil then
-							return nil
-						end
-						vim.lsp.buf.format({ async = true })
-					end,
-					-- Remove trailing whitespace without 'sed'
-					-- require("formatter.filetypes.any").substitute_trailing_whitespace,
-				},
-			}
-
-			formatter.setup({
-				logging = false,
-				log_level = vim.log.levels.WARN,
-				filetype = settings,
 			})
 		end,
 	},

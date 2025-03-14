@@ -7,7 +7,7 @@ return {
 			require("lualine").setup({
 				globalstatus = true,
 				options = {
-					theme = "kanagawa",
+					theme = "auto",
 					icons_enabled = true,
 					component_separators = { left = "|", right = "|" },
 					section_separators = { left = "", right = "" },
@@ -20,6 +20,7 @@ return {
 		"statuscol.nvim",
 		for_cat = "ui.core",
 		event = "DeferredUIEnter",
+    on_require = { "statuscol" },
 		after = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
@@ -37,10 +38,13 @@ return {
 		end,
 	},
 	{
-		"noice",
+		"noice.nvim",
 		for_cat = "ui.core",
-		event = "DeferredUIEnter",
-		cmd = { "Noice" },
+		event = "UIEnter",
+    load = function (name)
+      vim.cmd.packadd("nui.nvim")
+      vim.cmd.packadd(name)
+    end,
 		after = function()
 			require("noice").setup({
 				lsp = {
@@ -58,7 +62,7 @@ return {
 		end,
 	},
 	{
-		"dashboard.nvim",
+		"dashboard-nvim",
 		for_cat = "ui.core",
 		event = "DeferredUIEnter",
 		after = function()
@@ -83,7 +87,7 @@ return {
 		end,
 	},
 	{
-		"kanagawa",
+		"kanagawa.nvim",
 		for_cat = "ui.core",
 		event = "UIEnter",
 		before = function()

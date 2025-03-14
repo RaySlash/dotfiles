@@ -1,7 +1,13 @@
 return {
-	"treesitter",
+	"nvim-treesitter",
 	on_cat = "general.treesitter",
 	event = "DeferredUIEnter",
+	load = function(name)
+		vim.cmd.packadd(name)
+		vim.cmd.packadd("nvim-treesitter-textobjects")
+		vim.cmd.packadd("nvim-treesitter-context")
+		vim.cmd.packadd("nvim-ts-context-commentstring")
+	end,
 	before = function()
 		vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 		vim.g.skip_ts_context_comment_string_module = true

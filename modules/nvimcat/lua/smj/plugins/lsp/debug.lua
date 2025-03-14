@@ -1,6 +1,6 @@
 return {
 	{
-		"lazydev",
+		"lazydev.nvim",
 		for_cat = "lsp",
 		ft = "lua",
 		after = function(_)
@@ -17,7 +17,7 @@ return {
 		end,
 	},
 	{
-		"trouble",
+		"trouble.nvim",
 		for_cat = "lsp",
 		event = "LspAttach",
 		keys = {

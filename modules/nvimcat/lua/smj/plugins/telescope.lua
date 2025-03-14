@@ -1,15 +1,13 @@
-local builtin = require("telescope.builtin")
-
 return {
 	{
 		"telescope.nvim",
-		cmd = { "Telescope" },
 		event = "DeferredUIEnter",
+		on_require = { "telescope" },
 		keys = {
 			{
 				"<leader>ff",
 				function()
-					return builtin.find_files()
+					return require("telescope.builtin").find_files()
 				end,
 				mode = { "n" },
 				desc = "Find files [Telescope]",
@@ -18,7 +16,7 @@ return {
 			{
 				"<leader>fg",
 				function()
-					return builtin.live_grep()
+					return require("telescope.builtin").live_grep()
 				end,
 				mode = { "n" },
 				desc = "Find string [Telescope]",
@@ -27,13 +25,18 @@ return {
 			{
 				"<leader>fb",
 				function()
-					return builtin.buffers()
+					return require("telescope.builtin").buffers()
 				end,
 				mode = { "n" },
 				desc = "Find buffers [Telescope]",
 				noremap = true,
 			},
 		},
+		load = function(name)
+			vim.cmd.packadd(name)
+			vim.cmd.packadd("telescope-fzy-native.nvim")
+			vim.cmd.packadd("telescope-frecency.nvim")
+		end,
 		after = function(_)
 			local telescope = require("telescope")
 			local extension = telescope.load_extension
