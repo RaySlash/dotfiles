@@ -11,7 +11,6 @@
   ];
 
   custom = {
-    firefox.enable = true;
     kitty.enable = true;
   };
 

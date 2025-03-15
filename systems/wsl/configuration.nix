@@ -9,6 +9,7 @@
     enable = true;
     defaultUser = "smj";
     startMenuLaunchers = true;
+    useWindowsDriver = true;
     wslConf = {
       automount.enabled = true;
       automount.root = "/mnt";
@@ -32,11 +33,6 @@
   services = {
     dbus.enable = true;
     gnome.gnome-keyring.enable = true;
-  };
-
-  qt = {
-    enable = true;
-    platformTheme = "qt5ct";
   };
 
   custom = {
