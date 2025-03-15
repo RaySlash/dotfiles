@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
-    htop
+    btop
     fd
     ripgrep
     lazygit
@@ -9,6 +9,19 @@
     wget
     imv
   ];
+
+  custom = {
+    firefox.enable = true;
+    kitty.enable = true;
+  };
+
+  programs = {
+    kitty = {
+      settings = {
+        hide_window_decorations = false;
+      };
+    };
+  };
 
   home.stateVersion = "24.05";
 }

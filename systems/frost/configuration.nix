@@ -4,11 +4,10 @@
   networking = {
     hostName = "frost";
     nftables.enable = true;
-    firewall = {
-      enable = true;
-      # allowedTCPPorts = [25565];
-      # allowedUDPPorts = [25565];
-    };
+    # firewall = {
+    # allowedTCPPorts = [25565];
+    # allowedUDPPorts = [25565];
+    # };
   };
 
   boot = {

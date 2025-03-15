@@ -4,46 +4,46 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.themes-addons;
 in {
   options.custom.themes-addons = {enable = mkEnableOption "themes-addons";};
 
   config = mkIf cfg.enable {
     gtk = {
-      enable = true;
+      enable = mkDefault true;
       cursorTheme = {
-        name = "macOS-White";
-        package = pkgs.apple-cursor;
-        size = 32;
+        name = mkDefault "macOS-White";
+        package = mkDefault pkgs.apple-cursor;
+        size = mkDefault 32;
       };
       iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
+        name = mkDefault "Papirus-Dark";
+        package = mkDefault pkgs.papirus-icon-theme;
       };
       font = {
-        name = "IosevkaTerm Nerd Font";
-        size = 12;
+        name = mkDefault "IosevkaTerm Nerd Font";
+        size = mkDefault 12;
       };
       theme = {
-        name = "Kanagawa-BL";
-        package = pkgs.kanagawa-gtk-theme;
+        name = mkDefault "Kanagawa-BL";
+        package = mkDefault pkgs.kanagawa-gtk-theme;
       };
     };
 
     home = {
       pointerCursor = {
-        gtk.enable = true;
+        gtk.enable = mkDefault true;
         x11 = {
-          enable = true;
-          defaultCursor = "X_cursor";
+          enable = mkDefault true;
+          defaultCursor = mkDefault "X_cursor";
         };
-        name = "macOS-White";
-        package = pkgs.apple-cursor;
-        size = 32;
+        name = mkDefault "macOS-White";
+        package = mkDefault pkgs.apple-cursor;
+        size = mkDefault 32;
       };
 
-      packages = with pkgs; [papirus-icon-theme];
+      packages = mkDefault (with pkgs; [papirus-icon-theme]);
     };
   };
 }

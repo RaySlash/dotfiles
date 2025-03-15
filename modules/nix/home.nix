@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.nix-addons;
 in {
   options.custom.nix-addons = {enable = mkEnableOption "nix-addons";};
@@ -12,13 +12,13 @@ in {
   config = mkIf cfg.enable {
     programs = {
       nix-index = {
-        enable = true;
-        enableZshIntegration = true;
+        enable = mkDefault true;
+        enableZshIntegration = mkDefault true;
       };
       direnv = {
-        enable = true;
-        nix-direnv.enable = true;
-        enableZshIntegration = true;
+        enable = mkDefault true;
+        nix-direnv.enable = mkDefault true;
+        enableZshIntegration = mkDefault true;
       };
     };
   };

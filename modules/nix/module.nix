@@ -4,7 +4,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.nix;
 in {
   options.custom.nix = {enable = mkEnableOption "nix";};
@@ -14,38 +14,38 @@ in {
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
     in {
       settings = {
-        experimental-features = "nix-command flakes";
-        flake-registry = "";
-        nix-path = config.nix.nixPath;
-        auto-optimise-store = true;
-        substituters = ["https://nix-community.cachix.org"];
-        trusted-public-keys = [
-          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        experimental-features = mkDefault "nix-command flakes";
+        flake-registry = mkDefault "";
+        nix-path = mkDefault config.nix.nixPath;
+        auto-optimise-store = mkDefault true;
+        substituters = mkDefault ["https://nix-community.cachix.org"];
+        trusted-public-keys = mkDefault [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= mkDefault"
         ];
       };
-      channel.enable = false;
-      registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+      channel.enable = mkDefault false;
+      registry = mkDefault (lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs);
+      nixPath = mkDefault (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
     };
 
     programs = {
-      nix-ld.enable = true;
+      nix-ld.enable = mkDefault true;
       nh = {
-        enable = true;
-        clean.enable = true;
-        clean.extraArgs = "--keep-since 4d --keep 3";
-        flake = "/home/smj/dotfiles";
+        enable = mkDefault true;
+        clean.enable = mkDefault true;
+        clean.extraArgs = mkDefault "--keep-since 4d --keep 3";
+        flake = mkDefault "/home/smj/dotfiles";
       };
       direnv = {
-        enable = true;
-        nix-direnv.enable = true;
+        enable = mkDefault true;
+        nix-direnv.enable = mkDefault true;
       };
     };
 
     system.autoUpgrade = {
-      enable = true;
-      flake = "/home/smj/dotfiles";
-      flags = ["--update-input" "nixpkgs" "--commit-lock-file"];
+      enable = mkDefault true;
+      flake = mkDefault "/home/smj/dotfiles";
+      flags = mkDefault ["--update-input" "nixpkgs" "--commit-lock-file"];
     };
   };
 }

@@ -9,4 +9,6 @@ local nixcats = require("nixCats")
 local newbuf = vim.api.nvim_create_buf(false, true)
 vim.api.nvim_set_option_value("filetype", "nixcatdashboard", { buf = newbuf })
 
+M.test = "Helloww"
+
 return M

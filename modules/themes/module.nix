@@ -5,23 +5,23 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.themes;
 in {
   options.custom.themes = {enable = mkEnableOption "themes";};
 
   config = mkIf cfg.enable {
     console = {
-      font = "Lat2-Terminus16";
-      keyMap = "us";
+      font = mkDefault "Lat2-Terminus16";
+      keyMap = mkDefault "us";
     };
     fonts = {
-      fontDir.enable = true;
-      packages = with pkgs; [
+      fontDir.enable = mkDefault true;
+      packages = mkDefault (with pkgs; [
         nerd-fonts.iosevka-term
         atkinson-hyperlegible
         jetbrains-mono
-      ];
+      ]);
     };
   };
 }

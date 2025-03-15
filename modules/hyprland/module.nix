@@ -5,38 +5,37 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.hyprland;
 in {
   options.custom.hyprland = {enable = mkEnableOption "hyprland";};
 
   config = mkIf cfg.enable {
     services = {
-      dbus.enable = true;
-      gvfs.enable = true;
-      tumbler.enable = true;
-      gnome.gnome-keyring.enable = true;
-      displayManager.defaultSession = "hyprland";
+      dbus.enable = mkDefault true;
+      gvfs.enable = mkDefault true;
+      tumbler.enable = mkDefault true;
+      hypridle.enable = mkDefault true;
+      gnome.gnome-keyring.enable = mkDefault true;
+      displayManager.defaultSession = mkDefault "hyprland";
       xserver.displayManager.gdm = {
-        enable = true;
-        wayland = true;
+        enable = mkDefault true;
+        wayland = mkDefault true;
       };
     };
 
-    hardware.graphics.enable = true;
+    hardware.graphics.enable = mkDefault true;
 
-    programs = {
-      hyprlock.enable = true;
-      hyprland = {
-        enable = true;
-        systemd.setPath.enable = true;
+    programs = mkDefault {
+      hyprlock.enable = mkDefault true;
+      hyprland = mkDefault {
+        enable = mkDefault true;
+        systemd.setPath.enable = mkDefault true;
       };
     };
 
-    services.hypridle.enable = true;
+    environment = mkDefault {sessionVariables.NIXOS_OZONE_WL = "1";};
 
-    environment = {sessionVariables.NIXOS_OZONE_WL = "1";};
-
-    xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+    xdg.portal.extraPortals = mkDefault (with pkgs; [xdg-desktop-portal-gtk]);
   };
 }

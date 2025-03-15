@@ -1,8 +1,13 @@
 {pkgs, ...}: {
-  networking.networkmanager.enable = true;
   systemd.extraConfig = "\n    DefaultTimeoutStopSec=10s\n    ";
   time.timeZone = "Australia/Brisbane";
   i18n.defaultLocale = "en_AU.UTF-8";
+  networking = {
+    networkmanager.enable = true;
+    firewall = {
+      enable = true;
+    };
+  };
 
   services = {
     pipewire = {

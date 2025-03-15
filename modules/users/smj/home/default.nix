@@ -5,7 +5,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.users.smj;
 in {
   options.custom.users.smj = {enable = mkEnableOption "users.smj";};
@@ -17,8 +17,8 @@ in {
     };
 
     programs.git = {
-      userEmail = "45141270+RaySlash@users.noreply.github.com";
-      userName = "RaySlash";
+      userEmail = mkDefault "45141270+RaySlash@users.noreply.github.com";
+      userName = mkDefault "RaySlash";
     };
   };
 }

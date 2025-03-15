@@ -5,7 +5,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.hyprland-addons;
 in {
   options.custom.hyprland-addons = {
@@ -14,56 +14,56 @@ in {
 
   config = mkIf cfg.enable {
     wayland.windowManager.hyprland = {
-      enable = true;
-      extraConfig = builtins.readFile ./hyprland.conf;
+      enable = mkDefault true;
+      extraConfig = mkDefault (builtins.readFile ./hyprland.conf);
     };
 
     services = {
-      cliphist.enable = true;
+      cliphist.enable = mkDefault true;
       dunst = {
-        enable = true;
+        enable = mkDefault true;
         settings = {
           global = {
-            width = 300;
-            height = 300;
-            offset = "30x50";
-            origin = "top-right";
-            transparency = 10;
-            frame_color = "#1D1C19";
-            font = "AtkinsonHyperlegible";
+            width = mkDefault 300;
+            height = mkDefault 300;
+            offset = mkDefault "30x50";
+            origin = mkDefault "top-right";
+            transparency = mkDefault 10;
+            frame_color = mkDefault "#1D1C19";
+            font = mkDefault "AtkinsonHyperlegible";
           };
 
           urgency_normal = {
-            background = "#0d0c0c";
-            foreground = "#c5c9c5";
-            timeout = 10;
+            background = mkDefault "#0d0c0c";
+            foreground = mkDefault "#c5c9c5";
+            timeout = mkDefault 10;
           };
         };
         iconTheme = {
-          name = "Papirus-Dark";
-          package = pkgs.papirus-icon-theme;
+          name = mkDefault "Papirus-Dark";
+          package = mkDefault pkgs.papirus-icon-theme;
         };
       };
       kdeconnect = {
-        enable = true;
-        indicator = true;
+        enable = mkDefault true;
+        indicator = mkDefault true;
       };
       udiskie = {
-        enable = true;
-        notify = true;
-        automount = true;
-        tray = "auto";
+        enable = mkDefault true;
+        notify = mkDefault true;
+        automount = mkDefault true;
+        tray = mkDefault "auto";
       };
       hypridle = {
-        enable = true;
+        enable = mkDefault true;
         settings = {
           general = {
-            after_sleep_cmd = "hyprctl dispatch dpms on";
-            ignore_dbus_inhibit = false;
-            lock_cmd = "hyprlock";
+            after_sleep_cmd = mkDefault "hyprctl dispatch dpms on";
+            ignore_dbus_inhibit = mkDefault false;
+            lock_cmd = mkDefault "hyprlock";
           };
 
-          listener = [
+          listener = mkDefault [
             {
               timeout = 900;
               on-timeout = "hyprlock";
@@ -79,53 +79,53 @@ in {
     };
 
     programs = {
-      wlogout = {
-        enable = true;
+      wlogout = mkDefault {
+        enable = mkDefault true;
       };
       fuzzel = {
-        enable = true;
+        enable = mkDefault true;
         settings = {
           main = {
-            font = "AtkinsonHyperlegible:size=14";
-            dpi-aware = false;
-            use-bold = true;
-            icons-enabled = true;
-            icon-theme = "Papirus-Dark";
-            terminal = "kitty -1";
-            x-margin = 20;
-            y-margin = 20;
-            horizontal-pad = 30;
-            vertical-pad = 20;
-            tabs = 4;
-            inner-pad = 50;
-            line-height = 30;
+            font = mkDefault "AtkinsonHyperlegible:size=14";
+            dpi-aware = mkDefault false;
+            use-bold = mkDefault true;
+            icons-enabled = mkDefault true;
+            icon-theme = mkDefault "Papirus-Dark";
+            terminal = mkDefault "kitty -1";
+            x-margin = mkDefault 20;
+            y-margin = mkDefault 20;
+            horizontal-pad = mkDefault 30;
+            vertical-pad = mkDefault 20;
+            tabs = mkDefault 4;
+            inner-pad = mkDefault 50;
+            line-height = mkDefault 30;
           };
           colors = {
-            background = "000000ee";
-            text = "f9f5d7ff";
-            match = "563A9Cff";
-            selection = "433D8Bff";
-            selection-text = "FFE1FFff";
-            selection-match = "8B5DFFff";
-            border = "FFE1FFee";
+            background = mkDefault "000000ee";
+            text = mkDefault "f9f5d7ff";
+            match = mkDefault "563A9Cff";
+            selection = mkDefault "433D8Bff";
+            selection-text = mkDefault "FFE1FFff";
+            selection-match = mkDefault "8B5DFFff";
+            border = mkDefault "FFE1FFee";
           };
           border = {
-            width = 2;
-            radius = 15;
+            width = mkDefault 2;
+            radius = mkDefault 15;
           };
         };
       };
       hyprlock = {
-        enable = true;
-        settings = {
+        enable = mkDefault true;
+        settings = mkDefault {
           general = {
-            disable_loading_bar = true;
-            grace = 300;
-            hide_cursor = true;
-            no_fade_in = false;
+            disable_loading_bar = mkDefault true;
+            grace = mkDefault 300;
+            hide_cursor = mkDefault true;
+            no_fade_in = mkDefault false;
           };
 
-          background = [
+          background = mkDefault [
             {
               path = "screenshot";
               blur_passes = 3;
@@ -133,7 +133,7 @@ in {
             }
           ];
 
-          input-field = [
+          input-field = mkDefault [
             {
               size = "200, 50";
               position = "0, -80";
@@ -151,17 +151,17 @@ in {
         };
       };
       eww = {
-        enable = true;
-        configDir = ./eww;
+        enable = mkDefault true;
+        configDir = mkDefault ./eww;
       };
       fzf = {
-        enable = true;
-        enableZshIntegration = true;
+        enable = mkDefault true;
+        enableZshIntegration = mkDefault true;
       };
     };
 
     home = {
-      packages = with pkgs; [
+      packages = mkDefault (with pkgs; [
         swww
         hyprpolkitagent
         wl-clipboard
@@ -180,7 +180,7 @@ in {
         lm_sensors
         python3
         socat
-      ];
+      ]);
     };
   };
 }

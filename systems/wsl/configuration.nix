@@ -9,7 +9,6 @@
     enable = true;
     defaultUser = "smj";
     startMenuLaunchers = true;
-    # nativeSystemd = true;
     wslConf = {
       automount.enabled = true;
       automount.root = "/mnt";
@@ -17,18 +16,22 @@
   };
 
   nixpkgs.hostPlatform = {system = "x86_64-linux";};
-  networking.hostName = "wsl";
-
-  programs = {
+  networking = {
+    hostName = "wsl";
   };
 
-  virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      autoPrune.enable = true;
-    };
+  hardware = {
+    graphics.enable32Bit = true;
+  };
+
+  programs = {
+    dconf.enable = true;
+    xwayland.enable = true;
+  };
+
+  services = {
+    dbus.enable = true;
+    gnome.gnome-keyring.enable = true;
   };
 
   qt = {

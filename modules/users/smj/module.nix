@@ -5,7 +5,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkDefault;
   cfg = config.custom.users.smj;
 in {
   options.custom.users.smj = {enable = mkEnableOption "users.smj";};
@@ -13,8 +13,8 @@ in {
   config = mkIf cfg.enable {
     users.users = {
       smj = {
-        isNormalUser = true;
-        extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager"];
+        isNormalUser = mkDefault true;
+        extraGroups = mkDefault ["wheel" "podman" "docker" "audio" "video" "networkmanager"];
         shell = pkgs.zsh;
       };
     };
