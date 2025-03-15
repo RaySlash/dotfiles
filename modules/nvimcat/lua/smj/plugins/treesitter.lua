@@ -1,6 +1,6 @@
 return {
 	"nvim-treesitter",
-	on_cat = "general.treesitter",
+	for_cat = "general.treesitter",
 	event = "DeferredUIEnter",
 	load = function(name)
 		vim.cmd.packadd(name)

@@ -1,6 +1,7 @@
 return {
 	{
 		"conform.nvim",
+		for_cat = "formatter",
 		event = "BufWritePre",
 		cmd = { "ConformInfo" },
 		keys = {

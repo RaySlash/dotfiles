@@ -5,6 +5,12 @@
     packages-overlay = final: _prev: {
       custom = import ./packages final.pkgs;
     };
+    stable-overlay = final: _prev: {
+      stablePkgs = import inputs.nixpkgs-stable {
+        system = final.system;
+        config.allowUnfree = true;
+      };
+    };
   in
     (flake-parts.lib.mkFlake {inherit inputs;}) {
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
@@ -36,13 +42,14 @@
 
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [packages-overlay];
+          overlays = [packages-overlay stable-overlay];
         };
       };
 
       flake = {...}: {
         overlays = {
-          default = final: prev: (inputs.self.overlays.custom-pkgs final prev);
+          default = final: prev: (inputs.self.overlays.custom-pkgs final prev) // (inputs.self.overlays.stable-pkgs final prev);
+          stable-pkgs = stable-overlay;
           custom-pkgs = packages-overlay;
         };
 

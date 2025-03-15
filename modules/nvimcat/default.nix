@@ -127,6 +127,7 @@
         lazydev-nvim
         nvim-ts-autotag
         blink-cmp
+        colorful-menu-nvim
       ];
       formatter = with pkgs.vimPlugins; [
         conform-nvim
@@ -202,6 +203,9 @@
           git = true;
         };
         ui.core = true;
+      };
+      extra = {
+        nixdExtras.nixpkgs = nixpkgs;
       };
     };
   };

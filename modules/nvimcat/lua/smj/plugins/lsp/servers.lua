@@ -1,12 +1,21 @@
 return {
 	{
 		"ccls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "c", "cpp" },
 		},
 	},
 	{
+		"pyright",
+		enabled = nixCats("lsp"),
+		lsp = {
+			filetypes = { "python" },
+		},
+	},
+	{
 		"cssls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "css", "less", "scss" },
 			settings = {
@@ -18,54 +27,63 @@ return {
 	},
 	{
 		"elmls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "elm" },
 		},
 	},
 	{
 		"html",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "html" },
 		},
 	},
 	{
 		"hls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "haskell" },
 		},
 	},
 	{
 		"marksman",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "markdown" },
 		},
 	},
 	{
 		"ts_ls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
 		},
 	},
 	{
 		"tailwindcss",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "typescriptreact", "javascriptreact" },
 		},
 	},
 	{
 		"puresciptls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "purescipt", "purs" },
 		},
 	},
 	{
 		"jdtls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "java" },
 		},
 	},
 	{
 		"zls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = {
 				"zig",
@@ -74,6 +92,7 @@ return {
 	},
 	{
 		"rust_analyzer",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "rust" },
 			settings = {
@@ -96,6 +115,7 @@ return {
 	},
 	{
 		"lua_ls",
+		enabled = nixCats("lsp"),
 		lsp = {
 			filetypes = { "lua" },
 			settings = {
@@ -125,6 +145,7 @@ return {
 	},
 	{
 		"nixd",
+		enabled = nixCats("lsp"),
 		after = function()
 			vim.api.nvim_create_user_command("StartNilLSP", function()
 				require("lspconfig").nil_ls.setup({

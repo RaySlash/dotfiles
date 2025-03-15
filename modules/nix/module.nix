@@ -42,10 +42,9 @@ in {
       };
     };
 
-    # This does not work as expected as nix need `sudo` perms to commit-lock-file
     system.autoUpgrade = {
       enable = true;
-      flake = "github:NixOS/nixpkgs/nixos-24.11";
+      flake = "/home/smj/dotfiles";
       flags = ["--update-input" "nixpkgs" "--commit-lock-file"];
     };
   };

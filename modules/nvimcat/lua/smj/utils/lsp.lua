@@ -7,13 +7,16 @@ function M.on_attach(_, bufnr)
 		if desc then
 			desc = "LSP: " .. desc
 		end
-
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc, noremap = true })
 	end
 
-	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+	vim.lsp.inlay_hint.enable(false)
+	nmap("<leader>lh", function()
+		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+	end, "[T]oggle [I]nlayHints")
 
+	nmap("<leader>lr", vim.lsp.buf.rename, "[R]e[n]ame")
+	nmap("<leader>la", vim.lsp.buf.code_action, "[C]ode [A]ction")
 	nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 
 	if nixCats("general.core") then

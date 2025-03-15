@@ -27,5 +27,7 @@ in {
     smj = import ./users/smj/home;
   };
 
-  pkgs = {nvimcat = nvimcat.packages;};
+  pkgs = {
+    nvimcat = nvimcat.packages;
+  };
 }

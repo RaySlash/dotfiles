@@ -172,7 +172,7 @@ in {
         libva-utils
         fuseiso
         gsettings-desktop-schemas
-        pwvucontrol
+        stablePkgs.pwvucontrol
 
         inputs.meteorbom.packages.${pkgs.system}.default
         #eww dependencies

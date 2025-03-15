@@ -11,7 +11,7 @@ return {
 	},
 	{
 		"nvim-autopairs",
-		on_cat = "general.core",
+		for_cat = "general.core",
 		event = "InsertEnter",
 		on_require = { "nvim-autopairs" },
 		after = function(_)
@@ -20,7 +20,7 @@ return {
 	},
 	{
 		"nvim-surround",
-		on_cat = "general.core",
+		for_cat = "general.core",
 		event = "DeferredUIEnter",
 		after = function(_)
 			require("nvim-surround").setup({})
@@ -28,7 +28,7 @@ return {
 	},
 	{
 		"which-key.nvim",
-		on_cat = "general.core",
+		for_cat = "general.core",
 		event = "DeferredUIEnter",
 		after = function(_)
 			require("which-key").setup({
@@ -38,7 +38,7 @@ return {
 	},
 	{
 		"leap.nvim",
-		on_cat = "general.core",
+		for_cat = "general.core",
 		event = "DeferredUIEnter",
 		keys = {
 			{ "s", "<Plug>(leap-forward)", mode = { "n", "x" }, desc = "Find Forward [Leap]", noremap = true },
@@ -47,7 +47,7 @@ return {
 	},
 	{
 		"auto-session",
-		on_cat = "general.core",
+		for_cat = "general.core",
 		before = function()
 			vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 		end,
@@ -60,7 +60,7 @@ return {
 	},
 	{
 		"neogit",
-		on_cat = "general.git",
+		for_cat = "general.git",
 		event = "DeferredUIEnter",
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<CR>", mode = { "n" }, desc = "Git Console [Neogit]", noremap = true },

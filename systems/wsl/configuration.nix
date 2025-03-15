@@ -9,7 +9,7 @@
     enable = true;
     defaultUser = "smj";
     startMenuLaunchers = true;
-    nativeSystemd = true;
+    # nativeSystemd = true;
     wslConf = {
       automount.enabled = true;
       automount.root = "/mnt";

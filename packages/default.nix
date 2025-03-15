@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  dioxus-cli = pkgs.callPackage ./dioxus-cli {};
+  # dioxus-cli = pkgs.callPackage ./dioxus-cli {};
   meteorbom = pkgs.callPackage ./meteorbom {};
   wezterm = pkgs.callPackage ./wezterm {};
   yofi = pkgs.callPackage ./yofi {};

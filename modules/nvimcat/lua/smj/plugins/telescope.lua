@@ -1,6 +1,7 @@
 return {
 	{
 		"telescope.nvim",
+		for_cat = "general.telescope",
 		event = "DeferredUIEnter",
 		on_require = { "telescope" },
 		keys = {
