@@ -8,18 +8,17 @@
   extra_pkg_config = {
     allowUnfree = true;
   };
-  inherit
-    (forEachSystem (system: let
-      dependencyOverlays = [
-        (utils.sanitizedPluginOverlay inputs)
-      ];
-    in {inherit dependencyOverlays;}))
-    dependencyOverlays
-    ;
+  dependencyOverlays = [
+    (utils.sanitizedPluginOverlay inputs)
+  ];
 
   categoryDefinitions = {
     pkgs,
-    mkNvimPlugin, # (mkNvimPlugin inputs.plugins-neogit "neogit")
+    # settings,
+    # categories,
+    # extra,
+    # name,
+    # mkNvimPlugin,
     ...
   } @ packageDef: {
     lspsAndRuntimeDeps = {
@@ -186,7 +185,13 @@
         lsp = true;
       };
       extra = {
-        nixdExtras.nixpkgs = nixpkgs;
+        nixdExtras = {
+          nixpkgs = "import ${inputs.self.outPath} {}";
+          get_configs = utils.n2l.types.function-unsafe.mk {
+            args = ["type" "path"];
+            body = ''return [[import ${./nixd.nix} ${inputs.self.outPath} "]] .. type .. [[" ]] .. (path or "./.")'';
+          };
+        };
       };
     };
     nvim-minimal = {pkgs, ...}: {
@@ -205,12 +210,15 @@
         ui.core = true;
       };
       extra = {
-        nixdExtras.nixpkgs = nixpkgs;
+        nixdExtras = {
+          nixos_options = ''(builtins.getFlake "path:${builtins.toString inputs.self.outPath}").nixosConfigurations.frost.options'';
+          # home_manager_options = ''(builtins.getFlake "${inputs.self.outPath}").homeConfigurations.${pkgs.system}.."birdee@dustbook".options'';
+          nixpkgs = "import ${pkgs.path} {}";
+        };
       };
     };
   };
   defaultPackageName = "nvimcat";
-  # see :help nixCats.flake.outputs.exports
 in
   forEachSystem (system: let
     nixCatsBuilder =
@@ -227,15 +235,39 @@ in
     devShells = {
       default = pkgs.mkShell {
         name = defaultPackageName;
-        packages = [(nixCatsBuilder defaultPackageName)];
+        packages = [defaultPackage];
         inputsFrom = [];
         shellHook = ''
-          exec ${pkgs.zsh}/bin/zsh
         '';
       };
     };
   })
-  // {
+  // (let
+    nixosModule = utils.mkNixosModules {
+      moduleNamespace = [defaultPackageName];
+      inherit
+        defaultPackageName
+        dependencyOverlays
+        luaPath
+        categoryDefinitions
+        packageDefinitions
+        extra_pkg_config
+        nixpkgs
+        ;
+    };
+    homeModule = utils.mkHomeModules {
+      moduleNamespace = [defaultPackageName];
+      inherit
+        defaultPackageName
+        dependencyOverlays
+        luaPath
+        categoryDefinitions
+        packageDefinitions
+        extra_pkg_config
+        nixpkgs
+        ;
+    };
+  in {
     overlays =
       utils.makeOverlays luaPath {
         inherit nixpkgs dependencyOverlays extra_pkg_config;
@@ -244,26 +276,8 @@ in
       packageDefinitions
       defaultPackageName;
 
-    nixosModules.default = utils.mkNixosModules {
-      inherit
-        defaultPackageName
-        dependencyOverlays
-        luaPath
-        categoryDefinitions
-        packageDefinitions
-        extra_pkg_config
-        nixpkgs
-        ;
-    };
-    homeModules.default = utils.mkHomeModules {
-      inherit
-        defaultPackageName
-        dependencyOverlays
-        luaPath
-        categoryDefinitions
-        packageDefinitions
-        extra_pkg_config
-        nixpkgs
-        ;
-    };
-  }
+    nixosModules.default = nixosModule;
+    homeModules.default = homeModule;
+
+    inherit utils nixosModule homeModule;
+  })

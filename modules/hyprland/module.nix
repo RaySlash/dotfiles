@@ -26,16 +26,18 @@ in {
 
     hardware.graphics.enable = mkDefault true;
 
-    programs = mkDefault {
+    programs = {
       hyprlock.enable = mkDefault true;
-      hyprland = mkDefault {
+      hyprland = {
         enable = mkDefault true;
         systemd.setPath.enable = mkDefault true;
       };
     };
 
-    environment = mkDefault {sessionVariables.NIXOS_OZONE_WL = "1";};
+    environment = mkDefault {
+      sessionVariables.NIXOS_OZONE_WL = "1";
+    };
 
-    xdg.portal.extraPortals = mkDefault (with pkgs; [xdg-desktop-portal-gtk]);
+    xdg.portal.extraPortals = with pkgs; [xdg-desktop-portal-gtk];
   };
 }

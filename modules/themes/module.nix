@@ -17,11 +17,11 @@ in {
     };
     fonts = {
       fontDir.enable = mkDefault true;
-      packages = mkDefault (with pkgs; [
+      packages = with pkgs; [
         nerd-fonts.iosevka-term
         atkinson-hyperlegible
         jetbrains-mono
-      ]);
+      ];
     };
   };
 }

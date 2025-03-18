@@ -43,7 +43,7 @@ in {
         size = mkDefault 32;
       };
 
-      packages = mkDefault (with pkgs; [papirus-icon-theme]);
+      packages = with pkgs; [papirus-icon-theme];
     };
   };
 }

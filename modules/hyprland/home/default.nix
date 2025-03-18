@@ -5,7 +5,7 @@
   inputs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf mkDefault;
+  inherit (lib) mkEnableOption mkIf mkDefault mkOverride;
   cfg = config.custom.hyprland-addons;
 in {
   options.custom.hyprland-addons = {
@@ -79,7 +79,7 @@ in {
     };
 
     programs = {
-      wlogout = mkDefault {
+      wlogout = {
         enable = mkDefault true;
       };
       fuzzel = {
@@ -161,7 +161,7 @@ in {
     };
 
     home = {
-      packages = mkDefault (with pkgs; [
+      packages = with pkgs; [
         swww
         hyprpolkitagent
         wl-clipboard
@@ -172,7 +172,7 @@ in {
         libva-utils
         fuseiso
         gsettings-desktop-schemas
-        stablePkgs.pwvucontrol
+        pwvucontrol
 
         inputs.meteorbom.packages.${pkgs.system}.default
         #eww dependencies
@@ -180,7 +180,7 @@ in {
         lm_sensors
         python3
         socat
-      ]);
+      ];
     };
   };
 }

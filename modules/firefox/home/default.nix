@@ -164,7 +164,7 @@ in {
           "mousewheel.default.delta_multiplier_y" = mkDefault 275;
         };
         extensions = {
-          packages = mkDefault (with pkgs.nur.repos.rycee.firefox-addons; [
+          packages = with pkgs.nur.repos.rycee.firefox-addons; [
             ublock-origin
             bitwarden
             darkreader
@@ -172,7 +172,7 @@ in {
             sidebery
             tridactyl
             enhancer-for-youtube
-          ]);
+          ];
         };
       };
     };

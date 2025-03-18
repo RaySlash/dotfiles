@@ -35,24 +35,24 @@
       enable = true;
       interval = "monthly";
     };
-    xserver = {
-      enable = true;
-      excludePackages = [pkgs.xterm];
-      displayManager.lightdm.enable = false;
-      xkb = {
-        layout = "us";
-        variant = "";
-      };
-    };
+    # xserver = {
+    #   enable = true;
+    #   excludePackages = [pkgs.xterm];
+    # displayManager.lightdm.enable = false;
+    #   xkb = {
+    #     layout = "us";
+    #     variant = "";
+    #   };
+    # };
   };
 
   virtualisation = {
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      autoPrune.enable = true;
-    };
+    # podman = {
+    #   enable = true;
+    #   dockerCompat = true;
+    #   dockerSocket.enable = true;
+    #   autoPrune.enable = true;
+    # };
     libvirtd = {
       enable = true;
       qemu.swtpm.enable = true;

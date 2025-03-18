@@ -1,3 +1,5 @@
+local get_nixd_opts = nixCats.extra("nixdExtras.get_configs")
+
 return {
 	{
 		"ccls",
@@ -158,19 +160,18 @@ return {
 			settings = {
 				nixd = {
 					nixpkgs = {
-						expr = [[import (builtins.getFlake "]] .. nixCats.extra("nixdExtras.nixpkgs") .. [[") { }   ]],
+						expr = nixCats.extra("nixdExtras.nixpkgs") or "import <nixpkgs> {}",
 					},
 					formatting = {
 						command = { "nixfmt" },
 					},
 					options = {
-						-- (builtins.getFlake "<path_to_system_flake>").legacyPackages.<system>.nixosConfigurations."<user@host>".options
 						nixos = {
-							expr = nixCats.extra("nixdExtras.nixos_options"),
+							expr = get_nixd_opts and get_nixd_opts("nixos", nixCats.extra("nixdExtras.flake-path")),
 						},
-						-- (builtins.getFlake "<path_to_system_flake>").legacyPackages.<system>.homeConfigurations."<user@host>".options
 						["home-manager"] = {
-							expr = nixCats.extra("nixdExtras.home_manager_options"),
+							expr = get_nixd_opts
+								and get_nixd_opts("home-manager", nixCats.extra("nixdExtras.flake-path")),
 						},
 					},
 					diagnostic = {
