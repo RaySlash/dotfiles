@@ -1,5 +1,3 @@
-# Copyright (c) 2023 BirdeeHub
-# Licensed under the MIT license
 {inputs, ...} @ attrs: let
   inherit (inputs) nixpkgs;
   inherit (inputs.nixCats) utils;
@@ -167,7 +165,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = {
@@ -186,10 +184,10 @@
       };
       extra = {
         nixdExtras = {
-          nixpkgs = "import ${inputs.self.outPath} {}";
+          nixpkgs = "import ${pkgs.path} {}";
           get_configs = utils.n2l.types.function-unsafe.mk {
             args = ["type" "path"];
-            body = ''return [[import ${./nixd.nix} ${inputs.self.outPath} "]] .. type .. [[" ]] .. (path or "./.")'';
+            body = ''return [[import ${./nixd.nix} ${pkgs.path} "]] .. type .. [[" ]] .. (path or "./.")'';
           };
         };
       };
@@ -198,7 +196,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = {
@@ -211,8 +209,10 @@
       };
       extra = {
         nixdExtras = {
-          nixos_options = ''(builtins.getFlake "path:${builtins.toString inputs.self.outPath}").nixosConfigurations.frost.options'';
-          # home_manager_options = ''(builtins.getFlake "${inputs.self.outPath}").homeConfigurations.${pkgs.system}.."birdee@dustbook".options'';
+          get_configs = utils.n2l.types.function-unsafe.mk {
+            args = ["type" "path"];
+            body = ''return [[import ${./nixd.nix} ${pkgs.path} "]] .. type .. [[" ]] .. (path or "./.")'';
+          };
           nixpkgs = "import ${pkgs.path} {}";
         };
       };

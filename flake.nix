@@ -75,7 +75,6 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
-    sops-nix.url = "github:Mic92/sops-nix";
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -96,8 +95,8 @@
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    neovim-nightly-overlay = {
-      url = "github:nix-community/neovim-nightly-overlay";
-    };
+    # neovim-nightly-overlay = {
+    #   url = "github:nix-community/neovim-nightly-overlay";
+    # };
   };
 }

@@ -16,10 +16,17 @@
     supportedFilesystems = ["ntfs"];
     loader = {
       efi.canTouchEfiVariables = true;
-      systemd-boot = {
+      grub = {
         enable = true;
-        configurationLimit = 8;
+        useOSProber = true;
+        efiSupport = true;
+        device = "nodev";
+        # efiInstallAsRemovable = true;
       };
+      # systemd-boot = {
+      #   enable = true;
+      #   configurationLimit = 8;
+      # };
     };
   };
 

@@ -17,7 +17,6 @@ in {
     emacs-addons = import ./emacs/home;
     firefox-addons = import ./firefox/home;
     hyprland-addons = import ./hyprland/home;
-    lazyvim = import ./lazynvim/home;
     nixcats = nvimcat.homeModules.default;
     neovide = import ./neovide/home.nix;
     nix-addons = import ./nix/home.nix;
