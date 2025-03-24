@@ -17,13 +17,28 @@ in {
   #   modules = [./dell/configuration.nix];
   #   home = ./dell/home;
   # };
-  live = mkNixos {
+  rpi-live = mkNixos {
+    modules = [
+      (inputs.nixpkgs + "/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
+      {
+        nixpkgs.crossSystem.system = "armv7l-linux";
+        nixpkgs.system = "aarch64-linux";
+        nixpkgs.config.allowUnsupportedSystem = true;
+      }
+      ./live/configuration.nix
+    ];
+  };
+  x86_64-live = mkNixos {
     modules = [
       (inputs.nixpkgs
         + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
       (inputs.nixpkgs
         + "/nixos/modules/installer/cd-dvd/channel.nix")
-      ./iso/configuration.nix
+      {
+        nixpkgs.crossSystem = {system = "x86_64-linux";};
+        nixpkgs.system = "x86_64-linux";
+      }
+      ./live/configuration.nix
     ];
   };
 }

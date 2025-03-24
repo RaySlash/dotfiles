@@ -54,6 +54,10 @@
         };
 
         nixosConfigurations = import ./systems {inherit inputs;};
+        images = {
+          rpi-sd = inputs.self.nixosConfigurations.rpi-live.config.system.build.sdImage;
+          x86_64 = inputs.self.nixosConfigurations.x86_64-live.config.system.build.isoImage;
+        };
       };
     };
 
@@ -95,8 +99,8 @@
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    # neovim-nightly-overlay = {
-    #   url = "github:nix-community/neovim-nightly-overlay";
-    # };
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+    };
   };
 }
