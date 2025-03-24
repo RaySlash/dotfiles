@@ -106,6 +106,8 @@
           dressing-nvim
           noice-nvim
           nui-nvim
+          blink-cmp
+          colorful-menu-nvim
           kanagawa-nvim
           lualine-nvim
           leap-nvim
@@ -123,8 +125,6 @@
         trouble-nvim
         lazydev-nvim
         nvim-ts-autotag
-        blink-cmp
-        colorful-menu-nvim
       ];
       formatter = with pkgs.vimPlugins; [
         conform-nvim

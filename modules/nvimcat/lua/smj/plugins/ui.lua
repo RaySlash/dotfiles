@@ -20,7 +20,7 @@ return {
 		"statuscol.nvim",
 		for_cat = "ui.core",
 		event = "DeferredUIEnter",
-    on_require = { "statuscol" },
+		on_require = { "statuscol" },
 		after = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
@@ -41,10 +41,10 @@ return {
 		"noice.nvim",
 		for_cat = "ui.core",
 		event = "UIEnter",
-    load = function (name)
-      vim.cmd.packadd("nui.nvim")
-      vim.cmd.packadd(name)
-    end,
+		load = function(name)
+			vim.cmd.packadd("nui.nvim")
+			vim.cmd.packadd(name)
+		end,
 		after = function()
 			require("noice").setup({
 				lsp = {
@@ -153,6 +153,46 @@ return {
 				virtual_symbol = "■",
 				enable_named_colors = true,
 				enable_tailwind = true,
+			})
+		end,
+	},
+	{
+		"colorful-menu.nvim",
+		for_cat = "ui.core",
+		after = function()
+			require("colorful-menu").setup({})
+		end,
+	},
+	{
+		"blink.cmp",
+		for_cat = "ui.core",
+		after = function()
+			require("blink.cmp").setup({
+				sources = { default = { "lsp", "buffer", "snippets", "path" } },
+				keymap = {
+					preset = "enter",
+				},
+				appearance = { nerd_font_variant = "normal" },
+				completion = {
+					menu = {
+						draw = {
+							treesitter = { "lsp" },
+							-- We don't need label_description now because label and label_description are already
+							-- combined together in label by colorful-menu.nvim.
+							columns = { { "kind_icon" }, { "label", gap = 1 } },
+							components = {
+								label = {
+									text = function(ctx)
+										return require("colorful-menu").blink_components_text(ctx)
+									end,
+									highlight = function(ctx)
+										return require("colorful-menu").blink_components_highlight(ctx)
+									end,
+								},
+							},
+						},
+					},
+				},
 			})
 		end,
 	},
