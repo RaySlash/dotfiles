@@ -26,8 +26,8 @@ in {
         name = mkDefault "smj";
         isDefault = mkDefault true;
         search = {
-          default = mkDefault "DuckDuckGo";
-          order = mkDefault ["DuckDuckGo"];
+          default = mkDefault "ddg";
+          order = mkDefault ["ddg"];
           force = mkDefault true;
         };
         userChrome = mkDefault (readFile ./userChrome.css);
