@@ -165,7 +165,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = {
@@ -196,7 +196,7 @@
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
-        # neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
       };
       categories = {
         general = {
