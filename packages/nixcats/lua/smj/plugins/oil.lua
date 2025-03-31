@@ -9,7 +9,8 @@ return {
 		after = function(_)
 			local oil = require("oil")
 			function _G.get_oil_winbar()
-				local dir = require("oil").get_current_dir()
+				local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+				local dir = require("oil").get_current_dir(bufnr)
 				if dir then
 					return vim.fn.fnamemodify(dir, ":~")
 				else
