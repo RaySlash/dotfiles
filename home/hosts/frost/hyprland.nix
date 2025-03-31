@@ -89,7 +89,7 @@
     "$mod, XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 0.05+"
     "$mod, XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 0.05-"
     "$mod, XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-    "$mod, P, exec, grim -g '$(slurp)'"
+    "$mod, p, exec, grim -g $(slurp)"
     "$mod, x, togglespecialworkspace, scratch"
     "$mod_SHIFT, x, movetoworkspace, special:scratch"
     "$mod, left, movefocus, l"

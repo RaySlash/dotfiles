@@ -30,7 +30,9 @@
       }: let
         nixcats = (import ./packages/nixcats {inherit inputs;}).packages.${system};
       in {
-        packages = import ./packages {inherit pkgs inputs;} // nixcats;
+        packages =
+          import ./packages {inherit pkgs inputs;}
+          // nixcats;
         formatter = inputs'.nixpkgs.legacyPackages.alejandra;
 
         _module.args.pkgs = import inputs.nixpkgs {
@@ -93,7 +95,7 @@
     # Applications
     # wezterm.url = "github:wez/wezterm?dir=nix";
     meteorbom = {
-      url = "git+ssh://git@github.com/rayslash/meteorbom/master";
+      url = "git+ssh://git@github.com/rayslash/meteorbom";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs-overlay = {

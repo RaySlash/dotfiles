@@ -10,6 +10,11 @@
     emacs = import ./programs/emacs;
     firefox = import ./programs/firefox;
     hyprland = import ./programs/hyprland;
+    dunst = import ./programs/dunst;
+    hypridle = import ./programs/hypridle;
+    hyprlock = import ./programs/hyprlock;
+    eww = import ./programs/eww;
+    fuzzel = import ./programs/fuzzel;
     kitty = import ./programs/kitty;
     neovim = (pimport ../../packages/nixcats).homeModule;
     wezterm = import ./programs/wezterm;
