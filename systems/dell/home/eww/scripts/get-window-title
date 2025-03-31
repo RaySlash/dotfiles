@@ -1,2 +1,0 @@
-hyprctl activewindow -j | jq --raw-output .title
-socat -u UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | stdbuf -o0 grep 'activewindow>>' | stdbuf -o0 sed 's/^[^,]*,//' | stdbuf -o0 cut -c -60
