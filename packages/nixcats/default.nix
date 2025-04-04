@@ -150,22 +150,30 @@
         EDITOR = "nvim";
       };
     };
-
-    extraWrapperArgs = {
-      # https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
-      test = [''--set CATTESTVAR2 "It worked again!"''];
-    };
-
-    extraPython3Packages = {test = _: [];};
-    extraLuaPackages = {test = [(_: [])];};
   };
 
   packageDefinitions = {
-    nvimcat = {pkgs, ...}: {
+    nvimcat = {
+      pkgs,
+      name,
+      ...
+    }: {
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
         neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+        # hosts = {
+        #   python.enable = true;
+        #   node.enable = true;
+        #   # Wrap package with neovide
+        #   neovide = {
+        #     enable = true;
+        #     path = {
+        #       value = "${pkgs.neovide}/bin/neovide";
+        #       args = ["--add-flags" "--neovim-bin ${name}"];
+        #     };
+        #   };
+        # };
       };
       categories = {
         general = {

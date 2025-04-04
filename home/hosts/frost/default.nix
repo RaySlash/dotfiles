@@ -1,5 +1,10 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
+    inputs.zen-browser.packages.${pkgs.system}.default
     btop
     obsidian
     fd
@@ -36,7 +41,7 @@
 
   custom = {
     programs = {
-      firefox.enable = true;
+      # firefox.enable = true;
       kitty.enable = true;
       hyprland.enable = true;
       hypridle.enable = true;

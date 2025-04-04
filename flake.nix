@@ -15,24 +15,23 @@
   in
     (flake-parts.lib.mkFlake {inherit inputs;}) {
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
-      debug = true; # Enable debug log trace in repl
+      # debug = true; # Enable debug options (allSystems) in repl
 
       imports = [
         inputs.home-manager.flakeModules.default
         # inputs.flake-parts.flakeModules.flakeModules
       ];
 
+      # TODO: seperate overlays and write util functions
+      # TODO: factor out pkgs and commonize
       perSystem = {
         system,
         inputs',
         pkgs,
         ...
-      }: let
-        nixcats = (import ./packages/nixcats {inherit inputs;}).packages.${system};
-      in {
+      }: {
         packages =
-          import ./packages {inherit pkgs inputs;}
-          // nixcats;
+          import ./packages {inherit pkgs inputs;};
         formatter = inputs'.nixpkgs.legacyPackages.alejandra;
 
         _module.args.pkgs = import inputs.nixpkgs {
@@ -94,6 +93,10 @@
 
     # Applications
     # wezterm.url = "github:wez/wezterm?dir=nix";
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     meteorbom = {
       url = "git+ssh://git@github.com/rayslash/meteorbom";
       inputs.nixpkgs.follows = "nixpkgs";
