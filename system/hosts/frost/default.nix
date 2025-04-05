@@ -3,7 +3,10 @@
   inputs,
   ...
 }: {
-  imports = [./hardware-configuration.nix];
+  imports = [
+    ./hardware-configuration.nix
+    inputs.nix-minecraft.nixosModules.minecraft-servers
+  ];
 
   networking = {
     hostName = "frost";
@@ -20,17 +23,10 @@
     supportedFilesystems = ["ntfs"];
     loader = {
       efi.canTouchEfiVariables = true;
-      grub = {
+      systemd-boot = {
         enable = true;
-        useOSProber = true;
-        efiSupport = true;
-        device = "nodev";
-        # efiInstallAsRemovable = true;
+        configurationLimit = 8;
       };
-      # systemd-boot = {
-      #   enable = true;
-      #   configurationLimit = 8;
-      # };
     };
   };
 

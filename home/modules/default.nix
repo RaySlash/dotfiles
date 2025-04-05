@@ -16,10 +16,8 @@
     eww = import ./programs/eww;
     fuzzel = import ./programs/fuzzel;
     kitty = import ./programs/kitty;
-    neovim = (pimport ../../packages/nixcats).homeModule;
+    neovim = (pimport ../../packages/nixcats).homeModules.default;
     wezterm = import ./programs/wezterm;
   };
-  homeManagerModules = profiles // programs;
-in {
-  inherit homeManagerModules;
-}
+in
+  profiles // programs

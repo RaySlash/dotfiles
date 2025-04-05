@@ -8,14 +8,12 @@
     zsh = import ./programs/zsh;
     minecraft-servers = import ./programs/minecraft-servers;
     yazi = import ./programs/yazi;
-    neovim = (pimport ../../packages/nixcats).nixosModule;
+    neovim = (pimport ../../packages/nixcats).nixosModules.default;
   };
   profiles = {
     development = import ./profiles/development;
     desktop = import ./profiles/desktop;
     themes = import ./profiles/themes;
   };
-  nixosModules = programs // profiles;
-in {
-  inherit nixosModules;
-}
+in
+  programs // profiles

@@ -2,16 +2,16 @@
   description = "Personal Flake NixOS config - RaySlash";
 
   outputs = {flake-parts, ...} @ inputs: let
+    lib = inputs.nixpkgs.lib;
     packages-overlay = final: _prev: {
       custom = import ./packages final.pkgs;
     };
     stable-overlay = final: _prev: {
-      stablePkgs = import inputs.nixpkgs-stable {
+      stablePkgs = inputs.self.utils.mkPkgs {
+        nixpkgs = inputs.nixpkgs-stable;
         system = final.system;
-        config.allowUnfree = true;
       };
     };
-    lib = inputs.nixpkgs.lib;
   in
     (flake-parts.lib.mkFlake {inherit inputs;}) {
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
@@ -36,11 +36,7 @@
 
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
-          overlays = [
-            inputs.self.overlays.default
-            inputs.emacs-overlay.overlays.default
-            inputs.neovim-nightly-overlay.overlays.default
-          ];
+          overlays = builtins.attrValues inputs.self.overlays;
         };
       };
 
@@ -49,13 +45,18 @@
           default = final: prev: (inputs.self.overlays.custom-pkgs final prev) // (inputs.self.overlays.stable-pkgs final prev);
           stable-pkgs = stable-overlay;
           custom-pkgs = packages-overlay;
+          nurpkgs = inputs.nurpkgs.overlays.default;
+          nix-minecraft = inputs.nix-minecraft.overlay;
+          neovim-nightly = inputs.neovim-nightly-overlay.overlays.default;
+          emacs = inputs.emacs-overlay.overlays.default;
         };
 
         localConfig = import ./config.nix;
+        utils = import ./utils.nix {inherit inputs;};
         nixosConfigurations = import ./system {inherit inputs lib;};
         homeConfigurations = import ./home {inherit inputs lib;};
-        nixosModules = (import ./system/modules {inherit inputs lib;}).nixosModules;
-        homeModules = (import ./home/modules {inherit inputs lib;}).homeManagerModules;
+        nixosModules = import ./system/modules {inherit inputs lib;};
+        homeModules = import ./home/modules {inherit inputs lib;};
 
         images = {
           rpi-sd = inputs.self.nixosConfigurations.rpi-live.config.system.build.sdImage;
@@ -72,11 +73,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL?ref=main";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -101,9 +102,6 @@
       url = "git+ssh://git@github.com/rayslash/meteorbom";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
-    };
     kanagawa-yazi = {
       url = "github:marcosvnmelo/kanagawa-dragon.yazi";
       flake = false;
@@ -112,6 +110,9 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
+    };
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
     };
   };
 }

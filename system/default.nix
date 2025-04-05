@@ -1,30 +1,5 @@
-{
-  inputs,
-  lib,
-  ...
-}: let
-  mkSystem = args:
-    lib.nixosSystem {
-      pkgs = import inputs.nixpkgs {
-        config.allowUnfree = true;
-        system = args.system;
-        overlay = [
-          inputs.self.overlays.default
-          inputs.nix-minecraft.overlay
-        ];
-      };
-      specialArgs = {
-        inherit inputs lib;
-        inherit (inputs.self) localConfig;
-      };
-      modules =
-        [
-          ./common.nix
-          inputs.nix-minecraft.nixosModules.minecraft-servers
-        ]
-        ++ args.modules
-        ++ (builtins.attrValues (import ./modules {inherit inputs;}).nixosModules);
-    };
+{inputs, ...}: let
+  inherit (inputs.self.utils) mkSystem;
 in {
   frost = mkSystem {
     system = "x86_64-linux";

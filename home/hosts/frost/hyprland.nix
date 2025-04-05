@@ -9,6 +9,7 @@
     "openrgb --startminimized -p smj &"
     "hypridle &"
   ];
+
   env = [
     "XCURSOR_SIZE,32"
     "WLR_NO_HARDWARE_CURSORS,1"
@@ -86,8 +87,8 @@
     ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+"
     ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"
     ", XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-    "$mod, XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 0.05+"
-    "$mod, XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 0.05-"
+    "$mod, XF86AudioRaiseVolume, exec, hyprctl hyprsunset gamma -10"
+    "$mod, XF86AudioLowerVolume, exec, hyprctl hyprsunset gamma +10"
     "$mod, XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
     "$mod, p, exec, grim -g $(slurp)"
     "$mod, x, togglespecialworkspace, scratch"

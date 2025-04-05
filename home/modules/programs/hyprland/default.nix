@@ -36,6 +36,7 @@ in {
     home = {
       packages = with pkgs; [
         hyprpolkitagent
+        hyprsunset
         wl-clipboard
         wirelesstools
         libva-utils
