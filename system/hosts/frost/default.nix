@@ -6,6 +6,7 @@
   imports = [
     ./hardware-configuration.nix
     inputs.nix-minecraft.nixosModules.minecraft-servers
+    inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
   networking = {
@@ -18,14 +19,18 @@
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_xanmod;
+    # kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = ["i2c-dev"];
     supportedFilesystems = ["ntfs"];
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
     loader = {
       efi.canTouchEfiVariables = true;
       systemd-boot = {
-        enable = true;
-        configurationLimit = 8;
+        enable = false;
+        # configurationLimit = 8;
       };
     };
   };
@@ -45,7 +50,7 @@
     # xserver = {
     #   enable = true;
     #   excludePackages = [pkgs.xterm];
-    # displayManager.lightdm.enable = false;
+    #   displayManager.lightdm.enable = false;
     #   xkb = {
     #     layout = "us";
     #     variant = "";
@@ -94,6 +99,7 @@
       [
         man-pages
         man-pages-posix
+        sbctl
       ]
       ++ [inputs.home-manager.packages.${pkgs.system}.home-manager];
   };

@@ -19,11 +19,8 @@
 
       imports = [
         inputs.home-manager.flakeModules.default
-        # inputs.flake-parts.flakeModules.flakeModules
       ];
 
-      # TODO: seperate overlays and write util functions
-      # TODO: factor out pkgs and commonize
       perSystem = {
         system,
         inputs',
@@ -87,6 +84,10 @@
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-index-database = {
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -110,6 +111,10 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
+    };
+    plugin-nui = {
+      url = "github:MunifTanjim/nui.nvim?ref=main";
+      flake = false;
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";

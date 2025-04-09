@@ -4,6 +4,7 @@ return {
 	{ import = "smj.plugins.oil" },
 	{ import = "smj.plugins.telescope" },
 	{ import = "smj.plugins.treesitter" },
+	{ import = "smj.plugins.fzf" },
 	{ import = "smj.plugins.formatter" },
 	{ import = "smj.plugins.lsp" },
 }

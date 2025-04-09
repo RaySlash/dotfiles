@@ -77,7 +77,6 @@ return {
 				},
 			})
 			pcall(extension, "fzy_native")
-			pcall(extension, "noice")
 			pcall(extension, "frecency")
 			pcall(extension, "undo")
 		end,

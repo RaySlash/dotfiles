@@ -38,30 +38,6 @@ return {
 		end,
 	},
 	{
-		"noice.nvim",
-		for_cat = "ui.core",
-		event = "UIEnter",
-		load = function(name)
-			vim.cmd.packadd("nui.nvim")
-			vim.cmd.packadd(name)
-		end,
-		after = function()
-			require("noice").setup({
-				lsp = {
-					override = {
-						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-						["vim.lsp.util.stylize_markdown"] = true,
-					},
-				},
-				presets = {
-					bottom_search = true,
-					command_palette = true, -- position the cmdline and popupmenu together
-					long_message_to_split = true, -- long messages will be sent to a split
-				},
-			})
-		end,
-	},
-	{
 		"dashboard-nvim",
 		for_cat = "ui.core",
 		event = "DeferredUIEnter",

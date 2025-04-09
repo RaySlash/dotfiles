@@ -18,6 +18,9 @@ in {
         zsh-autoenv.enable = mkDefault true;
         enableCompletion = mkDefault true;
         histSize = mkDefault 10000;
+        interactiveShellInit = ''
+          source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+        '';
         ohMyZsh = {
           enable = mkDefault true;
           theme = mkDefault "intheloop";

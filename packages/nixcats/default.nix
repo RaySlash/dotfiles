@@ -16,7 +16,7 @@
     # categories,
     # extra,
     # name,
-    # mkNvimPlugin,
+    mkNvimPlugin,
     ...
   } @ packageDef: {
     lspsAndRuntimeDeps = {
@@ -52,11 +52,22 @@
       image-preview = with pkgs; [
         imagemagick
         curl
+        chafa
       ];
-      general.telescope = with pkgs; [
-        ripgrep
-        fd
-      ];
+      general = {
+        fzf = with pkgs; [
+          ripgrep
+          fd
+          fzf
+          bat
+          delta
+        ];
+        telescope = with pkgs; [
+          ripgrep
+          fd
+        ];
+        git = pkgs.git;
+      };
     };
 
     startupPlugins = {
@@ -94,6 +105,9 @@
           telescope-frecency-nvim
           telescope-undo-nvim
         ];
+        fzf = with pkgs.vimPlugins; [
+          fzf-lua
+        ];
         git = with pkgs.vimPlugins; [
           neogit
           undotree
@@ -104,8 +118,6 @@
           dashboard-nvim
           vim-startuptime
           dressing-nvim
-          noice-nvim
-          nui-nvim
           blink-cmp
           colorful-menu-nvim
           kanagawa-nvim
@@ -134,16 +146,13 @@
       ];
     };
 
-    sharedLibraries = {
-      general = {
-        core = with pkgs; [
-          libgit2
-        ];
-      };
-      lsp = with pkgs; [
-        raylib
-      ];
-    };
+    # sharedLibraries = {
+    #   general = {
+    #     core = with pkgs; [
+    #       libgit2
+    #     ];
+    #   };
+    # };
 
     environmentVariables = {
       general.core = {
@@ -162,24 +171,12 @@
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
         neovim-unwrapped = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-        # hosts = {
-        #   python.enable = true;
-        #   node.enable = true;
-        #   # Wrap package with neovide
-        #   neovide = {
-        #     enable = true;
-        #     path = {
-        #       value = "${pkgs.neovide}/bin/neovide";
-        #       args = ["--add-flags" "--neovim-bin ${name}"];
-        #     };
-        #   };
-        # };
       };
       categories = {
         general = {
           core = true;
           treesitter = true;
-          telescope = true;
+          fzf = true;
           git = true;
         };
         ui = {
@@ -210,7 +207,7 @@
         general = {
           core = true;
           treesitter = true;
-          telescope = true;
+          fzf = true;
           git = true;
         };
         ui.core = true;

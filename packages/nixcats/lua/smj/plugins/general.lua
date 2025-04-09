@@ -41,8 +41,8 @@ return {
 		for_cat = "general.core",
 		event = "DeferredUIEnter",
 		keys = {
-			{ "s", "<Plug>(leap-forward)", mode = { "n", "x" }, desc = "Find Forward [Leap]", noremap = true },
-			{ "S", "<Plug>(leap-backward)", mode = { "n", "x" }, desc = "Find Backwards [Leap]", noremap = true },
+			{ "f", "<Plug>(leap-forward)", mode = { "n", "x" }, desc = "Find Forward [Leap]", noremap = true },
+			{ "F", "<Plug>(leap-backward)", mode = { "n", "x" }, desc = "Find Backwards [Leap]", noremap = true },
 		},
 	},
 	{
@@ -61,7 +61,7 @@ return {
 	{
 		"neogit",
 		for_cat = "general.git",
-		event = "DeferredUIEnter",
+		-- event = "DeferredUIEnter",
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<CR>", mode = { "n" }, desc = "Git Console [Neogit]", noremap = true },
 		},
