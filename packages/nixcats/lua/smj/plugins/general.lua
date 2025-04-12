@@ -66,6 +66,10 @@ return {
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<CR>", mode = { "n" }, desc = "Git Console [Neogit]", noremap = true },
 		},
+		load = function(name)
+			vim.cmd.packadd("plenary.nvim")
+			vim.cmd.packadd(name)
+		end,
 		after = function()
 			require("neogit").setup({
 				commit_date_format = "strftime",

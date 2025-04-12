@@ -1065,6 +1065,38 @@
         "type": "github"
       }
     },
+    "plugins-lze": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1744074807,
+        "narHash": "sha256-4JCvOGxq4oV4rda75SFTL58INuX7BRJOyT/E2ppCnZI=",
+        "owner": "BirdeeHub",
+        "repo": "lze",
+        "rev": "f0c143868a64f915a13956130d2f509e79cccaed",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "lze",
+        "type": "github"
+      }
+    },
+    "plugins-lzextras": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1744080731,
+        "narHash": "sha256-fBoDoj0juoWn48OG+bj3isJ5904/wcFqDDnvhEvdIrE=",
+        "owner": "BirdeeHub",
+        "repo": "lzextras",
+        "rev": "53c2b4d9dc39e5c5e3d451f8e5b33ed589acb900",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "lzextras",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks-nix": {
       "inputs": {
         "flake-compat": [
@@ -1109,6 +1141,8 @@
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-stable": "nixpkgs-stable_3",
         "nurpkgs": "nurpkgs",
+        "plugins-lze": "plugins-lze",
+        "plugins-lzextras": "plugins-lzextras",
         "stylix": "stylix",
         "tt-schemes": "tt-schemes",
         "zen-browser": "zen-browser"

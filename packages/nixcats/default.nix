@@ -72,7 +72,7 @@
 
     startupPlugins = {
       general = {
-        core = with pkgs.vimPlugins; [
+        core = with pkgs.neovimPlugins; [
           lze
           lzextras
         ];
