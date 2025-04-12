@@ -37,9 +37,8 @@
     gnome.gnome-keyring.enable = true;
   };
 
-  custom = {
-    yazi.enable = true;
-  };
+  # custom = {
+  # };
 
   environment = {
     systemPackages = with pkgs; [man-pages man-pages-posix];

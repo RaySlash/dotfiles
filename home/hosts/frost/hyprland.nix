@@ -41,8 +41,8 @@
     gaps_in = 5;
     gaps_out = 10;
     border_size = 2;
-    "col.active_border" = "rgba(fb4934aa)";
-    "col.inactive_border" = "rgba(000000aa)";
+    # "col.active_border" = "rgba(fb4934aa)";
+    # "col.inactive_border" = "rgba(000000aa)";
     layout = "master";
   };
 
@@ -54,7 +54,7 @@
       enabled = true;
       range = 8;
       render_power = 3;
-      color = "rgba(1a1a1aee)";
+      # color = "rgba(1a1a1aee)";
     };
     blur = {
       enabled = "yes";

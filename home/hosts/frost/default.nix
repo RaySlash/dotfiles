@@ -1,8 +1,12 @@
 {
   inputs,
   pkgs,
+  config,
   ...
 }: {
+  imports = [
+  ];
+
   home.packages = with pkgs; [
     inputs.zen-browser.packages.${pkgs.system}.default
     btop
@@ -23,6 +27,7 @@
     grim
     slurp
     coreutils
+    yazi
     # wineWowPackages.waylandFull
     virt-manager
     vlc
@@ -64,6 +69,15 @@
         obs-vkcapture
         obs-gstreamer
         obs-pipewire-audio-capture
+      ];
+    };
+    bat = {
+      enable = true;
+      extraPackages = with pkgs.bat-extras; [
+        batdiff
+        batman
+        batgrep
+        batwatch
       ];
     };
     fzf = {

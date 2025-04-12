@@ -7,7 +7,6 @@
     nix = import ./programs/nix;
     zsh = import ./programs/zsh;
     minecraft-servers = import ./programs/minecraft-servers;
-    yazi = import ./programs/yazi;
     neovim = (pimport ../../packages/nixcats).nixosModules.default;
   };
   profiles = {

@@ -25,7 +25,7 @@ in {
           enable = mkDefault true;
           theme = mkDefault "intheloop";
         };
-        shellAliases = mkDefault {
+        shellAliases = {
           ls = "eza --icons";
           ll = "eza --icons -l";
           ffd = "cd $(fd -t d --max-depth 4 . ~/Projects | fzf)";

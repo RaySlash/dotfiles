@@ -89,7 +89,6 @@
     };
     programs = {
       hyprland.enable = true;
-      yazi.enable = true;
       minecraft-servers.enable = true;
     };
   };

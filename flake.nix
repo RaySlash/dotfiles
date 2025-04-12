@@ -14,7 +14,7 @@
     };
   in
     (flake-parts.lib.mkFlake {inherit inputs;}) {
-      systems = inputs.nixpkgs.lib.systems.flakeExposed;
+      systems = lib.platforms.all;
       # debug = true; # Enable debug options (allSystems) in repl
 
       imports = [
@@ -95,6 +95,12 @@
 
     # Applications
     # wezterm.url = "github:wez/wezterm?dir=nix";
+    # base16.url = "github:SenchoPens/base16.nix";
+    stylix.url = "github:danth/stylix";
+    tt-schemes = {
+      url = "github:rayslash/tinted-theme-schemes/kanagawa-dragon";
+      flake = false;
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -103,18 +109,10 @@
       url = "git+ssh://git@github.com/rayslash/meteorbom";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    kanagawa-yazi = {
-      url = "github:marcosvnmelo/kanagawa-dragon.yazi";
-      flake = false;
-    };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
-    };
-    plugin-nui = {
-      url = "github:MunifTanjim/nui.nvim?ref=main";
-      flake = false;
     };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";

@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf mkDefault;
+  inherit (lib) mkEnableOption mkIf mkDefault mkForce;
   cfg = config.custom.programs.kitty;
 in {
   options.custom.programs.kitty = {enable = mkEnableOption "programs.kitty";};
@@ -12,20 +12,20 @@ in {
   config = mkIf cfg.enable {
     programs.kitty = {
       enable = mkDefault true;
-      themeFile = mkDefault "kanagawa_dragon";
+      # themeFile = mkDefault "kanagawa_dragon";
       shellIntegration.enableZshIntegration = mkDefault true;
 
-      font = {
-        name = mkDefault "IosevkaTerm Nerd Font";
-        package = mkDefault pkgs.nerd-fonts.iosevka-term;
-        size = mkDefault 14;
-      };
-
+      # font = {
+      #   name = mkDefault "IosevkaTerm Nerd Font";
+      #   package = mkDefault pkgs.nerd-fonts.iosevka-term;
+      #   size = mkForce 12;
+      # };
+      #
       settings = {
         editor = mkDefault "nvim";
         shell = mkDefault "zsh";
         dynamic_background_opacity = mkDefault true;
-        background = mkDefault "#000000";
+        background = "#000000";
         background_opacity = mkDefault 0.8;
         background_blur = mkDefault 32;
         hide_window_decorations = mkDefault true;

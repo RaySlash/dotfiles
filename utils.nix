@@ -1,17 +1,15 @@
 {inputs, ...}: let
   # mkSpecialArgs : Attrset
-  # The attribute set values are passed to all modules called by lib.nixosSystem
-  # home-manager.lib.homeManagerConfiguration
+  # The attribute set values are passed to all modules called by lib.nixosSystem and
+  # home-manager.lib.homeManagerConfiguration. BY default, we pass inputs and localConfig
   mkSpecialArgs = {
     inherit inputs;
-    # inherit (inputs.nixpkgs) lib;
     inherit (inputs.self) localConfig;
   };
 
   # mkPkgs : system -> Maybe nixpkgs -> Maybe overlays -> (Instance of nixpkgs)
-  # Generate an instance of nixpkgs with overlays applied, and if the instance need to have
-  # differrent build host then adds buildPlatform as well. All are imported to be reused
-  # in home Configuration and nixos Configuration.
+  # Generate an instance of nixpkgs with overlays applied.
+  # All are imported to be reused in home Configuration and nixos Configuration.
   mkPkgs = args:
     import (args.nixpkgs or inputs.nixpkgs) {
       config.allowUnfree = true;
@@ -31,10 +29,7 @@
       };
       extraSpecialArgs = mkSpecialArgs;
       modules =
-        [
-          ./home/common.nix
-          inputs.nix-index-database.hmModules.nix-index
-        ]
+        [./home/common.nix]
         ++ builtins.attrValues inputs.self.homeModules or []
         ++ args.modules or [];
     };
@@ -49,9 +44,7 @@
       };
       specialArgs = mkSpecialArgs;
       modules =
-        [
-          ./system/common.nix
-        ]
+        [./system/common.nix]
         ++ builtins.attrValues inputs.self.nixosModules or []
         ++ args.modules or [];
     };

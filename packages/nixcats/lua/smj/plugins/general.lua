@@ -61,7 +61,8 @@ return {
 	{
 		"neogit",
 		for_cat = "general.git",
-		-- event = "DeferredUIEnter",
+		on_require = "neogit",
+		event = "DeferredUIEnter",
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<CR>", mode = { "n" }, desc = "Git Console [Neogit]", noremap = true },
 		},
