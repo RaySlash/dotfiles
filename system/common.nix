@@ -8,6 +8,7 @@
 }: {
   imports = [
     inputs.stylix.nixosModules.stylix
+    inputs.nix-minecraft.nixosModules.minecraft-servers
   ];
   systemd.extraConfig = "\n    DefaultTimeoutStopSec=10s\n    ";
   time.timeZone = "Australia/Brisbane";

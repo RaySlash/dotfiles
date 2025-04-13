@@ -1,0 +1,5 @@
+/.direnv
+/result
+/ccls*
+/.ccls*
+/*.out

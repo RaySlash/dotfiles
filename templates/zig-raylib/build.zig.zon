@@ -1,0 +1,27 @@
+.{
+    .name = .exampleapp,
+    .version = "0.0.1",
+    // TODO: Change fp from `zig build run`
+    .fingerprint = 0x8262be976a06210d, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.14.0",
+
+    // This field is optional.
+    // Each dependency must either provide a `url` and `hash`, or a `path`.
+    // `zig build --fetch` can be used to fetch all dependencies of a package, recursively.
+    // Once all dependencies are fetched, `zig build` no longer requires
+    // internet connectivity.
+    .dependencies = .{
+        .raylib_zig = .{
+            .url = "git+https://github.com/Not-Nik/raylib-zig?ref=devel#d6c77762cbdebbf56d3ff101142048dfae2496c4",
+            .hash = "raylib_zig-5.6.0-dev-KE8REBMyBQCnQ9RBhHsoSKr97XmDHF84wx3g0UiMRDxj",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        // For example...
+        //"LICENSE",
+        //"README.md",
+    },
+}

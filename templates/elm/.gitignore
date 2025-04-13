@@ -1,0 +1,6 @@
+/elm-stuff
+/dist
+/.direnv
+/.parcel-cache
+/node_modules
+/index.html

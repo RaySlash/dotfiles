@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }: {
@@ -51,21 +50,12 @@
   };
 
   custom = {
-    programs.yazi.enable = true;
+    profiles = {
+      development.enable = true;
+    };
   };
 
   environment = {
-    # Set to find custom kitty conf
-    etc = {
-      kitty = {
-        enable = true;
-        target = "kitty/kitty.conf";
-        source = ./kitty.conf;
-      };
-    };
-    sessionVariables = {
-      KITTY_CONFIG_DIRECTORY = "/etc/kitty/";
-    };
     systemPackages = with pkgs; [
       coreutils
       pciutils

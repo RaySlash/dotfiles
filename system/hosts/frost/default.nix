@@ -5,7 +5,6 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    inputs.nix-minecraft.nixosModules.minecraft-servers
     inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
