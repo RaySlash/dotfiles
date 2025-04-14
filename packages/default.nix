@@ -6,8 +6,8 @@
   packages = [
     "meteorbom"
     "wezterm"
-    "yofi"
     "neovide"
+    # "yofi"
     # dioxus-cli
     # hyprland-py
     # typstudio
