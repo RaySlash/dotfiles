@@ -33,9 +33,9 @@
       url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    stylix.url = "github:danth/stylix";
 
     # Applications
-    stylix.url = "github:danth/stylix";
     tt-schemes = {
       url = "github:tinted-theming/schemes";
       flake = false;
