@@ -65,7 +65,7 @@ in
       hub = import ./config.nix {inherit inputs;};
       nixosConfigurations = import ./system {inherit inputs hub;};
       homeConfigurations = import ./home {inherit inputs hub;};
-      flakeModules = import ./utils/flake-module.nix {inherit inputs hub;};
+      flakeModules = import ./utils/flake-module.nix {inherit inputs lib hub;};
       nixosModules = import ./system/modules {inherit inputs lib hub;};
       homeModules = import ./home/modules {inherit inputs lib hub;};
 

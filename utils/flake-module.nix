@@ -1,6 +1,6 @@
 {
   lib,
-  flake-parts-lib,
+  inputs,
   ...
 }: let
   inherit
@@ -10,7 +10,7 @@
     ;
 in {
   options = {
-    flake = flake-parts-lib.mkSubmoduleOptions {
+    flake = inputs.flake-parts.lib.mkSubmoduleOptions {
       hub = mkOption {
         type = types.lazyAttrsOf types.raw;
         default = {};
