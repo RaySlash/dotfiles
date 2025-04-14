@@ -2,6 +2,7 @@
   config,
   lib,
   inputs,
+  hub,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkDefault;
@@ -16,13 +17,13 @@ in {
         enable = mkDefault true;
         clean.enable = mkDefault true;
         clean.extraArgs = mkDefault "--keep-since 4d --keep 3";
-        flake = mkDefault "/home/${inputs.self.localConfig.username}/dotfiles";
+        flake = mkDefault "/home/${hub.cfg.user.name}/dotfiles";
       };
     };
 
     system.autoUpgrade = {
       enable = mkDefault true;
-      flake = mkDefault "/home/${inputs.self.localConfig.username}/dotfiles";
+      flake = mkDefault "/home/${hub.cfg.user.name}/dotfiles";
       flags = mkDefault ["--update-input" "nixpkgs" "--commit-lock-file"];
     };
   };

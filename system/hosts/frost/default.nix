@@ -93,13 +93,12 @@
   };
 
   environment = {
-    systemPackages = with pkgs;
-      [
-        man-pages
-        man-pages-posix
-        sbctl
-      ]
-      ++ [inputs.home-manager.packages.${pkgs.system}.home-manager];
+    systemPackages = with pkgs; [
+      man-pages
+      man-pages-posix
+      sbctl
+      home-manager-master
+    ];
   };
 
   system.stateVersion = "23.05";

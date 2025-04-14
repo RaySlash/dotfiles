@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  hub,
   inputs,
   ...
 }: let
@@ -10,12 +11,11 @@ in {
   options.custom.programs.wezterm = {enable = mkEnableOption "programs.wezterm";};
 
   config = mkIf cfg.enable {
-    home.file."/home/${inputs.self.localConfig.username}/.config/wezterm/sessionizer.lua".source =
-      ./sessionizer.lua;
+    home.file."/home/${hub.cfg.user.name}/.config/wezterm/sessionizer.lua".source = ./sessionizer.lua;
 
     programs.wezterm = {
       enable = true;
-      # package = inputs.wezterm.packages.x86_64-linux.default;
+      # package = inputs.wezterm.packages.${pkgs.system}.default;
       enableZshIntegration = true;
       colorSchemes = {
         kanagawa_custom = {

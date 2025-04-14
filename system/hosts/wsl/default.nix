@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  hub,
   ...
 }: {
   imports = [
@@ -9,7 +10,7 @@
 
   wsl = {
     enable = true;
-    defaultUser = inputs.self.localConfig.username;
+    defaultUser = hub.cfg.user.name;
     startMenuLaunchers = true;
     useWindowsDriver = true;
     wslConf = {

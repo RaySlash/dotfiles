@@ -1,18 +1,19 @@
 {inputs, ...}: let
-  programs = let
-    pimport = path: (import path {inherit inputs;});
-  in {
-    emacs = import ./programs/emacs;
-    hyprland = import ./programs/hyprland;
-    nix = import ./programs/nix;
-    zsh = import ./programs/zsh;
-    minecraft-servers = import ./programs/minecraft-servers;
-    neovim = (pimport ../../packages/nixcats).nixosModules.default;
-  };
-  profiles = {
-    development = import ./profiles/development;
-    desktop = import ./profiles/desktop;
-    themes = import ./profiles/themes;
-  };
+  programs = [
+    "emacs"
+    "hyprland"
+    "nix"
+    "zsh"
+    "minecraft-servers"
+  ];
+  profiles = [
+    "development"
+    "desktop"
+    "themes"
+  ];
 in
-  programs // profiles
+  builtins.listToAttrs (map (name: {
+    name = name;
+    value = import ./${name};
+  }) (profiles ++ programs))
+  // {neovim = (import ../../packages/nixcats {inherit inputs;}).nixosModules.default;}

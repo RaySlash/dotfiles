@@ -3,6 +3,7 @@
   lib,
   pkgs,
   inputs,
+  hub,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkDefault;
@@ -22,8 +23,8 @@ in {
     programs.firefox = {
       enable = mkDefault true;
       package = mkDefault pkgs.firefox-bin;
-      profiles.${inputs.self.localConfig.username} = {
-        name = mkDefault inputs.self.localConfig.username;
+      profiles.${hub.cfg.user.name} = {
+        name = mkDefault hub.cfg.user.name;
         isDefault = mkDefault true;
         search = {
           default = mkDefault "ddg";

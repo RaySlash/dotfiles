@@ -1,6 +1,6 @@
 {
   pkgs,
-  localConfig,
+  hub,
   lib,
   inputs,
   config,
@@ -85,14 +85,14 @@
   };
 
   users.users = let
-    username = localConfig.username;
+    username = hub.cfg.user.name;
   in {
     ${username} = {
       name = username;
       isNormalUser = true;
       createHome = true;
       home = "/home/${username}";
-      initialHashedPassword = "$y$j9T$OHE2L5aEqg6F0WtDdHIML0$6Qnd4f.HFzL3n3k8w1QYyR5MC/z8SL.0gQwIjLNML5/"; # 0000
+      initialHashedPassword = hub.cfg.user.initialHashedPassword;
       extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager"];
       shell = pkgs.zsh;
     };

@@ -2,7 +2,7 @@
   pkgs,
   inputs,
   lib,
-  localConfig,
+  hub,
   ...
 }: {
   imports = [
@@ -57,14 +57,14 @@
     gpg.enable = true;
     git = {
       enable = true;
-      userEmail = localConfig.email;
-      userName = localConfig.username;
+      userEmail = hub.cfg.user.email;
+      userName = hub.cfg.user.name;
     };
   };
 
   home = {
-    username = localConfig.username;
-    homeDirectory = lib.mkDefault (lib.concatStrings ["/home/" localConfig.username]);
+    username = hub.cfg.user.name;
+    homeDirectory = lib.mkDefault (lib.concatStrings ["/home/" hub.cfg.user.name]);
   };
 
   # Nixcat hmModule

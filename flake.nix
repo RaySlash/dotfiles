@@ -35,11 +35,9 @@
     };
 
     # Applications
-    # wezterm.url = "github:wez/wezterm?dir=nix";
-    # base16.url = "github:SenchoPens/base16.nix";
     stylix.url = "github:danth/stylix";
     tt-schemes = {
-      url = "github:rayslash/tinted-theme-schemes/kanagawa-dragon";
+      url = "github:tinted-theming/schemes";
       flake = false;
     };
     zen-browser = {

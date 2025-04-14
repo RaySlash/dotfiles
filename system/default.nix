@@ -1,5 +1,17 @@
-{inputs, ...}: let
-  inherit (inputs.self.utils) mkSystem;
+{
+  inputs,
+  hub,
+  ...
+}: let
+  mkSystem = args:
+    hub.lib.mkSystem {
+      system = args.system;
+      modules =
+        [
+          ./common.nix
+        ]
+        ++ (args.modules or []);
+    };
 in {
   frost = mkSystem {
     system = "x86_64-linux";
@@ -20,7 +32,6 @@ in {
       (inputs.nixpkgs + "/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix")
       {
         nixpkgs.crossSystem.system = "armv7l-linux";
-        nixpkgs.config.allowUnsupportedSystem = true;
       }
       ./hosts/live
     ];
