@@ -1,0 +1,15 @@
+name: "Nix Github Workflow"
+on:
+  pull_request:
+  push:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: cachix/install-nix-action@v31
+      with:
+        github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - run: nix build .#nvimcat
+    - run: nix build .#nvim-minimal
+    - run: nix flake check --all-systems
