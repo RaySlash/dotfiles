@@ -45,7 +45,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     meteorbom = {
-      url = "git+ssh://git@github.com/rayslash/meteorbom";
+      url = "github:rayslash/meteorbom";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";

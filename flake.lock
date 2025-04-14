@@ -705,15 +705,15 @@
       "locked": {
         "lastModified": 1744608444,
         "narHash": "sha256-5ZsOlepPa2qy14cuhxW//4Buq+2EimNhBrId6Dg+lwU=",
-        "ref": "refs/heads/master",
+        "owner": "rayslash",
+        "repo": "meteorbom",
         "rev": "dc9b0cdd73c6b68b82462310c8b7dbbe46835a65",
-        "revCount": 14,
-        "type": "git",
-        "url": "ssh://git@github.com/rayslash/meteorbom"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "ssh://git@github.com/rayslash/meteorbom"
+        "owner": "rayslash",
+        "repo": "meteorbom",
+        "type": "github"
       }
     },
     "neovim-nightly-overlay": {
@@ -1052,11 +1052,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1744602858,
-        "narHash": "sha256-j94Uygs1zqK5MrzAkbqTH+9r6J7vPn6fUL8Dv8+hBCA=",
+        "lastModified": 1744616943,
+        "narHash": "sha256-H8hgIftsqYLmTIiQhzyjFN4kcyVcIrYXHrV9XqS8QdA=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "8fe101f5587e97fdb80201b31e4ab50565d6fcee",
+        "rev": "a058380c138c5c30402c1bd12992d6849124bf44",
         "type": "github"
       },
       "original": {
@@ -1084,11 +1084,11 @@
     "plugins-lzextras": {
       "flake": false,
       "locked": {
-        "lastModified": 1744516284,
-        "narHash": "sha256-RIzbORQ5SHdqoJOnd5RGG0+PrK03RWllWcfhKwj7GzY=",
+        "lastModified": 1744611125,
+        "narHash": "sha256-HtI2otQ6oK4YrjukibJ6xZKFDKbcUeHOEKNlALPXp7M=",
         "owner": "BirdeeHub",
         "repo": "lzextras",
-        "rev": "3e3aebc41cf13a11e8dde67293104beba0c92952",
+        "rev": "4a670af130c466a0417bf18934d5e1b01775f294",
         "type": "github"
       },
       "original": {
