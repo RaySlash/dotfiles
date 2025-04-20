@@ -1,6 +1,6 @@
 # 🖥️ NixOS & Home-Manager Dotfiles
 
-![NixOS](https://img.shields.io/badge/nixos-unstable?logo=nixos)
+![NixOS](https://img.shields.io/badge/NixOS-unstable-007ec6?logo=nixos&logoColor=white)
 ![Flakes](https://img.shields.io/badge/Flakes-Enabled-blueviolet)
 ![License](https://img.shields.io/badge/License-GPLv3-green)
 
@@ -20,35 +20,45 @@ nix run github:rayslash/dotfiles#nvim-minimal
 
 ### 📀 Live ISO Generation
 
-Build bootable ISO with `live` nixos host configuration:
+Build bootable NixOS ISO with `live` nixos host configuration:
 
 ```bash
 nix build .#images.x86_64
-nix build .#images.rpi-live
+nix build .#images.rpi-sd
 ```
 
 ### 🛠️ System Installation
 
-> **⚠️ Important**: Replace all `<host>` occurrences with your actual hostname.
-> Same applies for `/dev/sdX` devices as well.
-
 **Fresh Install Procedure:**
 
+> **⚠️ Important**: Replace `MYHOST` and all `INSTALL_*` variables with
+> desired values before running. By default, following instructions
+> assume you are install the `frost` host configuration in a 3 volume partitioned nvme drive.
+
 ```bash
-# Partitioning
-sudo fdisk /dev/sdX  # Create required partitions
-sudo mount /dev/sdXX /mnt  # Mount root partition
-sudo mount /dev/sdXX /mnt/boot  # Mount boot
-sudo mount /dev/sdXX /mnt/nix  # Mount nix
+nix-shell -p git neovim
+export INSTALL_DEVICE_NAME="nvme0n1"
+export INSTALL_EFI_LABEL="nvme0n1p1"
+export INSTALL_ROOT_LABEL="nvme0n1p2"
+export INSTALL_NIX_LABEL="nvme0n1p3"
+export INSTALL_DEVICE="/dev/$INSTALL_DEVICE_NAME"
+sudo fdisk $INSTALL_DEVICE_NAME  # Create required partitions
+sudo mkfs.fat -F 32 /dev/$INSTALL_EFI_LABEL # Format an EFI partition
+sudo mkfs.ext4 /dev/$INSTALL_ROOT_LABEL # Format Linux filesystem partition (ext4, btrfs ...)
+sudo mount /dev/$INSTALL_ROOT_LABEL /mnt  # Mount root partition
+sudo mount /dev/$INSTALL_EFI_LABEL /mnt/boot  # Mount boot
+sudo mount /dev/$INSTALL_NIX_LABEL /mnt/nix  # Mount nix (optional)
 
-# Configuration Setup
-git clone https://github.com/RaySlash/nixos-config /mnt/etc/nixos
-rm /mnt/etc/nixos/systems/<host>/hardware-configuration.nix
+export DOTFILES="/mnt/etc/dotfiles"
+export MYHOST="frost"
+export HOSTCONFIG_DIR="$DOTFILES/system/hosts/$MYHOST"
+git clone https://github.com/RaySlash/dotfiles $DOTFILES
+mv "$HOSTCONFIG_DIR/hardware-configuration.nix" "$HOSTCONFIG_DIR/hardware-configuration-old.nix"
 sudo nixos-generate-config --root /mnt
-sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/systems/<host>/
+sudo cp /mnt/etc/nixos/hardware-configuration.nix $HOSTCONFIG_DIR
+nvim "$HOSTCONFIG_DIR/hardware-configuration.nix"
 
-# Final Installation
-sudo nixos-install --flake .#<host>
+sudo nixos-install --flake .#$MYHOST
 ```
 
 ## 🧠 Philosophy
@@ -109,7 +119,7 @@ mkHome {
 }
 ```
 
-### Implementation Guardrails
+### Util Functions
 
 1. **Host Declaration**:
 
@@ -118,19 +128,19 @@ mkHome {
      system = "aarch64-linux";
      modules = [
        ./hosts/myhost
-       specialFeatureModule.default
+       inputs.my-flake-input.nixosModules.default
      ];
    }
    ```
 
-2. **Home-Manager Activation**:
+2. **Home-Manager Declaration**:
 
    ```nix
    mkHome {
-     user = "devuser";
+     system = "x86_64-linux";
      modules = [
        ./hosts/myhost
-       customAliasesModule.myModule
+       inputs.my-flake-input.homeModules.default
      ];
    }
    ```

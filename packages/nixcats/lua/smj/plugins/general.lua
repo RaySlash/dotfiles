@@ -53,8 +53,10 @@ return {
 		end,
 		after = function()
 			require("auto-session").setup({
-				suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-				bypass_save_filetypes = { "dashboard", "netrw", "oil" },
+				auto_create = function()
+					local cmd = "git rev-parse --is-inside-work-tree"
+					return vim.fn.system(cmd) == "true\n"
+				end,
 			})
 		end,
 	},

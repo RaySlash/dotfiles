@@ -68,6 +68,7 @@
   security.polkit.enable = true;
   programs = {
     git.enable = true;
+    ssh.startAgent = true;
   };
 
   custom = {

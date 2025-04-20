@@ -90,7 +90,7 @@
     "$mod, XF86AudioRaiseVolume, exec, hyprctl hyprsunset gamma -10"
     "$mod, XF86AudioLowerVolume, exec, hyprctl hyprsunset gamma +10"
     "$mod, XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
-    "$mod, p, exec, grim -g $(slurp)"
+    "$mod, p, exec, grimblast copysave area"
     "$mod, x, togglespecialworkspace, scratch"
     "$mod_SHIFT, x, movetoworkspace, special:scratch"
     "$mod, left, movefocus, l"

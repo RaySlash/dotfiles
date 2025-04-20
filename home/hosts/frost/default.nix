@@ -8,7 +8,6 @@
   ];
 
   home.packages = with pkgs; [
-    inputs.zen-browser.packages.${pkgs.system}.default
     btop
     obsidian
     fd
@@ -24,10 +23,10 @@
     pwvucontrol
     swww
     wlr-randr
-    grim
-    slurp
+    grimblast
     coreutils
     yazi
+    zen-browser
     # wineWowPackages.waylandFull
     virt-manager
     vlc

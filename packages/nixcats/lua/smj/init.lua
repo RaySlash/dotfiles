@@ -6,6 +6,7 @@ g.loaded_netrwPlugin = 1
 g.editorconfig = true
 
 local lze = require("lze")
+require("smj.color")
 
 lze.register_handlers({
 	require("smj.utils.lze").for_cat,

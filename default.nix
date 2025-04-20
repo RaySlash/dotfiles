@@ -34,33 +34,7 @@ in
     };
 
     flake = rec {
-      overlays = {
-        # stable-pkgs: This overlay adds the stable branch of nixpkgs under
-        # `pkgs.stablePackages` to access stable branch.
-        # Example: `home.packages = [pkgs.stablePackages.neovim];`
-        stable-pkgs = final: _prev: {
-          stablePackages = import inputs.nixpkgs-stable {
-            system = final.system;
-            config.allowUnfree = true;
-          };
-        };
-        # custom-pkgs: This overlay adds all locally defined packages
-        # under `customPackages`.
-        # Example: `home.packages = [pkgs.customPackages.nvimcat];`
-        custom-pkgs = final: _prev: {
-          customPackages = import ./packages final.pkgs;
-        };
-        # Add home-manager CLI from inputs to `pkgs.home-manager-master`
-        home-manager = final: _prev: {
-          home-manager-master =
-            inputs.home-manager.packages.${final.system}.home-manager;
-        };
-        nurpkgs = inputs.nurpkgs.overlays.default;
-        nix-minecraft = inputs.nix-minecraft.overlay;
-        neovim-nightly = inputs.neovim-nightly-overlay.overlays.default;
-        emacs = inputs.emacs-overlay.overlays.default;
-      };
-
+      overlays = import ./overlays.nix {inherit inputs;};
       templates = import ./templates;
       hub = import ./config.nix {inherit inputs;};
       nixosConfigurations = import ./system {inherit inputs hub;};

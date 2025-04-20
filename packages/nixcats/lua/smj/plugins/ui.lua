@@ -63,62 +63,6 @@ return {
 		end,
 	},
 	{
-		"kanagawa.nvim",
-		for_cat = "ui.core",
-		event = "UIEnter",
-		before = function()
-			vim.o.background = "dark"
-		end,
-		after = function()
-			---@diagnostic disable: missing-fields
-			require("kanagawa").setup({
-				transparent = true,
-				background = {
-					dark = "dragon",
-					light = "lotus",
-				},
-				overrides = function(colors)
-					local theme = colors.theme
-					local makeDiagnosticColor = function(color)
-						local c = require("kanagawa.lib.color")
-						return { fg = color, bg = c(color):blend(theme.ui.bg, 0.95):to_hex() }
-					end
-					return {
-						-- This immitates a style of diagnostic messages seen OR Tint background of diagnostic messages with their foreground color
-						DiagnosticVirtualTextHint = makeDiagnosticColor(theme.diag.hint),
-						DiagnosticVirtualTextInfo = makeDiagnosticColor(theme.diag.info),
-						DiagnosticVirtualTextWarn = makeDiagnosticColor(theme.diag.warning),
-						DiagnosticVirtualTextError = makeDiagnosticColor(theme.diag.error),
-						-- Use Telescope Block UI
-						TelescopeTitle = { fg = theme.ui.special, bold = true },
-						TelescopePromptNormal = { bg = theme.ui.bg_p1 },
-						TelescopePromptBorder = { fg = theme.ui.bg_p1, bg = theme.ui.bg_p1 },
-						TelescopeResultsNormal = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m1 },
-						TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = theme.ui.bg_m1 },
-						TelescopePreviewNormal = { bg = theme.ui.bg_dim },
-						TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
-						-- More uniform colors for the popup menu.
-						Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1, blend = vim.o.pumblend },
-						PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
-						PmenuSbar = { bg = theme.ui.bg_m1 },
-						PmenuThumb = { bg = theme.ui.bg_p2 },
-					}
-				end,
-				-- Remove the background of LineNr, {Sign,Fold}Column and friends
-				colors = {
-					theme = {
-						all = {
-							ui = {
-								bg_gutter = "none",
-							},
-						},
-					},
-				},
-			})
-			vim.cmd.colorscheme("kanagawa")
-		end,
-	},
-	{
 		"nvim-highlight-colors",
 		for_cat = "ui.addons",
 		event = "DeferredUIEnter",
@@ -129,46 +73,6 @@ return {
 				virtual_symbol = "■",
 				enable_named_colors = true,
 				enable_tailwind = true,
-			})
-		end,
-	},
-	{
-		"colorful-menu.nvim",
-		for_cat = "ui.core",
-		after = function()
-			require("colorful-menu").setup({})
-		end,
-	},
-	{
-		"blink.cmp",
-		for_cat = "ui.core",
-		after = function()
-			require("blink.cmp").setup({
-				sources = { default = { "lsp", "buffer", "snippets", "path" } },
-				keymap = {
-					preset = "enter",
-				},
-				appearance = { nerd_font_variant = "normal" },
-				completion = {
-					menu = {
-						draw = {
-							treesitter = { "lsp" },
-							-- We don't need label_description now because label and label_description are already
-							-- combined together in label by colorful-menu.nvim.
-							columns = { { "kind_icon" }, { "label", gap = 1 } },
-							components = {
-								label = {
-									text = function(ctx)
-										return require("colorful-menu").blink_components_text(ctx)
-									end,
-									highlight = function(ctx)
-										return require("colorful-menu").blink_components_highlight(ctx)
-									end,
-								},
-							},
-						},
-					},
-				},
 			})
 		end,
 	},

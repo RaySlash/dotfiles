@@ -4,7 +4,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    zig.url = "github:mitchellh/zig-overlay";
+    zig.url = "github:bandithedoge/zig-overlay";
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -19,6 +19,7 @@
         deps = with pkgs; [
           gcc
           zigpkgs.default
+          zigpkgs.zls-latest
         ];
       in {
         _module.args.pkgs = import inputs.nixpkgs {

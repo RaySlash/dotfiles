@@ -23,31 +23,30 @@
       formatter = with pkgs; [
         alejandra
         clang-tools
-        elmPackages.elm-format
+        # elmPackages.elm-format
         prettierd
         stylua
-        rustfmt
-        leptosfmt
+        # rustfmt
         shfmt
-        sql-formatter
+        # sql-formatter
         taplo
       ];
       lsp = with pkgs; [
-        pyright
+        # pyright
         nil
         nixd
-        ccls
-        rust-analyzer
-        jdt-language-server
-        haskell-language-server
+        # ccls
+        # rust-analyzer
+        # jdt-language-server
+        # haskell-language-server
         lua-language-server
         marksman
         vscode-langservers-extracted
-        tailwindcss-language-server
-        elmPackages.elm-language-server
-        dart
-        nodePackages.typescript-language-server
-        zls
+        # tailwindcss-language-server
+        # elmPackages.elm-language-server
+        # dart
+        # nodePackages.typescript-language-server
+        # zls
       ];
       image-preview = with pkgs; [
         imagemagick
@@ -92,13 +91,24 @@
           nvim-unception
           which-key-nvim
         ];
-        treesitter = with pkgs.vimPlugins; [
-          nvim-treesitter.withAllGrammars
-          nvim-treesitter-textobjects
-          nvim-ts-context-commentstring
-          nvim-treesitter-context
-          yuck-vim
+        completion = with pkgs.vimPlugins; [
+          blink-cmp
+          colorful-menu-nvim
+          blink-compat
+          luasnip
+          cmp-cmdline
         ];
+        treesitter = let
+          treesitter-plugins = plugins:
+            with plugins; [c cpp clojure cmake comment commonlisp csv dockerfile git_config git_rebase gitattributes gitcommit gitignore go haskell hyprlang java json json5 luadoc make markdown markdown_inline meson nginx nix powershell purescript regex scss sql toml tsx typst vim vimdoc xml yaml yuck zig rust elm lua javascript typescript html css bash python];
+        in
+          with pkgs.vimPlugins; [
+            (nvim-treesitter.withPlugins treesitter-plugins)
+            nvim-treesitter-textobjects
+            nvim-ts-context-commentstring
+            nvim-treesitter-context
+            yuck-vim
+          ];
         telescope = with pkgs.vimPlugins; [
           telescope-nvim
           telescope-fzy-native-nvim
@@ -118,9 +128,8 @@
           dashboard-nvim
           vim-startuptime
           dressing-nvim
-          blink-cmp
-          colorful-menu-nvim
           kanagawa-nvim
+          mini-base16
           lualine-nvim
           leap-nvim
           statuscol-nvim
@@ -146,14 +155,6 @@
       ];
     };
 
-    # sharedLibraries = {
-    #   general = {
-    #     core = with pkgs; [
-    #       libgit2
-    #     ];
-    #   };
-    # };
-
     environmentVariables = {
       general.core = {
         EDITOR = "nvim";
@@ -162,11 +163,7 @@
   };
 
   packageDefinitions = {
-    nvimcat = {
-      pkgs,
-      name,
-      ...
-    }: {
+    nvimcat = {pkgs, ...}: {
       settings = {
         wrapRc = true;
         aliases = ["vi" "vim" "nvim"];
@@ -176,6 +173,7 @@
         general = {
           core = true;
           treesitter = true;
+          completion = true;
           fzf = true;
           git = true;
         };
@@ -188,6 +186,10 @@
         lsp = true;
       };
       extra = {
+        # base16colors =
+        #   pkgs.lib.filterAttrs
+        #   (k: v: builtins.match "base0[0-9A-F]" k != null)
+        #   config.lib.stylix.colors.withHashtag;
         nixdExtras = {
           nixpkgs = "import ${pkgs.path} {}";
           get_configs = utils.n2l.types.function-unsafe.mk {
@@ -207,6 +209,7 @@
         general = {
           core = true;
           treesitter = true;
+          completion = true;
           fzf = true;
           git = true;
         };
