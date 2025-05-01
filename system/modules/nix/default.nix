@@ -15,7 +15,7 @@ in {
     in {
       settings = {
         experimental-features = mkDefault "nix-command flakes";
-        flake-registry = mkDefault "";
+        # flake-registry = mkDefault "";
         nix-path = mkDefault config.nix.nixPath;
         auto-optimise-store = mkDefault true;
         substituters = [
@@ -26,7 +26,7 @@ in {
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         ];
       };
-      channel.enable = mkDefault false;
+      channel.enable = false;
       registry = mkDefault (lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs);
       nixPath = mkDefault (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
     };

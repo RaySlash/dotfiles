@@ -29,12 +29,14 @@
         # rustfmt
         shfmt
         # sql-formatter
+        typstyle
         taplo
       ];
       lsp = with pkgs; [
         # pyright
         nil
         nixd
+        tinymist
         # ccls
         # rust-analyzer
         # jdt-language-server
@@ -54,13 +56,20 @@
         chafa
       ];
       general = {
-        fzf = with pkgs; [
-          ripgrep
-          fd
-          fzf
-          bat
-          delta
-        ];
+        fzf = with pkgs;
+          [
+            ripgrep
+            fd
+            fzf
+            bat
+            delta
+          ]
+          ++ (with pkgs.bat-extras; [
+            batdiff
+            batman
+            batgrep
+            batwatch
+          ]);
         telescope = with pkgs; [
           ripgrep
           fd

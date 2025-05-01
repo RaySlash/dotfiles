@@ -2,6 +2,13 @@ local get_nixd_opts = nixCats.extra("nixdExtras.get_configs")
 
 return {
 	{
+		"tinymist",
+		enabled = nixCats("lsp"),
+		lsp = {
+			filetypes = { "typst" },
+		},
+	},
+	{
 		"ccls",
 		enabled = nixCats("lsp"),
 		lsp = {

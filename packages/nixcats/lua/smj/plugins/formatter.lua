@@ -57,6 +57,7 @@ return {
 					rust = { "rustfmt" },
 					lua = { "stylua" },
 					nix = { "alejandra" },
+					typst = { "typstyle" },
 					python = function(bufnr)
 						return { first(bufnr, "pyright", "prettierd") }
 					end,

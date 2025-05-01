@@ -69,6 +69,11 @@
   programs = {
     git.enable = true;
     ssh.startAgent = true;
+    wireshark = {
+      enable = true;
+      dumpcap.enable = true;
+      usbmon.enable = true;
+    };
   };
 
   custom = {
@@ -94,7 +99,7 @@
       createHome = true;
       home = "/home/${username}";
       initialHashedPassword = hub.cfg.user.initialHashedPassword;
-      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager"];
+      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark"];
       shell = pkgs.zsh;
     };
   };
