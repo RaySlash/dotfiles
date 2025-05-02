@@ -7,7 +7,7 @@
     "meteorbom"
     "wezterm"
     "neovide"
-    "md2pdf"
+    # "md2pdf"
     # "yofi"
     # dioxus-cli
     # hyprland-py
