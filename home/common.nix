@@ -75,6 +75,7 @@
 
   custom = {
     profiles.development.enable = true;
+    programs.nushell.enable = true;
   };
 
   systemd.user.startServices = "sd-switch";

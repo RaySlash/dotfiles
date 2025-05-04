@@ -13,6 +13,7 @@
     "eww"
     "fuzzel"
     "kitty"
+    "nushell"
     "wezterm"
   ];
 in

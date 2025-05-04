@@ -11,10 +11,7 @@
     btop
     obsidian
     fd
-    ripgrep
-    lazygit
     unzip
-    wget
     imv
     helvum
     openrgb-with-all-plugins
@@ -22,9 +19,7 @@
     stremio
     pwvucontrol
     swww
-    wlr-randr
     grimblast
-    coreutils
     yazi
     zen-browser
     # wineWowPackages.waylandFull
@@ -46,7 +41,7 @@
   custom = {
     programs = {
       # firefox.enable = true;
-      kitty.enable = true;
+      # kitty.enable = true;
       hyprland.enable = true;
       hypridle.enable = true;
       hyprlock.enable = true;
@@ -69,6 +64,15 @@
         obs-gstreamer
         obs-pipewire-audio-capture
       ];
+    };
+    foot = {
+      enable = true;
+      server.enable = true;
+      settings = {
+        main = {
+          term = "xterm-256color";
+        };
+      };
     };
     bat = {
       enable = true;

@@ -78,7 +78,7 @@
 
   custom = {
     programs = {
-      zsh.enable = true;
+      # zsh.enable = true;
       nix.enable = true;
     };
     # profiles = {
@@ -100,13 +100,12 @@
       home = "/home/${username}";
       initialHashedPassword = hub.cfg.user.initialHashedPassword;
       extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark"];
-      shell = pkgs.zsh;
+      shell = pkgs.nushell;
     };
   };
 
   environment = {
     systemPackages = with pkgs; [
-      eza
       libclang
       gcc
       gnumake

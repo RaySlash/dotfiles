@@ -1,6 +1,5 @@
 {
   exec-once = [
-    "dbus-update-activation-environment --systemd --all"
     "systemctl --user start hyprpolkitagent"
     "swww-daemon &"
     "eww open bar &"
@@ -76,11 +75,11 @@
   "$mod" = "SUPER";
 
   bind = [
-    "$mod, return, exec, kitty"
+    "$mod, return, exec, foot"
     "$mod_SHIFT, Q, killactive,"
     "$mod_SHIFT, M, exit,"
     "$mod_SHIFT, L, exec, wlogout"
-    "$mod, D, exec, kitty -1 yazi"
+    "$mod, D, exec, foot yazi"
     "$mod, F, togglefloating"
     "$mod_SHIFT, return, exec, fuzzel --show-actions"
     "$mod, V, exec, sh -c 'cliphist list | fuzzel --dmenu | cliphist decode | wl-copy'"
