@@ -16,37 +16,52 @@ in {
         settings = {
           add_newline = mkDefault true;
           character = {
-            success_symbol = mkDefault "[➜](bold green)";
-            error_symbol = mkDefault "[➜](bold red)";
+            success_symbol = mkDefault "[ ➜](bold green)";
+            error_symbol = mkDefault "[ ➜](bold red)";
           };
         };
       };
 
-      zellij = {
-        enable = true;
-        settings = {
-          default_shell = "${pkgs.nushell}/bin/nu";
-          ui.pane.rounded_corners = true;
-          show_release_notes = false;
-        };
-      };
+      # zellij = {
+      #   enable = mkDefault true;
+      #   settings = mkDefault {
+      #     default_shell = "${pkgs.nushell}/bin/nu";
+      #     ui.pane.rounded_corners = true;
+      #     show_release_notes = false;
+      #     show_startup_tips = false;
+      #     keybinds = {
+      #       normal = {
+      #         unbind = [
+      #           "Ctrl q"
+      #           "Ctrl s"
+      #         ];
+      #       };
+      #     };
+      #   };
+      # };
       carapace = {
-        enable = true;
-        enableNushellIntegration = true;
+        enable = mkDefault true;
+        enableNushellIntegration = mkDefault true;
       };
       nushell = {
         enable = mkDefault true;
-        settings = {
+        settings = mkDefault {
           edit_mode = "vi";
           show_banner = false;
         };
-        extraConfig = ''
+        # Load caraspace in nushell
+        # Load zellij and auto-attach
+        extraConfig = mkDefault ''
           let carapace_completer = {|spans|
-             carapace $spans.0 nushell ...$spans | from json
+            carapace $spans.0 nushell ...$spans | from json
           }
-          zellij attach -c
         '';
-        shellAliases = {
+        # def start_zellij [] {
+        #   zellij attach -c
+        # }
+        # start_zellij
+        # zellij attach -c
+        shellAliases = mkDefault {
           nix-shell = "nix-shell -p nushell --run nu";
         };
       };

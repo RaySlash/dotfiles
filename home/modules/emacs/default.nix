@@ -13,17 +13,14 @@ in {
   config = mkIf cfg.enable {
     programs.emacs = {
       enable = true;
-      package = pkgs.emacs-pgtk;
-      # extraPackages = with pkgs.emacsPackages; [
-      #   leaf
-      # ];
+      package = pkgs.emacs-git-pgtk;
     };
 
     services.emacs = {
       enable = true;
       client.enable = true;
       defaultEditor = true;
-      package = pkgs.emacs-pgtk;
+      package = pkgs.emacs-git-pgtk;
       socketActivation.enable = true;
       startWithUserSession = true;
     };

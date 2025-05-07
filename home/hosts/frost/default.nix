@@ -42,6 +42,7 @@
     programs = {
       # firefox.enable = true;
       # kitty.enable = true;
+      emacs.enable = true;
       hyprland.enable = true;
       hypridle.enable = true;
       hyprlock.enable = true;
@@ -68,11 +69,6 @@
     foot = {
       enable = true;
       server.enable = true;
-      settings = {
-        main = {
-          term = "xterm-256color";
-        };
-      };
     };
     bat = {
       enable = true;
