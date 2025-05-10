@@ -13,37 +13,29 @@ in {
     programs = {
       carapace = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       direnv = {
         enable = mkDefault true;
         nix-direnv.enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       eza = {
         enable = mkDefault true;
         colors = mkDefault "auto";
-        enableBashIntegration = mkDefault true;
       };
       fzf = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       nix-index = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       yazi = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       zoxide = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
       };
       starship = {
         enable = mkDefault true;
-        enableBashIntegration = mkDefault true;
         settings = {
           add_newline = true;
         };
@@ -52,8 +44,13 @@ in {
         enable = mkDefault true;
         enableCompletion = mkDefault true;
         enableVteIntegration = mkDefault true;
+        intitExtra = ''
+          source ${pkgs.blesh}/share/blesh/ble.sh
+        '';
         bashrcExtra = ''
           set -o vi
+          export CARAPACE_BRIDGES='bash,zsh'
+          source <(carapace _carapace)
         '';
         shellAliases = {
           ls = "eza --icons";
