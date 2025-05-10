@@ -78,7 +78,7 @@
 
   custom = {
     programs = {
-      # zsh.enable = true;
+      bash.enable = true;
       nix.enable = true;
     };
     # profiles = {
@@ -100,7 +100,7 @@
       home = "/home/${username}";
       initialHashedPassword = hub.cfg.user.initialHashedPassword;
       extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark"];
-      shell = pkgs.nushell;
+      shell = pkgs.bash;
     };
   };
 

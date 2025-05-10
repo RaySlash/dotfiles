@@ -17,10 +17,11 @@ in {
       tumbler.enable = mkDefault true;
       hypridle.enable = mkDefault true;
       gnome.gnome-keyring.enable = mkDefault true;
+      xserver.enable = mkDefault true;
       displayManager.defaultSession = mkDefault "hyprland";
-      xserver.displayManager.gdm = {
+      xserver.displayManager.lightdm = {
         enable = mkDefault true;
-        wayland = mkDefault true;
+        greeters.gtk.enable = true;
       };
     };
 
