@@ -4,10 +4,10 @@
     "hyprland"
     "nix"
     "zsh"
+    "bash"
     "minecraft-servers"
   ];
   profiles = [
-    "development"
     "desktop"
     "themes"
   ];

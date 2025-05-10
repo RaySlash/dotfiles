@@ -83,7 +83,6 @@
   custom = {
     profiles = {
       desktop.enable = true;
-      development.enable = true;
       themes.enable = true;
     };
     programs = {

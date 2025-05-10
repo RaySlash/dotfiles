@@ -20,7 +20,6 @@
     pwvucontrol
     swww
     grimblast
-    yazi
     zen-browser
     # wineWowPackages.waylandFull
     virt-manager

@@ -50,6 +50,7 @@
     };
     targets = {
       kitty.variant256Colors = true;
+      emacs.enable = false;
     };
   };
 
@@ -74,8 +75,7 @@
   };
 
   custom = {
-    profiles.development.enable = true;
-    programs.nushell.enable = true;
+    programs.bash.enable = true;
   };
 
   systemd.user.startServices = "sd-switch";

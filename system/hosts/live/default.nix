@@ -51,7 +51,6 @@
 
   custom = {
     profiles = {
-      development.enable = true;
     };
   };
 

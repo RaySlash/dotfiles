@@ -1,6 +1,5 @@
 {inputs, ...}: let
   profiles = [
-    "development"
     "themes"
   ];
   programs = [
@@ -11,6 +10,7 @@
     "hypridle"
     "hyprlock"
     "eww"
+    "bash"
     "fuzzel"
     "kitty"
     "nushell"
