@@ -44,13 +44,10 @@ in {
         enable = mkDefault true;
         enableCompletion = mkDefault true;
         enableVteIntegration = mkDefault true;
-        intitExtra = ''
-          source ${pkgs.blesh}/share/blesh/ble.sh
-        '';
         bashrcExtra = ''
           set -o vi
           export CARAPACE_BRIDGES='bash,zsh'
-          source <(carapace _carapace)
+          source <(carapace _carapace bash)
         '';
         shellAliases = {
           ls = "eza --icons";

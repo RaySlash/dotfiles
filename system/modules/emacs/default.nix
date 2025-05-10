@@ -15,7 +15,7 @@ in {
       enable = true;
       install = true;
       startWithGraphical = true;
-      package = pkgs.emacs-git-pgtk;
+      package = pkgs.emacs-pgtk;
     };
   };
 }

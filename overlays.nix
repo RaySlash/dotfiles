@@ -37,5 +37,4 @@
   nurpkgs = inputs.nurpkgs.overlays.default;
   nix-minecraft = inputs.nix-minecraft.overlay;
   neovim-nightly = inputs.neovim-nightly-overlay.overlays.default;
-  emacs = inputs.emacs-overlay.overlays.default;
 }

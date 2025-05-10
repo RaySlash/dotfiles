@@ -61,8 +61,5 @@
       url = "github:BirdeeHub/lzextras";
       flake = false;
     };
-    emacs-overlay = {
-      url = "github:nix-community/emacs-overlay";
-    };
   };
 }
