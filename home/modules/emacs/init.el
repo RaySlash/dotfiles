@@ -45,31 +45,31 @@
    (interactive)
    (add-to-list 'default-frame-alist '(alpha-background . 90)))
 
+(setenv "LANG" "en_US.UTF-8")
+(setenv "LC_ALL" "en_US.UTF-8")
+(setenv "LC_CTYPE" "en_US.UTF-8")
 (toggle-relative-line-numbers)
 (toggle-transparency)
 (disable-ui-extras)
 (global-hl-line-mode 1)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-(setenv "LANG" "en_US.UTF-8")
-(setenv "LC_ALL" "en_US.UTF-8")
-(setenv "LC_CTYPE" "en_US.UTF-8")
-(global-unset-key (kbd "C-x C-c"))
 ;;(global-set-key (kbd "C-c t") 'toggle-full-transparency)
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 (add-hook 'org-mode-hook #'(lambda () (electric-pair-local-mode -1)))
+(add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
 ;; Bootstrap straight.el and take over use-package
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-use-package-by-default)
-            user-emacs-directory)))
+	"straight/repos/straight.el/bootstrap.el"
+	(or (bound-and-true-p straight-use-package-by-default)
+	    user-emacs-directory)))
       (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-        (url-retrieve-synchronously
+	(url-retrieve-synchronously
          "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
@@ -82,9 +82,8 @@
   (text-mode-ispell-word-completion nil)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
-;; Base 16 Kanagawa Dragon theme
-(use-package base16-theme
-  :config (load-theme 'base16-kanagawa-dragon t))
+;; Kanagawa Dragon theme
+(use-package base16-theme :config (load-theme 'base16-kanagawa-dragon t))
 
 (use-package dashboard
   :config (dashboard-setup-startup-hook)
@@ -135,6 +134,7 @@
   :hook (after-init . doom-modeline-mode)
   (doom-modeline-mode . display-battery-mode))
 
+;; Git support in mini-buffer
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (add-hook 'with-editor-mode-hook #'evil-insert-state))
@@ -169,7 +169,13 @@
 (use-package orderless
   :defer t
  :custom (completion-styles '(orderless basic flex))
+ (completion-category-defaults nil)
  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package smartparens
+  ;; add `smartparens-mode` to these hooks
+  :hook (prog-mode text-mode markdown-mode web-mode zig-ts-mode nix-ts-mode rustic)
+  :config (require 'smartparens-config))
 
 (use-package corfu
   :defer t
@@ -188,6 +194,12 @@
   (add-hook 'completion-at-point-functions #'cape-elisp-block)
   (add-hook 'completion-at-point-functions #'cape-history))
 
+(use-package which-key
+  :diminish which-key-mode
+  :config (which-key-mode +1)
+  (setq which-key-idle-delay 0.4
+        which-key-idle-secondary-delay 0.4))
+
 ;; LSP and syntax check error/warning highlighting
 (use-package flycheck
   :defer t
@@ -202,7 +214,8 @@
 
 ;; Language support modes
 (use-package markdown-mode :defer t)
-(use-package nix-mode :defer t)
+(use-package nix-ts-mode :defer t)
+(use-package zig-ts-mode :defer t)
 (use-package typst-ts-mode :defer t)
 (use-package rustic
   :defer t
@@ -216,9 +229,9 @@
          ("\\.tsx?\\'"  . web-mode)
          ("\\.json\\'"  . web-mode))
   :config
-  (setq web-mode-markup-indent-offset 2) ; HTML
-  (setq web-mode-css-indent-offset 2)    ; CSS
-  (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
+  (setq web-mode-markup-indent-offset 4) ; HTML
+  (setq web-mode-css-indent-offset 4)    ; CSS
+  (setq web-mode-code-indent-offset 4)   ; JS/JSX/TS/TSX
   (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
 ;;; init.el ends here
