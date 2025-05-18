@@ -19,9 +19,9 @@ in {
       gnome.gnome-keyring.enable = mkDefault true;
       xserver.enable = mkDefault true;
       displayManager.defaultSession = mkDefault "hyprland";
-      xserver.displayManager.lightdm = {
+      xserver.displayManager.gdm = {
         enable = mkDefault true;
-        greeters.gtk.enable = true;
+        wayland = mkDefault true;
       };
     };
 

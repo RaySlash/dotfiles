@@ -9,6 +9,7 @@
 
   home.packages = with pkgs; [
     btop
+    qbittorrent
     obsidian
     fd
     unzip
@@ -21,7 +22,6 @@
     swww
     grimblast
     zen-browser
-    # wineWowPackages.waylandFull
     virt-manager
     vlc
     vesktop
@@ -68,6 +68,18 @@
     foot = {
       enable = true;
       server.enable = true;
+    };
+    lutris = {
+      enable = true;
+      extraPackages = with pkgs; [
+        protonup-qt
+        mangohud
+        winetricks
+        gamescope
+        gamemode
+      ];
+      protonPackages = with pkgs; [proton-ge-bin];
+      winePackages = with pkgs; [wineWowPackages.waylandFull];
     };
     bat = {
       enable = true;

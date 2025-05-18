@@ -1,6 +1,6 @@
 {inputs, ...}: let
   programs = [
-    "emacs"
+    # "emacs"
     "hyprland"
     "nix"
     "zsh"

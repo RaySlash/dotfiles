@@ -1,37 +1,52 @@
 ;;; Package --- init file -*- lexical-binding: t -*-
-(setq debug-on-error t)
-(setq default-directory (expand-file-name "~/"))
-(setq inhibit-startup-message t)
-(setq ring-bell-function 'ignore)
-(setq custom-file "~/.emacs-custom.el")
-(setq backup-directory-alist `(("." . ,(concat user-emacs-directory
+
+;;; Commentary:
+;; Personal Emacs Configuration of RaySlash
+;; Uses MELPA as one of sources.
+;; Includes evil-mode.
+
+;;; Code:
+(setq debug-on-error t
+      enable-recursive-minibuffers t
+      inhibit-startup-message t
+      ring-bell-function 'ignore)
+
+(setq default-directory (expand-file-name "~/")
+      custom-file "~/.emacs-custom.el"
+      backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
 (setq delete-old-versions t
-  kept-new-versions 6
-  kept-old-versions 2
-  version-control t)
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
 
+(setq scroll-step 1
+      scroll-conservatively  10000)
+
+;; Disable extra UI elements
 (defun disable-ui-extras ()
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
 
+;; Enable extra UI elements
 (defun enable-ui-extras ()
   (menu-bar-mode)
   (tool-bar-mode)
   (scroll-bar-mode))
 
+;; Toggle Relative Line Numbers
 (defun toggle-relative-line-numbers ()
   (global-display-line-numbers-mode)
   (menu-bar--display-line-numbers-mode-relative))
 
-
-(defun toggle-full-transparency ()
+;; Toggle Frame Transparency (Emacs 29+)
+(defun toggle-transparency ()
    (interactive)
    (add-to-list 'default-frame-alist '(alpha-background . 90)))
 
 (toggle-relative-line-numbers)
-(toggle-full-transparency)
+(toggle-transparency)
 (disable-ui-extras)
 (global-hl-line-mode 1)
 (global-set-key (kbd "M-[") 'previous-buffer)
@@ -39,172 +54,171 @@
 (setenv "LANG" "en_US.UTF-8")
 (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LC_CTYPE" "en_US.UTF-8")
-(setq scroll-step 1
-      scroll-conservatively  10000)
 (global-unset-key (kbd "C-x C-c"))
-
 ;;(global-set-key (kbd "C-c t") 'toggle-full-transparency)
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'org-mode-hook #'(lambda () (electric-pair-local-mode -1)))
 
-(use-package package
-  :ensure t
-  :config
-  (package-initialize)
-  :custom
-  (package-native-compile t)
-  (package-archives '(("gnu"   . "http://elpa.gnu.org/packages/")
-                      ("melpa" . "https://melpa.org/packages/"))))
+;; Bootstrap straight.el and take over use-package
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-use-package-by-default)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Emacs defaults
+(use-package emacs
+  :custom (tab-always-indent 'complete)
+  (text-mode-ispell-word-completion nil)
+  (read-extended-command-predicate #'command-completion-default-include-p))
+
+;; Base 16 Kanagawa Dragon theme
 (use-package base16-theme
-  :ensure t
-  :demand t
   :config (load-theme 'base16-kanagawa-dragon t))
 
+(use-package dashboard
+  :config (dashboard-setup-startup-hook)
+  (setq dashboard-startup-banner 'logo
+        dashboard-banner-logo-title "Evil Emacs"
+        dashboard-items nil
+        dashboard-set-footer nil))
+
+;; Evil mode and complimentaries
 (use-package evil
-  :ensure t
   :init (setq evil-want-C-u-scroll t)
   (setq evil-want-C-d-scroll t)
   (setq evil-undo-system 'undo-redo)
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
   :config (evil-mode 1)
   (evil-set-leader '(normal visual) (kbd "SPC"))
   ;; show a list of available interactive functions
-  (evil-define-key 'normal 'global (kbd "<leader>SPC") #'(lambda ()
-                                                           (interactive)
-                                                           (call-interactively #'execute-extended-command)))
-  (evil-define-key nil 'global (kbd "<leader>a") 'consult-ripgrep)
-  ;; find in project using fuzzy search
+  (evil-define-key 'normal 'global
+    (kbd "<leader>SPC") #'(lambda ()
+			    (interactive)
+			    (call-interactively #'execute-extended-command)))
   (evil-define-key nil 'global (kbd "<leader>e") 'project-find-file)
   (evil-define-key nil 'global (kbd "<leader>f") 'find-file)
   (evil-define-key nil 'global (kbd "<leader>k") 'kill-buffer)
-  ;; toggle native line numbers
   (evil-define-key nil 'global (kbd "<leader>l") 'display-line-numbers-mode)
   (evil-define-key nil 'global (kbd "<leader>n") 'evil-buffer-new)
-  ;; fuzzy search for current buffer content
-  (evil-define-key nil 'global (kbd "<leader>q") 'consult-line)
-  (evil-define-key nil 'global (kbd "<leader>y") 'consult-yank-from-kill-ring))
+  (evil-define-key nil 'global (kbd "<leader>b") 'consult-buffer))
+
+(use-package evil-collection
+  :after evil
+  :custom (evil-collection-setup-minibuffer t)
+  :config (evil-collection-init))
 
 (use-package evil-matchit
-  :ensure t
+  :after evil
   :config (global-evil-matchit-mode 1))
 
 (use-package evil-commentary
-  :ensure t
   :after (evil)
-  :config
-  (evil-commentary-mode))
+  :config (evil-commentary-mode))
 
-(use-package markdown-mode
-  :ensure t
-  :defer t)
-
-(use-package rustic
-  :ensure t
-  :config
-  (setq rustic-format-on-save t)
-  :custom
-  (rustic-cargo-use-last-stored-arguments t))
-
-;; add pair parenthesis, square brackets, etc
-(add-hook 'prog-mode-hook 'electric-pair-mode)
-
-;; disable `electric-pair-mode' in `org-mode', to avoid conflict with
-;; `<s' source block
-(add-hook 'org-mode-hook #'(lambda ()
-                             (electric-pair-local-mode -1)))
-
-(use-package consult
-  :ensure t)
-
+;; Statusbar with evil support
 (use-package doom-modeline
-  :ensure t
   :defer t
-  :custom
-  ;; show evil state in modeline
-  (doom-modeline-modal-icon nil)
-  ;; file path will be relative to project root
+  :custom (doom-modeline-modal-icon nil)
   (doom-modeline-buffer-file-name-style 'relative-from-project)
-  :hook
-  (after-init . doom-modeline-mode)
+  :hook (after-init . doom-modeline-mode)
   (doom-modeline-mode . display-battery-mode))
 
+(use-package magit
+  :bind ("C-x g" . magit-status)
+  :config (add-hook 'with-editor-mode-hook #'evil-insert-state))
+
+;; mini-buffer completion and completion-on-point
+(use-package consult
+  :defer t
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :config (consult-customize consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep consult-man
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any)) ;; :preview-key "M-."
+  (setq consult-narrow-key "<") ;; "C-+"
+  (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help))
+
+(use-package vertico
+  :defer t
+  :init (vertico-mode)
+  :custom (vertico-resize nil)
+  (vertico-count 15))
+
+(use-package marginalia
+  :defer t
+  :init (marginalia-mode))
+
+(use-package orderless
+  :defer t
+ :custom (completion-styles '(orderless basic flex))
+ (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package corfu
+  :defer t
+  :custom (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-quit-no-match t)
+  :init (global-corfu-mode)
+  (corfu-history-mode)
+  (corfu-popupinfo-mode))
+
+(use-package cape
+  :defer t
+  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  :init (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  (add-hook 'completion-at-point-functions #'cape-history))
+
+;; LSP and syntax check error/warning highlighting
 (use-package flycheck
-  :ensure t
+  :defer t
+  :commands (global-flycheck-mode)
   :init (global-flycheck-mode))
 
 (use-package lsp-mode
+  :defer t
   :init (setq lsp-keymap-prefix "C-l")
-  :ensure t
   :hook ((XXX-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+         (lsp-mode . lsp-enable-which-key-integration)))
 
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
-(use-package ivy
-  :ensure t
-  :config (ivy-mode)
-  (setopt ivy-use-virtual-buffers t)
-  (setopt enable-recursive-minibuffers t))
-
-(use-package lsp-ivy
-  :ensure t
-  :commands lsp-ivy-workspace-symbol)
-
-(use-package lsp-treemacs
-  :ensure t
-  :commands lsp-treemacs-errors-list)
-
-(use-package dap-mode :ensure t)
-
-;; Show help about the keys pressed
-(use-package which-key
-  :ensure t
+;; Language support modes
+(use-package markdown-mode :defer t)
+(use-package nix-mode :defer t)
+(use-package typst-ts-mode :defer t)
+(use-package rustic
+  :defer t
+  :config (setq rustic-format-on-save t)
+  :custom (rustic-cargo-use-last-stored-arguments t))
+(use-package web-mode
+  :defer t
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.css\\'"   . web-mode)
+         ("\\.jsx?\\'"  . web-mode)
+         ("\\.tsx?\\'"  . web-mode)
+         ("\\.json\\'"  . web-mode))
   :config
-  (which-key-mode)
-  (which-key-setup-minibuffer))
+  (setq web-mode-markup-indent-offset 2) ; HTML
+  (setq web-mode-css-indent-offset 2)    ; CSS
+  (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
+  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
-;; Show a marker in fringe area when there is a change in the current
-;; buffer
-(use-package diff-hl
-  :ensure t
-  :custom
-  (diff-hl-show-staged-changes nil)
-  :init
-  (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-  :config
-  (global-diff-hl-mode))
-
-;; UI for completion
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode)
-  :custom
-  (vertico-resize nil)
-  (vertico-count 15))
-
-;; Enhance information in completion
-(use-package marginalia
-  :ensure
-  :init
-  (marginalia-mode))
-
-;; Better completion style
-(use-package orderless
-  :ensure t
-  :config
-  (setq (completion-styles '(orderless basic))
-	(completion-category-overrides '((file (styles basic partial-completion))))))
-
-;; Completion at point support
-(use-package company
-  :ensure t
-  :init
-  (setq company-idle-delay 0.1
-        company-tooltip-limit 10
-        company-minimum-prefix-length 3)
-  :hook (after-init . global-company-mode)
-  :config
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous))
-
+;;; init.el ends here

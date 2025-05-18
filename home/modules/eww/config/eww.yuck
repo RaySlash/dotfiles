@@ -63,7 +63,7 @@
        :space-evenly false
        :visible {net_name == "" ? false : true}
        (label :class "icon"
-              :text "󰈀   ${net_name}")))
+              :text "󰤥 ")))
 
 (defwidget weatherinfo []
   (box :class "weatherinfo"

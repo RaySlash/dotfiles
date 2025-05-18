@@ -34,6 +34,7 @@
       };
     };
   };
+  emacs = inputs.emacs-overlay.overlays.default;
   nurpkgs = inputs.nurpkgs.overlays.default;
   nix-minecraft = inputs.nix-minecraft.overlay;
   neovim-nightly = inputs.neovim-nightly-overlay.overlays.default;

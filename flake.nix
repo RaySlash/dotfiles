@@ -50,6 +50,9 @@
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+    };
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
     };

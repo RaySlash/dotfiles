@@ -78,6 +78,38 @@
   programs = {
     kdeconnect.enable = true;
     dconf.enable = true;
+    steam = {
+      enable = true;
+      # extest.enable = true;
+      gamescopeSession = {
+        enable = true;
+        args = [
+          "--adaptive-sync" # VRR support
+          "--mangoapp" # performance overlay
+          "--rt"
+          "--steam"
+        ];
+      };
+      protontricks.enable = true;
+      remotePlay.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          MANGOHUD = true;
+          OBS_VKCAPTURE = true;
+          # RADV_TEX_ANISO = 16;
+        };
+        extraLibraries = p:
+          with p; [
+            atk
+          ];
+      };
+      extraCompatPackages = with pkgs; [proton-ge-bin];
+      extraPackages = with pkgs; [
+        gamescope
+        mangohud
+      ];
+    };
   };
 
   custom = {
