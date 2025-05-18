@@ -48,6 +48,7 @@
 (setenv "LANG" "en_US.UTF-8")
 (setenv "LC_ALL" "en_US.UTF-8")
 (setenv "LC_CTYPE" "en_US.UTF-8")
+(setenv "LSP_USE_PLISTS" "true")
 (toggle-relative-line-numbers)
 (toggle-transparency)
 (disable-ui-extras)
@@ -59,22 +60,8 @@
 (add-hook 'org-mode-hook #'(lambda () (electric-pair-local-mode -1)))
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
-;; Bootstrap straight.el and take over use-package
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-	"straight/repos/straight.el/bootstrap.el"
-	(or (bound-and-true-p straight-use-package-by-default)
-	    user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
 ;; Emacs defaults
 (use-package emacs
@@ -210,28 +197,110 @@
   :defer t
   :init (setq lsp-keymap-prefix "C-l")
   :hook ((XXX-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration)))
+         (lsp-mode . lsp-enable-which-key-integration))
+  :custom (lsp-keymap-prefix "C-c l")
+  (lsp-completion-provider :none)
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-session-file (locate-user-emacs-file ".lsp-session"))
+  (lsp-log-io nil)
+  (lsp-keep-workspace-alive nil)
+  (lsp-idle-delay 0.5)
+  (lsp-enable-xref t)
+  (lsp-auto-configure t)
+  (lsp-eldoc-enable-hover t)
+  (lsp-enable-dap-auto-configure t)
+  (lsp-enable-file-watchers nil)
+  (lsp-enable-folding t)
+  (lsp-enable-imenu t)
+  (lsp-enable-indentation true)
+  (lsp-enable-links nil)
+  (lsp-enable-on-type-formatting t)
+  (lsp-enable-suggest-server-download t)
+  (lsp-enable-symbol-highlighting t)
+  (lsp-enable-text-document-color nil)
+
+  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-sideline-diagnostic-max-lines 20)
+
+  (lsp-completion-enable t)
+  (lsp-completion-enable-additional-text-edit t)
+  (lsp-enable-snippet t)
+  (lsp-completion-show-kind t)
+
+  (lsp-headerline-breadcrumb-enable t)
+  (lsp-headerline-breadcrumb-enable-diagnostics nil)
+  (lsp-headerline-breadcrumb-enable-symbol-numbers nil)
+  (lsp-headerline-breadcrumb-icons-enable nil)
+
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-modeline-diagnostics-enable nil)
+  (lsp-modeline-workspace-status-enable nil)
+  (lsp-signature-doc-lines 1)
+  (lsp-ui-doc-use-childframe t)
+  (lsp-eldoc-render-all nil)
+  (lsp-lens-enable nil)
+  (lsp-semantic-tokens-enable nil))
+
+(use-package lsp-completion
+  :no-require
+  :hook ((lsp-mode . lsp-completion-mode)))
+
+(use-package lsp-ui
+  :ensure t
+  :commands
+  (lsp-ui-doc-show
+   lsp-ui-doc-glance)
+  :bind (:map lsp-mode-map
+              ("C-c C-d" . 'lsp-ui-doc-glance))
+  :after (lsp-mode evil)
+  :config (setq lsp-ui-doc-enable t
+                evil-lookup-func #'lsp-ui-doc-glance
+                lsp-ui-doc-show-with-cursor nil
+                lsp-ui-doc-include-signature t
+                lsp-ui-doc-position 'at-point))
+
+(use-package envrc
+  :hook (after-init . envrc-global-mode))
 
 ;; Language support modes
-(use-package markdown-mode :defer t)
-(use-package nix-ts-mode :defer t)
-(use-package zig-ts-mode :defer t)
-(use-package typst-ts-mode :defer t)
+(use-package c-ts-mode
+  :defer t
+  :mode (("\\.c\\'" . c-ts-mode)))
+(use-package markdown-ts-mode
+  :defer t
+  :mode (("\\.md\\'" . markdown-ts-mode)))
+(use-package nix-ts-mode
+  :defer t
+  :mode (("\\.nix\\'" . nix-ts-mode)))
+(use-package json-ts-mode
+  :defer t
+  :mode (("\\.json\\'" . json-ts-mode)))
+(use-package zig-ts-mode
+  :defer t
+  :mode (("\\.zig\\'" . zig-ts-mode)))
+(use-package typescript-ts-mode
+  :defer t
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.js\\'" . typescript-ts-mode)
+	 ("\\.tsx\\'" . tsx-ts-mode)
+	 ("\\.jsx\\'" . tsx-ts-mode))
+  :config (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
+(use-package css-mode
+  :defer t
+  :mode (("\\.css\\'" . css-mode)))
+(use-package typst-ts-mode
+  :defer t
+  :mode (("\\.typ\\'" . typst-ts-mode)
+         ("\\.typst\\'"   . typst-ts-mode)))
+(use-package rust-mode
+  :defer t
+  :init (setq rust-mode-treesitter-derive t)
+  :mode (("\\.rs\\'" . rust-mode)))
 (use-package rustic
   :defer t
+  :after (rust-mode)
+  :mode (("\\.rs\\'" . rustic-mode))
   :config (setq rustic-format-on-save t)
   :custom (rustic-cargo-use-last-stored-arguments t))
-(use-package web-mode
-  :defer t
-  :mode (("\\.html?\\'" . web-mode)
-         ("\\.css\\'"   . web-mode)
-         ("\\.jsx?\\'"  . web-mode)
-         ("\\.tsx?\\'"  . web-mode)
-         ("\\.json\\'"  . web-mode))
-  :config
-  (setq web-mode-markup-indent-offset 4) ; HTML
-  (setq web-mode-css-indent-offset 4)    ; CSS
-  (setq web-mode-code-indent-offset 4)   ; JS/JSX/TS/TSX
-  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
 ;;; init.el ends here
