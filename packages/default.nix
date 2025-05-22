@@ -21,3 +21,4 @@ in
     })
     packages)
   // (import ./nixcats {inherit inputs;}).packages.${pkgs.system}
+  // (import ./emacats {inherit inputs;}).packages.${pkgs.system}

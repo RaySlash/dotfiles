@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  config,
   ...
 }: {
   imports = [
@@ -18,8 +19,10 @@
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = ["i2c-dev"];
+    kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = ["i2c-dev" "hid-tmff2"];
+    blacklistedKernelModules = ["hid-thrustmaster"];
+    extraModulePackages = with config.boot.kernelPackages; [hid-tmff2];
     supportedFilesystems = ["ntfs"];
     lanzaboote = {
       enable = true;

@@ -12,6 +12,7 @@
     prettierd
     nixd
     vscode-langservers-extracted
+    typst
     tinymist
   ]);
 
@@ -41,7 +42,6 @@ in {
     programs.emacs = {
       enable = true;
       package = myEmacs;
-      extraConfig = builtins.readFile ./init.el;
     };
 
     services.emacs = {

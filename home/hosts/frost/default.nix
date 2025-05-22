@@ -26,6 +26,8 @@
     vlc
     vesktop
     prismlauncher
+    typst
+    oversteer
   ];
 
   wayland.windowManager.hyprland = {

@@ -24,7 +24,7 @@
   zen-browser = final: _prev: {
     zen-browser-twilight = inputs.zen-browser.packages.${final.system}.twilight;
     zen-browser = inputs.zen-browser.packages.${final.system}.default.override {
-      nativeMessagingHosts = [final.pkgs.firefoxpwa];
+      # nativeMessagingHosts = [final.pkgs.firefoxpwa];
       extraPolicies = {
         DisableAppUpdate = true;
         DisableTelemetry = true;

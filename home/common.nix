@@ -6,7 +6,7 @@
   ...
 }: {
   imports = [
-    inputs.stylix.homeManagerModules.stylix
+    inputs.stylix.homeModules.stylix
     inputs.nix-index-database.hmModules.nix-index
   ];
 
@@ -69,10 +69,10 @@
   };
 
   # Nixcat hmModule
-  nvimcat = {
-    enable = true;
-    packageNames = ["nvimcat"];
-  };
+  # nvimcat = {
+  #   enable = true;
+  #   packageNames = ["nvimcat"];
+  # };
 
   custom = {
     programs.bash.enable = true;
