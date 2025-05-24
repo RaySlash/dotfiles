@@ -40,6 +40,24 @@ in {
           add_newline = true;
         };
       };
+      readline = {
+	enable = true;
+	variables = {
+          editing-mode = "vi";
+	  vi-cmd-mode-string = ''\001\e[38;5;111m\002 \001\e[0m\002'';
+	  vi-ins-mode-string = ''\001\e[38;5;108m\002 \001\e[0m\002'';
+          mark-symlinked-directories = true;
+          menu-complete-display-prefix = true;
+	  print-completions-horizontally = true;
+          show-mode-in-prompt = true;
+	  show-all-if-ambiguous = true;
+          completion-ignore-case = true;
+	  colored-completion-prefix = true;
+	  completion-map-case = true;
+          colored-stats = true;
+          bell-style = "none";
+	};
+      };
       bash = {
         enable = mkDefault true;
         enableCompletion = mkDefault true;

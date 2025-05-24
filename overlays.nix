@@ -12,7 +12,9 @@
   # under `customPackages`.
   # Example: `home.packages = [pkgs.customPackages.nvimcat];`
   custom-pkgs = final: _prev: {
-    customPackages = import ./packages final.pkgs;
+    customPackages = let
+      pkgs = final.pkgs;
+      in import ./packages {inherit pkgs inputs;};
   };
   # Add home-manager CLI from inputs to `pkgs.home-manager-master`
   home-manager = final: _prev: {

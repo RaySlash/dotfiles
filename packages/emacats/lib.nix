@@ -1,25 +1,39 @@
 { inputs
   , lib ? inputs.nixpkgs.lib
-  , utils ? inputs.nixCats.utils
-  , pkgs ? import inputs.nixpkgs {}
-}:{
+}: 
+let
+  inherit (lib) foldl' attrNames elem;
+in {
   # Make the derivation buildable by all available platforms in nixpkgs
-  forEachSystem = utils.eachSystem lib.platforms.all;
+  forEachSystem = let
+    /**
+    `flake-utils.lib.eachSystem` but without the flake input
 
-  # Function that gives a list of treesitter grammers
-  # This takes emacsPackages as first argument and grammerPackage list
-  # with only the suffix names as second argument.
-  # Use this instead of `epkgs.treesit-grammers.with-all-grammers`
-  mkTreeSitterGrammers = epkgs: grammerlist: with epkgs; [
-    tree-sitter
-    (treesit-grammars.with-grammars (grammer:
-    let
-      # Function adds a supplied "prefix with first argument" to all elements
-      # in "list as second argument" 
-      addPrefixForEach = prefix: list: (map (item: "${prefix}${item}") list);
-    in
-      (with grammer;
-	(addPrefixForEach "tree-sitter-" grammerlist))))
-  ];
+    Builds a map from `<attr> = value` to `<attr>.<system> = value` for each system
 
+    ## Arguments
+
+    - `systems` (`listOf strings`)
+
+    - `f` (`functionTo` `AttrSet`)
+
+    ---
+    */
+      eachSystem = systems: f: let
+	# get function result and insert system variable
+	op = attrs: system: let
+	  ret = f system;
+	  op = attrs: key: attrs // {
+            ${key} = (attrs.${key} or { })
+          // { ${system} = ret.${key}; };
+	  };
+	in foldl' op attrs (attrNames ret);
+	# Merge together the outputs for all systems.
+      in foldl' op { } (systems ++
+    (if builtins ? currentSystem && ! elem builtins.currentSystem systems
+    # add the current system if --impure is used
+    then [ builtins.currentSystem ]
+    else []));
+  in
+    eachSystem lib.platforms.all;
 }

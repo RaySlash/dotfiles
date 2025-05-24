@@ -78,6 +78,11 @@
     platformTheme = "qt5ct";
   };
 
+  services.guix = {
+    enable = true;
+    publish.enable = true;
+  };
+
   programs = {
     kdeconnect.enable = true;
     dconf.enable = true;
