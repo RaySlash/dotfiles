@@ -70,6 +70,15 @@ in {
         shellAliases = {
           ls = "eza --icons";
           ll = "eza --icons -l";
+	  mkcd = ''
+	    mkcd() {
+              if [ $# -ne 1 ]; then
+                echo "Error: Specify exactly one directory name."
+                return 1
+              fi
+              mkdir -p "$1" && cd "$1" || return 1
+	    }
+	  '';
           ffd = "cd $(fd -t d --max-depth 4 . ~/Projects | fzf)";
           gl = "git log";
           gs = "git status";
