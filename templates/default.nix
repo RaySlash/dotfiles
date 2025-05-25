@@ -3,6 +3,7 @@ let
     "c"
     "c-raylib"
     "elm"
+    "nextjs"
     "rust"
     "zig-raylib"
     "zig"
