@@ -88,6 +88,7 @@
   (setq evil-want-keybinding nil)
   :config (evil-mode 1)
   (evil-set-leader '(normal visual) (kbd "SPC"))
+  (evil-set-initial-state 'term-mode 'emacs)
   ;; show a list of available interactive functions
   (evil-define-key 'normal 'global
     (kbd "<leader>SPC") #'(lambda ()
@@ -95,6 +96,7 @@
 			    (call-interactively #'execute-extended-command)))
   (evil-define-key nil 'global (kbd "<leader>e") 'project-find-file)
   (evil-define-key nil 'global (kbd "<leader>f") 'find-file)
+  (evil-define-key nil 'global (kbd "<leader>t") 'vterm)
   (evil-define-key nil 'global (kbd "<leader>k") 'kill-buffer)
   (evil-define-key nil 'global (kbd "<leader>l") 'display-line-numbers-mode)
   (evil-define-key nil 'global (kbd "<leader>n") 'evil-buffer-new)
@@ -261,6 +263,8 @@
                 lsp-ui-doc-show-with-cursor nil
                 lsp-ui-doc-include-signature t
                 lsp-ui-doc-position 'at-point))
+
+(use-package vterm)
 
 (use-package envrc
   :hook (after-init . envrc-global-mode))

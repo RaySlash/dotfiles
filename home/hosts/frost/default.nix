@@ -16,18 +16,17 @@
     imv
     helvum
     openrgb-with-all-plugins
-    libreoffice-fresh
     stremio
     pwvucontrol
     swww
     grimblast
     zen-browser
-    virt-manager
     vlc
-    vesktop
+    (discord-canary.override {withVencord = true;})
     prismlauncher
     typst
     oversteer
+    onlyoffice-desktopeditors
   ];
 
   wayland.windowManager.hyprland = {

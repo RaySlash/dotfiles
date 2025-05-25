@@ -19,6 +19,7 @@
     "CLUTTER_BACKEND=wayland"
     "HYPRCURSOR_THEME,macOS-White"
     "HYPRCURSOR_SIZE,24"
+    "XDG_SCREENSHOTS_DIR,$HOME/Pictures/screenshots"
   ];
 
   monitor = [
