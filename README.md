@@ -6,9 +6,15 @@
 
 My personal NixOS configuration featuring multiple hosts and modern development setups.
 
-> **Warning**: These configs are highly opinionated - use as inspiration, not copy-paste!
+> **NOTE**: These configs are highly opinionated - use as inspiration, not copy-paste!
 
 ## 🚀 Usage
+
+### ✏️ Emacs Configuration
+
+```bash
+nix run github:rayslash/dotfiles#emacats
+```
 
 ### 🧩 Neovim Configuration
 
@@ -65,15 +71,18 @@ sudo nixos-install --flake .#$MYHOST
 
 ### Core Principles:
 
-- 🔌 **Explicit Wiring**: Configurations are directly referenced via absolute paths - no implicit file tree crawling
+- 🔌 **Explicit Wiring**:
+  - Configurations are directly referenced via absolute paths
+  - No implicit file tree crawling
+
 - 📚 **Layered Composition**: Modules set defaults that can be cleanly overridden:
 
   ```nix
   # modules/kitty/default.nix
   { lib, ... }: {
     programs.kitty = {
-      enable = lib.mkDefault true;  # Default that can be disabled
-      defaultTerminal = lib.mkDefault true;
+      enable = lib.mkForce true;
+      defaultTerminal = lib.mkDefault true; # Default that can be disabled
     };
   }
 
@@ -86,11 +95,14 @@ sudo nixos-install --flake .#$MYHOST
   }
   ```
 
-- 🧰 **Utility-First**: Abstract common patterns into repo-specific functions:
+- 🧰 **Utility-First**:
+  - Abstract common patterns into repo-specific functions:
 
   ```nix
   # utils/lib.nix
-  { inputs }:
+  { inputs }: let
+    # ....
+  in
   {
   inherit
     mkPkgs
@@ -103,47 +115,7 @@ sudo nixos-install --flake .#$MYHOST
 - 🚫 **Anti-Pattern Rejection**:
   - No automatic inclusion of `./hosts/*.nix`
   - No magic "profiles" directory
-  - No recursive config discovery (except when explicitly enabled)
-
-### Zero-Magic Plug & Play Architecture:
-
-```nix
-# Anti-pattern vs Our Approach
-# Instead of implicit path resolution:
-./users/${user}/home.nix
-
-# We use explicit composition:
-mkHome {
-  system = "x86_64-linux";
-  modules = [ ./hosts/myhost ];
-}
-```
-
-### Util Functions
-
-1. **Host Declaration**:
-
-   ```nix
-   mkSystem {
-     system = "aarch64-linux";
-     modules = [
-       ./hosts/myhost
-       inputs.my-flake-input.nixosModules.default
-     ];
-   }
-   ```
-
-2. **Home-Manager Declaration**:
-
-   ```nix
-   mkHome {
-     system = "x86_64-linux";
-     modules = [
-       ./hosts/myhost
-       inputs.my-flake-input.homeModules.default
-     ];
-   }
-   ```
+  - No recursive config discovery
 
 > "Configs should be obvious, not clever"
 > i.e., Direct file references > Convention over configuration

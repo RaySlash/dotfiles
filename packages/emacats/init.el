@@ -22,7 +22,6 @@
 
 (setq scroll-step 1
       scroll-conservatively  10000)
-
 ;; Disable extra UI elements
 (defun disable-ui-extras ()
   (menu-bar-mode -1)
@@ -67,6 +66,7 @@
 (use-package emacs
   :custom (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
+  (set-face-attribute 'default nil :font "IosevkaTerm Nerd Font")
   (read-extended-command-predicate #'command-completion-default-include-p))
 
 ;; Kanagawa Dragon theme
@@ -131,60 +131,16 @@
   :bind ("C-x g" . magit-status)
   :config (add-hook 'with-editor-mode-hook #'evil-insert-state))
 
-;; mini-buffer completion and completion-on-point
-(use-package consult
-  :defer t
-  :hook (completion-list-mode . consult-preview-at-point-mode)
-  :init (advice-add #'register-preview :override #'consult-register-window)
-  (setq register-preview-delay 0.5)
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
-  :config (consult-customize consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep consult-man
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
-   :preview-key '(:debounce 0.4 any)) ;; :preview-key "M-."
-  (setq consult-narrow-key "<") ;; "C-+"
-  (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help))
-
-(use-package vertico
-  :defer t
-  :init (vertico-mode)
-  :custom (vertico-resize nil)
-  (vertico-count 15))
+(use-package icomplete :config (fido-vertical-mode))
 
 (use-package marginalia
-  :defer t
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
   :init (marginalia-mode))
 
-(use-package orderless
-  :defer t
- :custom (completion-styles '(orderless basic flex))
- (completion-category-defaults nil)
- (completion-category-overrides '((file (styles basic partial-completion)))))
-
 (use-package smartparens
-  ;; add `smartparens-mode` to these hooks
-  :hook (prog-mode text-mode markdown-mode web-mode zig-ts-mode nix-ts-mode rustic)
+  :hook (prog-mode text-mode markdown-mode)
   :config (require 'smartparens-config))
-
-(use-package corfu
-  :defer t
-  :custom (corfu-cycle t)
-  (corfu-auto t)
-  (corfu-quit-no-match t)
-  :init (global-corfu-mode)
-  (corfu-history-mode)
-  (corfu-popupinfo-mode))
-
-(use-package cape
-  :defer t
-  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
-  :init (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block)
-  (add-hook 'completion-at-point-functions #'cape-history))
 
 (use-package which-key
   :diminish which-key-mode
@@ -198,72 +154,6 @@
   :commands (global-flycheck-mode)
   :init (global-flycheck-mode))
 
-(use-package lsp-mode
-  :defer t
-  :init (setq lsp-keymap-prefix "C-l")
-  :hook ((XXX-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
-  :custom (lsp-keymap-prefix "C-c l")
-  (lsp-completion-provider :none)
-  (lsp-diagnostics-provider :flycheck)
-  (lsp-session-file (locate-user-emacs-file ".lsp-session"))
-  (lsp-log-io nil)
-  (lsp-keep-workspace-alive nil)
-  (lsp-idle-delay 0.5)
-  (lsp-enable-xref t)
-  (lsp-auto-configure t)
-  (lsp-eldoc-enable-hover t)
-  (lsp-enable-dap-auto-configure t)
-  (lsp-enable-file-watchers nil)
-  (lsp-enable-folding t)
-  (lsp-enable-imenu t)
-  (lsp-enable-indentation true)
-  (lsp-enable-links nil)
-  (lsp-enable-on-type-formatting t)
-  (lsp-enable-suggest-server-download t)
-  (lsp-enable-symbol-highlighting t)
-  (lsp-enable-text-document-color nil)
-
-  (lsp-ui-sideline-show-hover nil)
-  (lsp-ui-sideline-diagnostic-max-lines 20)
-
-  (lsp-completion-enable t)
-  (lsp-completion-enable-additional-text-edit t)
-  (lsp-enable-snippet t)
-  (lsp-completion-show-kind t)
-
-  (lsp-headerline-breadcrumb-enable t)
-  (lsp-headerline-breadcrumb-enable-diagnostics nil)
-  (lsp-headerline-breadcrumb-enable-symbol-numbers nil)
-  (lsp-headerline-breadcrumb-icons-enable nil)
-
-  (lsp-modeline-code-actions-enable nil)
-  (lsp-modeline-diagnostics-enable nil)
-  (lsp-modeline-workspace-status-enable nil)
-  (lsp-signature-doc-lines 1)
-  (lsp-ui-doc-use-childframe t)
-  (lsp-eldoc-render-all nil)
-  (lsp-lens-enable nil)
-  (lsp-semantic-tokens-enable nil))
-
-(use-package lsp-completion
-  :no-require
-  :hook ((lsp-mode . lsp-completion-mode)))
-
-(use-package lsp-ui
-  :ensure t
-  :commands
-  (lsp-ui-doc-show
-   lsp-ui-doc-glance)
-  :bind (:map lsp-mode-map
-              ("C-c C-d" . 'lsp-ui-doc-glance))
-  :after (lsp-mode evil)
-  :config (setq lsp-ui-doc-enable t
-                evil-lookup-func #'lsp-ui-doc-glance
-                lsp-ui-doc-show-with-cursor nil
-                lsp-ui-doc-include-signature t
-                lsp-ui-doc-position 'at-point))
-
 (use-package vterm)
 
 (use-package envrc
@@ -274,10 +164,11 @@
   :defer t
   :mode (("\\.c\\'" . c-ts-mode)))
 (use-package markdown-ts-mode
-  :defer t
+ :defer t
   :mode (("\\.md\\'" . markdown-ts-mode)))
 (use-package nix-ts-mode
   :defer t
+  :hook (lsp-mode)
   :mode (("\\.nix\\'" . nix-ts-mode)))
 (use-package json-ts-mode
   :defer t

@@ -1,5 +1,5 @@
 {inputs, ...}: let
-  lib = inputs.nixpkgs.lib;
+  lib = (inputs.nixpkgs.lib // inputs.home-manager.lib) // inputs.self.hub.lib;
 in
   (inputs.flake-parts.lib.mkFlake {inherit inputs;}) {
     systems = [
@@ -37,8 +37,8 @@ in
       overlays = import ./overlays.nix {inherit inputs;};
       templates = import ./templates;
       hub = import ./config.nix {inherit inputs;};
-      nixosConfigurations = import ./system {inherit inputs hub;};
-      homeConfigurations = import ./home {inherit inputs hub;};
+      nixosConfigurations = import ./system {inherit inputs lib hub;};
+      homeConfigurations = import ./home {inherit inputs lib hub;};
       flakeModules.default = import ./utils/flake-module.nix {inherit inputs lib hub;};
       nixosModules = import ./system/modules {inherit inputs lib hub;};
       homeModules = import ./home/modules {inherit inputs lib hub;};
