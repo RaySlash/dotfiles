@@ -22,6 +22,7 @@
 
 (setq scroll-step 1
       scroll-conservatively  10000)
+
 ;; Disable extra UI elements
 (defun disable-ui-extras ()
   (menu-bar-mode -1)
@@ -41,8 +42,8 @@
 
 ;; Toggle Frame Transparency (Emacs 29+)
 (defun toggle-transparency ()
-   (interactive)
-   (add-to-list 'default-frame-alist '(alpha-background . 90)))
+  (interactive)
+  (add-to-list 'default-frame-alist '(alpha-background . 90)))
 
 (setenv "LANG" "en_US.UTF-8")
 (setenv "LC_ALL" "en_US.UTF-8")
@@ -51,12 +52,13 @@
 (toggle-relative-line-numbers)
 (toggle-transparency)
 (disable-ui-extras)
+(electric-pair-mode 1)
 (global-hl-line-mode 1)
+(global-completion-preview-mode)
+(global-prettify-symbols-mode 1)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 ;;(global-set-key (kbd "C-c t") 'toggle-full-transparency)
-(add-hook 'prog-mode-hook 'electric-pair-mode)
-(add-hook 'org-mode-hook #'(lambda () (electric-pair-local-mode -1)))
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
 (require 'use-package-ensure)
@@ -94,13 +96,15 @@
     (kbd "<leader>SPC") #'(lambda ()
 			    (interactive)
 			    (call-interactively #'execute-extended-command)))
-  (evil-define-key nil 'global (kbd "<leader>e") 'project-find-file)
-  (evil-define-key nil 'global (kbd "<leader>f") 'find-file)
+  (evil-define-key nil 'global (kbd "<leader>f") 'project-find-file)
+  (evil-define-key nil 'global (kbd "<leader>g") 'rgrep)
+  (evil-define-key nil 'global (kbd "<leader>p") 'find-file)
+  (evil-define-key nil 'global (kbd "<leader>e") 'dired-jump)
   (evil-define-key nil 'global (kbd "<leader>t") 'vterm)
   (evil-define-key nil 'global (kbd "<leader>k") 'kill-buffer)
   (evil-define-key nil 'global (kbd "<leader>l") 'display-line-numbers-mode)
   (evil-define-key nil 'global (kbd "<leader>n") 'evil-buffer-new)
-  (evil-define-key nil 'global (kbd "<leader>b") 'consult-buffer))
+  (evil-define-key nil 'global (kbd "<leader>b") 'ibuffer))
 
 (use-package evil-collection
   :after evil
@@ -117,46 +121,76 @@
 
 ;; Statusbar with evil support
 (use-package doom-modeline
-  :defer t
-  :custom (doom-modeline-modal-icon nil)
-  (doom-modeline-buffer-file-name-style 'relative-from-project)
-  :hook (after-init . doom-modeline-mode)
-  (doom-modeline-mode . display-battery-mode))
+  :hook (after-init . doom-modeline-mode))
 
 (use-package nerd-icons
   :custom (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+(use-package nerd-icons-dired
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
 ;; Git support in mini-buffer
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (add-hook 'with-editor-mode-hook #'evil-insert-state))
 
-(use-package icomplete :config (fido-vertical-mode))
+(use-package icomplete
+  :init
+  (setf completion-styles '(basic flex)
+	completion-auto-select t ;; Show completion on first call
+	completion-auto-help 'visible ;; Display *Completions* upon first request
+	completions-format 'one-column ;; Use only one column
+	completions-sort 'historical ;; Order based on minibuffer history
+	completions-max-height 20 ;; Limit completions to 15 (completions start at line 5)
+	completion-ignore-case t)
+  :config
+  (fido-vertical-mode))
 
 (use-package marginalia
+  :commands (marginalia-mode)
   :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
   :init (marginalia-mode))
-
-(use-package smartparens
-  :hook (prog-mode text-mode markdown-mode)
-  :config (require 'smartparens-config))
 
 (use-package which-key
   :diminish which-key-mode
-  :config (which-key-mode +1)
+  :config (which-key-mode 1)
   (setq which-key-idle-delay 0.4
         which-key-idle-secondary-delay 0.4))
 
 ;; LSP and syntax check error/warning highlighting
+(use-package eglot
+  :defer t
+  :hook
+  (c-ts-mode . eglot-ensure)
+  (markdown-ts-mode . eglot-ensure)
+  (nix-ts-mode . eglot-ensure)
+  (lua-ts-mode . eglot-ensure)
+  (typst-ts-mode . eglot-ensure)
+  (zig-ts-mode . eglot-ensure)
+  (typescript-ts-mode . eglot-ensure)
+  (rust-mode . eglot-ensure))
+
 (use-package flycheck
   :defer t
   :commands (global-flycheck-mode)
   :init (global-flycheck-mode))
 
-(use-package vterm)
+(use-package vterm :defer t)
 
 (use-package envrc
+  :defer t
   :hook (after-init . envrc-global-mode))
 
 ;; Language support modes
@@ -164,7 +198,7 @@
   :defer t
   :mode (("\\.c\\'" . c-ts-mode)))
 (use-package markdown-ts-mode
- :defer t
+  :defer t
   :mode (("\\.md\\'" . markdown-ts-mode)))
 (use-package nix-ts-mode
   :defer t
@@ -191,8 +225,7 @@
   :mode (("\\.css\\'" . css-mode)))
 (use-package typst-ts-mode
   :defer t
-  :mode (("\\.typ\\'" . typst-ts-mode)
-         ("\\.typst\\'"   . typst-ts-mode)))
+  :mode (("\\.typ\\'" . typst-ts-mode)))
 (use-package rust-mode
   :defer t
   :init (setq rust-mode-treesitter-derive t)

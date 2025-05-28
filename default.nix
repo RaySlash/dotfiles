@@ -42,7 +42,6 @@ in
       flakeModules.default = import ./utils/flake-module.nix {inherit inputs lib hub;};
       nixosModules = import ./system/modules {inherit inputs lib hub;};
       homeModules = import ./home/modules {inherit inputs lib hub;};
-
       images = {
         rpi-sd = inputs.self.nixosConfigurations.rpi-live.config.system.build.sdImage;
         x86_64 = inputs.self.nixosConfigurations.x86_64-live.config.system.build.isoImage;
