@@ -10,6 +10,7 @@ jobs:
     - uses: cachix/install-nix-action@v31
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    - run: nix build .#emacats
     - run: nix build .#nvimcat
     - run: nix build .#nvim-minimal
     - run: nix flake check --all-systems
