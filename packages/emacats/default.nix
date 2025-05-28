@@ -38,7 +38,7 @@
     package = pkgs.emacs-pgtk;
     extraEmacsPackages = epkgs:
       (mkTreeSitterGrammers epkgs)
-      EmacsRuntimeDeps;
+      ++ EmacsRuntimeDeps;
   };
   # nixosModule = utils.mkNixosModules {
   #   moduleNamespace = [defaultPackageName];

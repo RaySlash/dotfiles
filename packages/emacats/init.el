@@ -196,17 +196,27 @@
 ;; Language support modes
 (use-package c-ts-mode
   :defer t
-  :mode (("\\.c\\'" . c-ts-mode)))
+  :mode (("\\.c\\'" . c-ts-mode)
+	 ("\\.cpp\\'" . c-ts-mode)))
 (use-package markdown-ts-mode
   :defer t
-  :mode (("\\.md\\'" . markdown-ts-mode)))
+  :mode (("\\.md\\'" . markdown-ts-mode)
+	 ("\\.mdx\\'" . markdown-ts-mode)))
+(use-package bash-ts-mode
+  :defer t
+  :mode (("\\.sh\\'" . bash-ts-mode)))
 (use-package nix-ts-mode
   :defer t
-  :hook (lsp-mode)
   :mode (("\\.nix\\'" . nix-ts-mode)))
 (use-package json-ts-mode
   :defer t
   :mode (("\\.json\\'" . json-ts-mode)))
+(use-package yaml-ts-mode
+  :defer t
+  :mode (("\\.yaml\\'" . yaml-ts-mode)))
+(use-package clojure-ts-mode
+  :defer t
+  :mode (("\\.clj\\'" . clojure-ts-mode)))
 (use-package lua-ts-mode
   :defer t
   :mode (("\\.lua\\'" . lua-ts-mode)))
@@ -216,25 +226,30 @@
 (use-package typescript-ts-mode
   :defer t
   :mode (("\\.ts\\'" . typescript-ts-mode)
-         ("\\.js\\'" . typescript-ts-mode)
+         ("\\.js\\'" . js-ts-mode)
 	 ("\\.tsx\\'" . tsx-ts-mode)
-	 ("\\.jsx\\'" . tsx-ts-mode))
+	 ("\\.jsx\\'" . js-jsx-mode))
   :config (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
-(use-package css-mode
+(use-package scss-mode
   :defer t
-  :mode (("\\.css\\'" . css-mode)))
+  :mode (("\\.scss\\'" . scss-mode)))
+(use-package less-css-mode
+  :defer t
+  :mode (("\\.less\\'" . less-css-mode)))
+(use-package html-ts-mode
+  :defer t
+  :mode (("\\.html\\'" . html-ts-mode)))
+(use-package css-ts-mode
+  :defer t
+  :mode (("\\.css\\'" . css-ts-mode)))
+(use-package toml-ts-mode
+  :defer t
+  :mode (("\\.toml\\'" . toml-ts-mode)))
 (use-package typst-ts-mode
   :defer t
   :mode (("\\.typ\\'" . typst-ts-mode)))
-(use-package rust-mode
+(use-package rust-ts-mode
   :defer t
-  :init (setq rust-mode-treesitter-derive t)
-  :mode (("\\.rs\\'" . rust-mode)))
-(use-package rustic
-  :defer t
-  :after (rust-mode)
-  :mode (("\\.rs\\'" . rustic-mode))
-  :config (setq rustic-format-on-save t)
-  :custom (rustic-cargo-use-last-stored-arguments t))
+  :mode (("\\.rs\\'" . rust-ts-mode)))
 
 ;;; init.el ends here
