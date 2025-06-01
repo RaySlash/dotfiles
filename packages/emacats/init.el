@@ -172,6 +172,7 @@
 ;; LSP and syntax check error/warning highlighting
 (use-package eglot
   :defer t
+  :init (setq eglot-connect-hook nil)
   :hook
   (c-ts-mode . eglot-ensure)
   (markdown-ts-mode . eglot-ensure)
@@ -186,6 +187,21 @@
   :defer t
   :commands (global-flycheck-mode)
   :init (global-flycheck-mode))
+(use-package corfu
+  :commands (global-corfu-mode)
+  (corfu-history-mode)
+  (corfu-popupinfo-mode)
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+
+  :init (global-corfu-mode)
+  (corfu-history-mode)
+  (corfu-popupinfo-mode))
 
 (use-package vterm :defer t)
 

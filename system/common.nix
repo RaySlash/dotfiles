@@ -99,7 +99,7 @@
       createHome = true;
       home = "/home/${username}";
       initialHashedPassword = hub.cfg.user.initialHashedPassword;
-      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark"];
+      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark" "adbusers" ];
       shell = pkgs.bash;
     };
   };

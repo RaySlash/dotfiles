@@ -19,11 +19,11 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = ["i2c-dev" "hid-tmff2"];
     blacklistedKernelModules = ["hid-thrustmaster"];
     extraModulePackages = with config.boot.kernelPackages; [hid-tmff2];
-    supportedFilesystems = ["ntfs"];
+    # supportedFilesystems = ["ntfs"];
     lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
@@ -86,6 +86,7 @@
   programs = {
     kdeconnect.enable = true;
     dconf.enable = true;
+    adb.enable = true;
     steam = {
       enable = true;
       # extest.enable = true;
