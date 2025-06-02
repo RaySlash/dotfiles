@@ -49,15 +49,6 @@
       enable = true;
       interval = "monthly";
     };
-    # xserver = {
-    #   enable = true;
-    #   excludePackages = [pkgs.xterm];
-    #   displayManager.lightdm.enable = false;
-    #   xkb = {
-    #     layout = "us";
-    #     variant = "";
-    #   };
-    # };
   };
 
   virtualisation = {

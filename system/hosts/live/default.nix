@@ -12,9 +12,9 @@
         variant = "";
       };
       excludePackages = [pkgs.xterm];
-      displayManager.gdm.enable = true;
       desktopManager.xfce.enable = true;
     };
+    displayManager.gdm.enable = true;
   };
 
   boot = {

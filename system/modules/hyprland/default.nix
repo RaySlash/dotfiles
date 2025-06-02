@@ -18,10 +18,12 @@ in {
       hypridle.enable = mkDefault true;
       gnome.gnome-keyring.enable = mkDefault true;
       xserver.enable = mkDefault true;
-      displayManager.defaultSession = mkDefault "hyprland";
-      xserver.displayManager.gdm = {
-        enable = mkDefault true;
-        wayland = mkDefault true;
+      displayManager = {
+	defaultSession = mkDefault "hyprland";
+	gdm = {
+	  enable = mkDefault true;
+	  wayland = mkDefault true;
+	};
       };
     };
 
