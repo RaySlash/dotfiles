@@ -21,7 +21,7 @@
       version-control t)
 
 (setq scroll-step 1
-      scroll-conservatively  10000)
+      scroll-conservatively 10000)
 
 ;; Disable extra UI elements
 (defun disable-ui-extras ()
@@ -69,7 +69,10 @@
   :custom (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
   (set-face-attribute 'default nil :font "IosevkaTerm Nerd Font")
-  (read-extended-command-predicate #'command-completion-default-include-p))
+  (read-extended-command-predicate #'command-completion-default-include-p)
+  (enable-recursive-minibuffers t)
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; Kanagawa Dragon theme
 (use-package base16-theme :config (load-theme 'base16-kanagawa-dragon t))
@@ -81,13 +84,32 @@
         dashboard-items nil
         dashboard-set-footer nil))
 
+(use-package dired-preview
+  :defer t
+  :config (setq dired-preview-delay 0.7)
+  (setq dired-preview-ignored-extensions-regexp
+	(concat "\\."
+		"\\(gz\\|"
+		"zst\\|"
+		"tar\\|"
+		"xz\\|"
+		"rar\\|"
+		"zip\\|"
+		"iso\\|"
+		"exe\\|"
+		"dll\\|"
+		"epub"
+		"\\)"))
+  (dired-preview-global-mode))
+
 ;; Evil mode and complimentaries
 (use-package evil
-  :init (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-d-scroll t)
-  (setq evil-undo-system 'undo-redo)
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
+  :init (setq evil-want-C-u-scroll t
+	      evil-want-C-d-scroll t
+	      evil-undo-system 'undo-redo
+	      evil-want-integration t
+	      evil-undo-system 'undo-fu
+	      evil-want-keybinding nil)
   :config (evil-mode 1)
   (evil-set-leader '(normal visual) (kbd "SPC"))
   (evil-set-initial-state 'term-mode 'emacs)
@@ -101,10 +123,12 @@
   (evil-define-key nil 'global (kbd "<leader>p") 'find-file)
   (evil-define-key nil 'global (kbd "<leader>e") 'dired-jump)
   (evil-define-key nil 'global (kbd "<leader>t") 'vterm)
+  (evil-define-key nil 'global (kbd "<leader>u") 'vundo)
   (evil-define-key nil 'global (kbd "<leader>k") 'kill-buffer)
   (evil-define-key nil 'global (kbd "<leader>l") 'display-line-numbers-mode)
   (evil-define-key nil 'global (kbd "<leader>n") 'evil-buffer-new)
-  (evil-define-key nil 'global (kbd "<leader>b") 'ibuffer))
+  (evil-define-key nil 'global (kbd "<leader>d") 'consult-flymake)
+  (evil-define-key nil 'global (kbd "<leader>b") 'consult-buffer))
 
 (use-package evil-collection
   :after evil
@@ -137,31 +161,139 @@
   (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package nerd-icons-ibuffer
-  :ensure t
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package kind-icon
+  :after corfu
+  (kind-icon-blend-background t)
+  (kind-icon-default-face 'corfu-default) ; only needed with blend-background
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Git support in mini-buffer
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (add-hook 'with-editor-mode-hook #'evil-insert-state))
 
-(use-package icomplete
-  :init
-  (setf completion-styles '(basic flex)
-	completion-auto-select t ;; Show completion on first call
-	completion-auto-help 'visible ;; Display *Completions* upon first request
-	completions-format 'one-column ;; Use only one column
-	completions-sort 'historical ;; Order based on minibuffer history
-	completions-max-height 20 ;; Limit completions to 15 (completions start at line 5)
-	completion-ignore-case t)
-  :config
-  (fido-vertical-mode))
+(use-package undo-fu)
+(use-package vundo)
+
+;; Default Emacs fido mode - LESS FEATUREFULL
+;; (use-package icomplete
+;;   :init
+;;   (setf completion-styles '(basic flex)
+;; 	completion-auto-select t ;; Show completion on first call
+;; 	completion-auto-help 'visible ;; Display *Completions* upon first request
+;; 	completions-format 'one-column ;; Use only one column
+;; 	completions-sort 'historical ;; Order based on minibuffer history
+;; 	completions-max-height 20 ;; Limit completions to 15 (completions start at line 5)
+;; 	completion-ignore-case t)
+;;   :config
+;;   (fido-vertical-mode))
+
+(use-package vertico
+  :init (vertico-mode))
+
+(use-package savehist
+  :init (savehist-mode))
+
+(use-package orderless
+  :custom
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  (orderless-component-separator #'orderless-escapable-split-on-space)
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package marginalia
-  :commands (marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :init (marginalia-mode))
+
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+  :init (setq prefix-help-command #'embark-prefix-help-command)
+
+  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package consult
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flycheck)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ("M-s d" . consult-fd)                  ;; Alternative: consult-fd
+         ("M-s c" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  :config
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep consult-man
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file :preview-key '(:debounce 0.4 any))
+  (setq consult-narrow-key "<"))
+
+(use-package embark-consult
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package which-key
   :diminish which-key-mode
@@ -181,27 +313,54 @@
   (typst-ts-mode . eglot-ensure)
   (zig-ts-mode . eglot-ensure)
   (typescript-ts-mode . eglot-ensure)
-  (rust-mode . eglot-ensure))
+  (rust-ts-mode . eglot-ensure))
 
 (use-package flycheck
   :defer t
-  :commands (global-flycheck-mode)
-  :init (global-flycheck-mode))
+  :config (global-flycheck-mode))
+
+(use-package flycheck-inline
+  :config (global-flycheck-inline-mode))
+
+(use-package flycheck-rust
+  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
 (use-package corfu
-  :commands (global-corfu-mode)
-  (corfu-history-mode)
-  (corfu-popupinfo-mode)
   :custom
+  (corfu-auto t)
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
 
   :init (global-corfu-mode)
   (corfu-history-mode)
   (corfu-popupinfo-mode))
+
+(use-package cape
+  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;; Alternatively bind Cape commands individually.
+  :commands (global-corfu-mode)
+  ;; :bind (("C-c p d" . cape-dabbrev)
+  ;;        ("C-c p h" . cape-history)
+  ;;        ("C-c p f" . cape-file)
+  ;;        ...)
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  (add-hook 'completion-at-point-functions #'cape-history))
+
+(use-package format-all
+  :commands format-all-mode
+  :hook (prog-mode . format-all-mode)
+  ;; :config
+  ;; (setq-default format-all-formatters
+  ;;               '(("C"     (astyle "--mode=c"))
+  ;;                 ("Shell" (shfmt "-i" "4" "-ci"))))
+  )
 
 (use-package vterm :defer t)
 
