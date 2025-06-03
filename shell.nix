@@ -5,5 +5,8 @@ pkgs.mkShell {
     fd
     ripgrep
     git
+    nixd
+    alejandra
+    stylua
   ];
 }

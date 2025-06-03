@@ -6,6 +6,28 @@
 ;; Includes evil-mode.
 
 ;;; Code:
+;; Bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Configure recipe sources (MELPA only)
+(setq straight-recipe-repositories '(melpa org-elpa gnu-elpa-mirror nongnu-elpa el-get)) ; Critical: exclude emacsmirror
+(use-package use-package)
+(setq straight-use-package-by-default t)
+
 (setq debug-on-error t
       enable-recursive-minibuffers t
       inhibit-startup-message t
@@ -61,9 +83,6 @@
 ;;(global-set-key (kbd "C-c t") 'toggle-full-transparency)
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
 ;; Emacs defaults
 (use-package emacs
   :custom (tab-always-indent 'complete)
@@ -75,7 +94,8 @@
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; Kanagawa Dragon theme
-(use-package base16-theme :config (load-theme 'base16-kanagawa-dragon t))
+(use-package base16-theme
+  :config (load-theme 'base16-kanagawa-dragon t))
 
 (use-package dashboard
   :config (dashboard-setup-startup-hook)
@@ -178,29 +198,12 @@
 (use-package undo-fu)
 (use-package vundo)
 
-;; Default Emacs fido mode - LESS FEATUREFULL
-;; (use-package icomplete
-;;   :init
-;;   (setf completion-styles '(basic flex)
-;; 	completion-auto-select t ;; Show completion on first call
-;; 	completion-auto-help 'visible ;; Display *Completions* upon first request
-;; 	completions-format 'one-column ;; Use only one column
-;; 	completions-sort 'historical ;; Order based on minibuffer history
-;; 	completions-max-height 20 ;; Limit completions to 15 (completions start at line 5)
-;; 	completion-ignore-case t)
-;;   :config
-;;   (fido-vertical-mode))
-
 (use-package vertico
-  :init (vertico-mode))
-
-(use-package savehist
-  :init (savehist-mode))
+  :init (vertico-mode)
+  (savehist-mode))
 
 (use-package orderless
   :custom
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
   (orderless-component-separator #'orderless-escapable-split-on-space)
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
@@ -218,11 +221,9 @@
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
   :init (setq prefix-help-command #'embark-prefix-help-command)
-
-  ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
   :config
-  ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
@@ -295,25 +296,6 @@
 (use-package embark-consult
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
-(use-package which-key
-  :diminish which-key-mode
-  :config (which-key-mode 1)
-  (setq which-key-idle-delay 0.4
-        which-key-idle-secondary-delay 0.4))
-
-;; LSP and syntax check error/warning highlighting
-(use-package eglot
-  :defer t
-  :init (setq eglot-connect-hook nil)
-  :hook
-  (c-ts-mode . eglot-ensure)
-  (markdown-ts-mode . eglot-ensure)
-  (nix-ts-mode . eglot-ensure)
-  (lua-ts-mode . eglot-ensure)
-  (typst-ts-mode . eglot-ensure)
-  (zig-ts-mode . eglot-ensure)
-  (typescript-ts-mode . eglot-ensure)
-  (rust-ts-mode . eglot-ensure))
 
 (use-package flycheck
   :defer t
@@ -330,7 +312,6 @@
   (corfu-auto t)
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-
   :init (global-corfu-mode)
   (corfu-history-mode)
   (corfu-popupinfo-mode))
@@ -353,14 +334,24 @@
   (add-hook 'completion-at-point-functions #'cape-elisp-block)
   (add-hook 'completion-at-point-functions #'cape-history))
 
+(use-package websocket)
+(use-package typst-preview
+  :straight '(typst-preview :type git :host github :repo "havarddj/typst-preview.el")
+  :config (setq typst-preview-invert-colors "never"))
+
 (use-package format-all
   :commands format-all-mode
   :hook (prog-mode . format-all-mode)
-  ;; :config
-  ;; (setq-default format-all-formatters
-  ;;               '(("C"     (astyle "--mode=c"))
-  ;;                 ("Shell" (shfmt "-i" "4" "-ci"))))
-  )
+  :config (setq-default format-all-formatters '(
+						("Typst" (typstyle))
+						("C" (clangd))
+						("Nix" (alejandra))))
+  (define-format-all-formatter typstyle
+    (:executable "typstyle")
+    (:install "cargo install typstyle")
+    (:languages "Typst")
+    (:features)
+    (:format (format-all--buffer-easy executable))))
 
 (use-package vterm :defer t)
 
@@ -369,62 +360,62 @@
   :hook (after-init . envrc-global-mode))
 
 ;; Language support modes
-(use-package c-ts-mode
-  :defer t
-  :mode (("\\.c\\'" . c-ts-mode)
-	 ("\\.cpp\\'" . c-ts-mode)))
-(use-package markdown-ts-mode
-  :defer t
-  :mode (("\\.md\\'" . markdown-ts-mode)
-	 ("\\.mdx\\'" . markdown-ts-mode)))
-(use-package bash-ts-mode
-  :defer t
-  :mode (("\\.sh\\'" . bash-ts-mode)))
-(use-package nix-ts-mode
-  :defer t
-  :mode (("\\.nix\\'" . nix-ts-mode)))
-(use-package json-ts-mode
-  :defer t
-  :mode (("\\.json\\'" . json-ts-mode)))
-(use-package yaml-ts-mode
-  :defer t
-  :mode (("\\.yaml\\'" . yaml-ts-mode)))
-(use-package clojure-ts-mode
-  :defer t
-  :mode (("\\.clj\\'" . clojure-ts-mode)))
-(use-package lua-ts-mode
-  :defer t
-  :mode (("\\.lua\\'" . lua-ts-mode)))
+(add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cmake\\'" . cmake-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.sh\\'" . bash-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
+(add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'" . css-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . html-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+
 (use-package zig-ts-mode
-  :defer t
-  :mode (("\\.zig\\'" . zig-ts-mode)))
-(use-package typescript-ts-mode
-  :defer t
-  :mode (("\\.ts\\'" . typescript-ts-mode)
-         ("\\.js\\'" . js-ts-mode)
-	 ("\\.tsx\\'" . tsx-ts-mode)
-	 ("\\.jsx\\'" . js-jsx-mode))
-  :config (add-hook! '(typescript-ts-mode-hook tsx-ts-mode-hook) #'lsp!))
-(use-package scss-mode
-  :defer t
-  :mode (("\\.scss\\'" . scss-mode)))
-(use-package less-css-mode
-  :defer t
-  :mode (("\\.less\\'" . less-css-mode)))
-(use-package html-ts-mode
-  :defer t
-  :mode (("\\.html\\'" . html-ts-mode)))
-(use-package css-ts-mode
-  :defer t
-  :mode (("\\.css\\'" . css-ts-mode)))
-(use-package toml-ts-mode
-  :defer t
-  :mode (("\\.toml\\'" . toml-ts-mode)))
+  :mode ("\\.zig\\'" . zig-ts-mode))
+
+(use-package nix-ts-mode
+  :mode ("\\.nix\\'" . nix-ts-mode))
+
 (use-package typst-ts-mode
-  :defer t
-  :mode (("\\.typ\\'" . typst-ts-mode)))
-(use-package rust-ts-mode
-  :defer t
-  :mode (("\\.rs\\'" . rust-ts-mode)))
+  :mode ("\\.typ\\'" . typst-ts-mode)
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+		 `((typst-ts-mode) . ,(eglot-alternatives
+				       `(,typst-ts-lsp-download-path
+					  "tinymist"
+					  "typst-lsp"))))))
+
+(use-package eglot
+  :hook
+  (c-ts-mode . eglot-ensure)
+  (c++-ts-mode . eglot-ensure)
+  (cmake-ts-mode . eglot-ensure)
+  (lua-ts-mode . eglot-ensure)
+  (csharp-ts-mode . eglot-ensure)
+  (bash-ts-mode . eglot-ensure)
+  (yaml-ts-mode . eglot-ensure)
+  (css-ts-mode . eglot-ensure)
+  (html-ts-mode . eglot-ensure)
+  (markdown-ts-mode . eglot-ensure)
+  (rust-ts-mode . eglot-ensure)
+  (typescript-ts-mode . eglot-ensure)
+  (js-ts-mode . eglot-ensure)
+  (tsx-ts-mode . eglot-ensure)
+  (zig-ts-mode . eglot-ensure)
+  (nix-ts-mode . eglot-ensure)
+  (typst-ts-mode . eglot-ensure))
+
+(use-package treesit-auto
+  :custom (treesit-auto-install t)
+  :config (global-treesit-auto-mode))
 
 ;;; init.el ends here
