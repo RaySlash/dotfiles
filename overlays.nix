@@ -14,7 +14,8 @@
   custom-pkgs = final: _prev: {
     customPackages = let
       pkgs = final.pkgs;
-      in import ./packages {inherit pkgs inputs;};
+    in
+      import ./packages {inherit pkgs inputs;};
   };
   # Add home-manager CLI from inputs to `pkgs.home-manager-master`
   home-manager = final: _prev: {
@@ -36,6 +37,7 @@
       };
     };
   };
+
   emacs = inputs.emacs-overlay.overlays.default;
   nurpkgs = inputs.nurpkgs.overlays.default;
   nix-minecraft = inputs.nix-minecraft.overlay;

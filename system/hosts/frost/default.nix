@@ -12,18 +12,16 @@
   networking = {
     hostName = "frost";
     nftables.enable = true;
-    # firewall = {
-    # allowedTCPPorts = [25565];
-    # allowedUDPPorts = [25565];
-    # };
+    firewall = {
+      allowedTCPPorts = [];
+      allowedUDPPorts = [];
+    };
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = ["i2c-dev" "hid-tmff2"];
     blacklistedKernelModules = ["hid-thrustmaster"];
     extraModulePackages = with config.boot.kernelPackages; [hid-tmff2];
-    # supportedFilesystems = ["ntfs"];
     lanzaboote = {
       enable = true;
       pkiBundle = "/var/lib/sbctl";
@@ -32,7 +30,7 @@
       efi.canTouchEfiVariables = true;
       systemd-boot = {
         enable = false;
-        # configurationLimit = 8;
+        configurationLimit = 8;
       };
     };
   };
@@ -45,6 +43,19 @@
   services = {
     udev.packages = with pkgs; [openrgb-with-all-plugins];
     fstrim.enable = true;
+    factorio = {
+      enable = true;
+      package = pkgs.factorio-headless;
+      lan = true;
+      openFirewall = true;
+      loadLatestSave = true;
+      requireUserVerification = false;
+      game-name = "Depressed Tech";
+      mods = with pkgs; [];
+      extraSettings = {
+        max_players = 64;
+      };
+    };
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
@@ -80,7 +91,6 @@
     adb.enable = true;
     steam = {
       enable = true;
-      # extest.enable = true;
       gamescopeSession = {
         enable = true;
         args = [
