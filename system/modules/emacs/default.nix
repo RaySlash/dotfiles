@@ -15,7 +15,7 @@ in {
       enable = true;
       install = true;
       startWithGraphical = true;
-      package = pkgs.emacs-pgtk;
+      package = pkgs.customPackages.emacats;
     };
   };
 }

@@ -73,6 +73,15 @@
     vfr = 1;
   };
 
+  workspace = [
+    "w[tv1], gapsout:0, gapsin:0"
+    "f[1], gapsout:0, gapsin:0"
+    "bordersize 0, floating:0, onworkspace:w[tv1]"
+    "rounding 0, floating:0, onworkspace:w[tv1]"
+    "bordersize 0, floating:0, onworkspace:f[1]"
+    "rounding 0, floating:0, onworkspace:f[1]"
+  ];
+
   windowrule = [
     "idleinhibit fullscreen, class:^(*)$"
     "idleinhibit fullscreen, title:^(*)$"
@@ -84,7 +93,7 @@
   "$mod" = "SUPER";
 
   bind = [
-    "$mod, return, exec, foot"
+    "$mod, return, exec, footclient"
     "$mod_SHIFT, Q, killactive,"
     "$mod_SHIFT, M, exec, wlogout"
     "$mod, D, exec, foot yazi"

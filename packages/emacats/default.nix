@@ -40,6 +40,7 @@ utils.forEachSystem (system: let
     ripgrep
     fd
     cmake
+    (aspellWithDicts (dicts: with dicts; [en en-computers en-science]))
   ];
 
   # initFile = builtins.readFile ./init.el;
@@ -49,7 +50,7 @@ utils.forEachSystem (system: let
 
   # Parse and add all packages defined with `use-package` inside init file.
   # https://github.com/nix-community/emacs-overlay/blob/master/README.org#extra-library-functionality
-  defaultPackage = (pkgs.emacsPackagesFor pkgs.emacs-pgtk).emacsWithPackages (epkgs: EmacsRuntimeDeps);
+  defaultPackage = (pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages (epkgs: EmacsRuntimeDeps);
   # nixosModule = utils.mkNixosModules {
   #   moduleNamespace = [defaultPackageName];
   #   inherit nixpkgs defaultPackageName;

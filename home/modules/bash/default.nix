@@ -41,62 +41,58 @@ in {
         };
       };
       readline = {
-	enable = true;
-	variables = {
+        enable = true;
+        variables = {
           editing-mode = "vi";
-	  vi-cmd-mode-string = ''\001\e[38;5;111m\002 \001\e[0m\002'';
-	  vi-ins-mode-string = ''\001\e[38;5;108m\002 \001\e[0m\002'';
+          show-mode-in-prompt = true;
+          vi-cmd-mode-string = ''\1\e[6 q\2'';
+          vi-ins-mode-string = ''\1\e[2 q\2'';
           mark-symlinked-directories = true;
           menu-complete-display-prefix = true;
-	  print-completions-horizontally = true;
-          show-mode-in-prompt = true;
-	  show-all-if-ambiguous = true;
+          print-completions-horizontally = true;
+          visible-stats = true;
+          page-completions = false;
+          enable-bracketed-paste = true;
+          show-all-if-ambiguous = true;
+          colored-completion-prefix = true;
           completion-ignore-case = true;
-	  colored-completion-prefix = true;
-	  completion-map-case = true;
-          colored-stats = true;
+          completion-map-case = true;
           bell-style = "none";
-	};
+        };
       };
       bash = {
         enable = mkDefault true;
-        enableCompletion = mkDefault true;
+        completion.enable = mkDefault true;
         enableVteIntegration = mkDefault true;
         bashrcExtra = ''
-          set -o vi
-          export CARAPACE_BRIDGES='bash,zsh'
-          source <(carapace _carapace bash)
-	  vterm_printf(){
-            if [ -n "$TMUX" ]; then
-	      printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-            elif [ "''${TERM%%-*}" = "screen" ]; then
-	      printf "\eP\e]%s\007\e\\" "$1"
-            else
-	      printf "\e]%s\e\\" "$1"
-            fi
-          }
-	  vterm_cmd() {
-            local vterm_elisp
-            vterm_elisp=""
-            while [ $# -gt 0 ]; do
-	      vterm_elisp="$vterm_elisp""$(printf '"%s" ' "$(printf "%s" "$1" | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')")"
-	      shift
-            done
-            vterm_printf "51;E$vterm_elisp"
-          }
+          shopt -s autocd
+                 shopt -s checkwinsize
+                 shopt -s histappend
+                 shopt -s no_empty_cmd_completion
+                 source "$(carapace bash)"
+                 vterm_printf(){
+                                 if [ -n "$TMUX" ]; then
+                            printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+                                 elif [ "''${TERM%%-*}" = "screen" ]; then
+                            printf "\eP\e]%s\007\e\\" "$1"
+                                 else
+                            printf "\e]%s\e\\" "$1"
+                                 fi
+                 }
+                 vterm_cmd() {
+                                 local vterm_elisp
+                                 vterm_elisp=""
+                                 while [ $# -gt 0 ]; do
+                            vterm_elisp="$vterm_elisp""$(printf '"%s" ' "$(printf "%s" "$1" | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')")"
+                            shift
+                                 done
+                                 vterm_printf "51;E$vterm_elisp"
+                 }
         '';
         shellAliases = {
           ls = "eza --icons";
           ll = "eza --icons -l";
-	  mkcd = ''
-	    mkcd() {
-              if [ $# -ne 1 ]; then
-                echo "Error: Specify exactly one directory name."
-                return 1
-              fi
-              mkdir -p "$1" && cd "$1" || return 1
-	    }
-	  '';
+          cd = "z";
           ffd = "cd $(fd -t d --max-depth 4 . ~/Projects | fzf)";
           gl = "git log";
           gs = "git status";

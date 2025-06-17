@@ -45,49 +45,45 @@
 (setq scroll-step 1
       scroll-conservatively 10000)
 
-;; Disable extra UI elements
-(defun disable-ui-extras ()
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
+;; Toggle Frame Transparency (Emacs 29+)
 
-;; Enable extra UI elements
-(defun enable-ui-extras ()
-  (menu-bar-mode)
-  (tool-bar-mode)
-  (scroll-bar-mode))
+; (setenv "LANG" "en_US.UTF-8")
+; (setenv "LC_ALL" "en_US.UTF-8")
+; (setenv "LC_CTYPE" "en_US.UTF-8")
+(setenv "LSP_USE_PLISTS" "true")
+
+;; Set Frame Decoration and Fonts
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+(set-frame-font "IosevkaTermNerdFont-13" nil t)
+(set-face-font 'fixed-pitch "IosevkaTermNerdFont") ;; Show same font in codeblocks
 
 ;; Toggle Relative Line Numbers
-(defun toggle-relative-line-numbers ()
-  (global-display-line-numbers-mode)
-  (menu-bar--display-line-numbers-mode-relative))
+(global-display-line-numbers-mode)
+(menu-bar--display-line-numbers-mode-relative)
 
-;; Toggle Frame Transparency (Emacs 29+)
-(defun toggle-transparency ()
-  (interactive)
-  (add-to-list 'default-frame-alist '(alpha-background . 90)))
+;; Disable extra UI elements
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-(setenv "LANG" "en_US.UTF-8")
-(setenv "LC_ALL" "en_US.UTF-8")
-(setenv "LC_CTYPE" "en_US.UTF-8")
-(setenv "LSP_USE_PLISTS" "true")
-(toggle-relative-line-numbers)
-(toggle-transparency)
-(disable-ui-extras)
+;; Autocomplete brackets and quotes
 (electric-pair-mode 1)
 (global-hl-line-mode 1)
-(global-completion-preview-mode)
 (global-prettify-symbols-mode 1)
+(global-completion-preview-mode)
+
+;; Set global key to switch buffers
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-;;(global-set-key (kbd "C-c t") 'toggle-full-transparency)
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+
+(setq which-key-popup-type 'minibuffer)
+(which-key-mode)
 
 ;; Emacs defaults
 (use-package emacs
   :custom (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
-  (set-face-attribute 'default nil :font "IosevkaTerm Nerd Font")
   (read-extended-command-predicate #'command-completion-default-include-p)
   (enable-recursive-minibuffers t)
   (minibuffer-prompt-properties
@@ -103,24 +99,6 @@
         dashboard-banner-logo-title "Evil Emacs"
         dashboard-items nil
         dashboard-set-footer nil))
-
-(use-package dired-preview
-  :defer t
-  :config (setq dired-preview-delay 0.7)
-  (setq dired-preview-ignored-extensions-regexp
-	(concat "\\."
-		"\\(gz\\|"
-		"zst\\|"
-		"tar\\|"
-		"xz\\|"
-		"rar\\|"
-		"zip\\|"
-		"iso\\|"
-		"exe\\|"
-		"dll\\|"
-		"epub"
-		"\\)"))
-  (dired-preview-global-mode))
 
 ;; Evil mode and complimentaries
 (use-package evil
@@ -167,12 +145,42 @@
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode))
 
+(use-package dirvish
+  :init (dirvish-override-dired-mode)
+  :config
+  ;; (dirvish-peek-mode)             ; Preview files in minibuffer
+  ;; (dirvish-side-follow-mode)      ; similar to `treemacs-follow-mode'
+  (setq dirvish-mode-line-format
+        '(:left (sort symlink) :right (omit yank index)))
+  (setq dirvish-attributes           ; The order *MATTERS* for some attributes
+        '(vc-state subtree-state nerd-icons collapse git-msg file-time file-size)
+        dirvish-side-attributes
+        '(vc-state nerd-icons collapse file-size))
+  (setq dirvish-large-directory-threshold 20000)
+  :bind ; Bind `dirvish-fd|dirvish-side|dirvish-dwim' as you see fit
+  (("C-c f" . dirvish)
+   :map dirvish-mode-map               ; Dirvish inherits `dired-mode-map'
+   (";"   . dired-up-directory)        ; So you can adjust `dired' bindings here
+   ("?"   . dirvish-dispatch)          ; [?] a helpful cheatsheet
+   ("n"   . make-empty-file)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("d"   . make-directory)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("e"   . dired-toggle-read-only)        ; [a]ttributes settings:`t' toggles mtime, `f' toggles fullframe, etc.
+   ("f"   . dirvish-file-info-menu)    ; [f]ile info
+   ("o"   . dirvish-quick-access)      ; [o]pen `dirvish-quick-access-entries'
+   ("s"   . dirvish-quicksort)         ; [s]ort flie list
+   ("r"   . dirvish-history-jump)      ; [r]ecent visited
+   ("v"   . dirvish-vc-menu)           ; [v]ersion control commands
+   ("*"   . dirvish-mark-menu)
+   ("y"   . dirvish-yank-menu)
+   ("N"   . dirvish-narrow)
+   ("^"   . dirvish-history-last)
+   ("TAB" . dirvish-subtree-toggle)
+   ("M-f" . dirvish-history-go-forward)
+   ("M-b" . dirvish-history-go-backward)
+   ("M-e" . dirvish-emerge-menu)))
+
 (use-package nerd-icons
   :custom (nerd-icons-font-family "Symbols Nerd Font Mono"))
-
-(use-package nerd-icons-dired
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
 
 (use-package nerd-icons-completion
   :after marginalia
@@ -220,9 +228,6 @@
    ("C-;" . embark-dwim)        ;; good alternative: M-.
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-  :init (setq prefix-help-command #'embark-prefix-help-command)
-  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
   :config
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -316,6 +321,8 @@
   (corfu-history-mode)
   (corfu-popupinfo-mode))
 
+(use-package markdown-mode)
+
 (use-package cape
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   ;; Alternatively bind Cape commands individually.
@@ -344,7 +351,7 @@
   :hook (prog-mode . format-all-mode)
   :config (setq-default format-all-formatters '(
 						("Typst" (typstyle))
-						("C" (clangd))
+						("C" (clang-format))
 						("Nix" (alejandra))))
   (define-format-all-formatter typstyle
     (:executable "typstyle")
@@ -379,10 +386,14 @@
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
 (use-package zig-ts-mode
+  :straight (:type git :host codeberg :repo "meow_king/zig-ts-mode")
   :mode ("\\.zig\\'" . zig-ts-mode))
 
 (use-package nix-ts-mode
   :mode ("\\.nix\\'" . nix-ts-mode))
+
+(use-package markdown-ts-mode
+  :mode ("\\.md\\'" . markdown-ts-mode))
 
 (use-package typst-ts-mode
   :mode ("\\.typ\\'" . typst-ts-mode)
@@ -395,6 +406,7 @@
 					  "typst-lsp"))))))
 
 (use-package eglot
+  :config (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
   :hook
   (c-ts-mode . eglot-ensure)
   (c++-ts-mode . eglot-ensure)

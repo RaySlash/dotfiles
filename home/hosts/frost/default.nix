@@ -21,6 +21,7 @@
     swww
     grimblast
     zen-browser
+    nautilus
     vlc
     (discord-canary.override {withVencord = true;})
     prismlauncher
@@ -69,6 +70,11 @@
     foot = {
       enable = true;
       server.enable = true;
+      settings = {
+        bell = {system = "no";};
+        cursor = {blink = "yes";};
+        mouse = {hide-when-typing = "yes";};
+      };
     };
     lutris = {
       enable = true;
