@@ -27,6 +27,7 @@ in {
         ];
       };
       channel.enable = false;
+      optimise.automatic = true;
       registry = mkDefault (lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs);
       nixPath = mkDefault (lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs);
     };

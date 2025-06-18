@@ -22,9 +22,13 @@ in {
     };
 
     system.autoUpgrade = {
-      enable = mkDefault true;
-      flake = mkDefault "/home/${hub.cfg.user.name}/dotfiles";
-      flags = mkDefault ["--update-input" "nixpkgs" "--commit-lock-file"];
+      enable = true;
+      flake = inputs.self.outPath;
+      flags = [
+        "--update-input"
+        "nixpkgs"
+        "--print-build-logs"
+      ];
     };
   };
 }
