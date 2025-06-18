@@ -1,4 +1,5 @@
 {inputs, ...}: let
+  inherit (inputs.nixpkgs.lib) foldl' attrNames elem;
   ## The functions in the files depend only on inputs and few outputs
   ## inputs are used to derive nixpkgs and home-manager
   ## while, outputs are used to fetch commonConfigurations and hub
@@ -50,10 +51,51 @@
         builtins.attrValues inputs.self.nixosModules or []
         ++ args.modules or [];
     };
+
+  # Make the derivation buildable by all available platforms in nixpkgs
+  /**
+  `flake-utils.lib.eachSystem` but without the flake input
+
+  Builds a map from `<attr> = value` to `<attr>.<system> = value` for each system
+
+  ## Arguments
+
+  - `systems` (`listOf strings`)
+
+  - `f` (`functionTo` `AttrSet`)
+
+  ---
+  */
+  forEachSystem = let
+    eachSystem = systems: f: let
+      # get function result and insert system variable
+      op = attrs: system: let
+        ret = f system;
+        op = attrs: key:
+          attrs
+          // {
+            ${key} =
+              (attrs.${key} or {})
+              // {${system} = ret.${key};};
+          };
+      in
+        foldl' op attrs (attrNames ret);
+      # Merge together the outputs for all systems.
+    in
+      foldl' op {} (systems
+        ++ (
+          if builtins ? currentSystem && ! elem builtins.currentSystem systems
+          # add the current system if --impure is used
+          then [builtins.currentSystem]
+          else []
+        ));
+  in
+    eachSystem inputs.nixpkgs.lib.platforms.all;
 in {
   inherit
     mkPkgs
     mkHome
     mkSystem
+    forEachSystem
     ;
 }

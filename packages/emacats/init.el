@@ -71,6 +71,7 @@
 (global-hl-line-mode 1)
 (global-prettify-symbols-mode 1)
 (global-completion-preview-mode)
+(pixel-scroll-precision-mode)
 
 ;; Set global key to switch buffers
 (global-set-key (kbd "M-[") 'previous-buffer)

@@ -11,11 +11,11 @@ in {
   options.custom.programs.emacs = {enable = mkEnableOption "programs.emacs";};
 
   config = mkIf cfg.enable {
-    services.emacs = {
-      enable = true;
-      install = true;
-      startWithGraphical = true;
-      package = pkgs.customPackages.emacats;
-    };
+    # services.emacs = {
+    #   enable = true;
+    #   install = true;
+    #   startWithGraphical = true;
+    #   package = pkgs.customPackages.emacats;
+    # };
   };
 }
