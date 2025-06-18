@@ -7,28 +7,41 @@
   imports = [
   ];
 
-  home.packages = with pkgs; [
-    btop
-    qbittorrent
-    obsidian
-    fd
-    unzip
-    imv
-    helvum
-    openrgb-with-all-plugins
-    stremio
-    pwvucontrol
-    swww
-    grimblast
-    zen-browser
-    nautilus
-    vlc
-    (discord-canary.override {withVencord = true;})
-    prismlauncher
-    typst
-    oversteer
-    onlyoffice-desktopeditors
-  ];
+  home = {
+    sessionVariables = {
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = ''''${HOME}/.steam/root/compatibilitytools.d'';
+    };
+    packages = with pkgs; [
+      btop
+      qbittorrent
+      obsidian
+      fd
+      unzip
+      imv
+      helvum
+      openrgb-with-all-plugins
+      stremio
+      pwvucontrol
+      swww
+      grimblast
+      zen-browser
+      nautilus
+      vlc
+      (discord-canary.override {withVencord = true;})
+      prismlauncher
+      typst
+      oversteer
+      onlyoffice-desktopeditors
+      # Editor
+      coreutils-full
+      ripgrep
+      fd
+      cmake
+      libtool
+      (aspellWithDicts (dicts: with dicts; [en en-computers en-science]))
+      customPackages.emacats
+    ];
+  };
 
   wayland.windowManager.hyprland = {
     settings = import ./hyprland.nix;
@@ -43,7 +56,7 @@
     programs = {
       # firefox.enable = true;
       # kitty.enable = true;
-      emacs.enable = true;
+      # emacs.enable = true;
       hyprland.enable = true;
       hypridle.enable = true;
       hyprlock.enable = true;
@@ -51,9 +64,9 @@
       eww.enable = true;
       fuzzel.enable = true;
     };
-    profiles = {
-      themes.enable = true;
-    };
+    # profiles = {
+    #   themes.enable = true;
+    # };
   };
 
   programs = {
@@ -97,10 +110,11 @@
         batwatch
       ];
     };
-    fzf = {
-      enable = true;
-      enableZshIntegration = true;
-    };
+  };
+
+  nvimcat = {
+    enable = true;
+    packageNames = ["nvimcat"];
   };
 
   dconf.settings = {

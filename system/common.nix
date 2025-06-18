@@ -31,27 +31,24 @@
       size = 32;
     };
     opacity = {
-      terminal = 0.8;
+      terminal = 0.9;
     };
     fonts = {
-      serif = {
-        package = pkgs.nerd-fonts.iosevka-term;
-        name = "IosevkaTerm Nerd Font";
-      };
       sansSerif = {
         package = pkgs.nerd-fonts.iosevka-term;
         name = "IosevkaTerm Nerd Font";
       };
-      monospace = {
-        package = pkgs.nerd-fonts.iosevka-term;
-        name = "IosevkaTerm Nerd Font";
-      };
+      serif = config.stylix.fonts.sansSerif;
+      monospace = config.stylix.fonts.sansSerif;
       sizes = {
-        desktop = 12;
-        applications = 12;
-        popups = 12;
-        terminal = 12;
+        desktop = 13;
+        applications = 13;
+        popups = 13;
+        terminal = 13;
       };
+    };
+    targets = {
+      gtk.enable = true;
     };
   };
 
@@ -68,7 +65,7 @@
   security.polkit.enable = true;
   programs = {
     git.enable = true;
-    ssh.startAgent = true;
+    # ssh.startAgent = true;
     wireshark = {
       enable = true;
       dumpcap.enable = true;
@@ -99,16 +96,19 @@
       createHome = true;
       home = "/home/${username}";
       initialHashedPassword = hub.cfg.user.initialHashedPassword;
-      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark" "adbusers" ];
+      extraGroups = ["wheel" "podman" "docker" "audio" "video" "networkmanager" "wireshark" "adbusers"];
       shell = pkgs.bash;
     };
   };
 
   environment = {
     systemPackages = with pkgs; [
-      libclang
       gcc
       gnumake
+      pciutils
+      vulkan-tools
+      glxinfo
+      lshw
     ];
   };
 }

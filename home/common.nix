@@ -21,7 +21,7 @@
       size = 32;
     };
     opacity = {
-      terminal = 0.8;
+      terminal = 0.9;
     };
     iconTheme = {
       light = "Papirus-Light";
@@ -42,15 +42,15 @@
         name = "IosevkaTerm Nerd Font";
       };
       sizes = {
-        desktop = 12;
-        applications = 12;
-        popups = 12;
-        terminal = 12;
+        desktop = 13;
+        applications = 13;
+        popups = 13;
+        terminal = 13;
       };
     };
     targets = {
-      kitty.variant256Colors = true;
       emacs.enable = false;
+      gtk.enable = true;
     };
   };
 
@@ -67,12 +67,6 @@
     username = hub.cfg.user.name;
     homeDirectory = lib.mkDefault (lib.concatStrings ["/home/" hub.cfg.user.name]);
   };
-
-  # Nixcat hmModule
-  # nvimcat = {
-  #   enable = true;
-  #   packageNames = ["nvimcat"];
-  # };
 
   custom = {
     programs.bash.enable = true;
