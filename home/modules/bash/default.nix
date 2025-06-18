@@ -45,12 +45,13 @@ in {
         variables = {
           editing-mode = "vi";
           show-mode-in-prompt = true;
-          vi-cmd-mode-string = ''\1\e[6 q\2'';
-          vi-ins-mode-string = ''\1\e[2 q\2'';
+          vi-ins-mode-string = ''\1\e[6 q\2'';
+          vi-cmd-mode-string = ''\1\e[2 q\2'';
           mark-symlinked-directories = true;
           menu-complete-display-prefix = true;
           print-completions-horizontally = true;
           visible-stats = true;
+          colored-stats = true;
           page-completions = false;
           enable-bracketed-paste = true;
           show-all-if-ambiguous = true;
@@ -62,31 +63,43 @@ in {
       };
       bash = {
         enable = mkDefault true;
-        completion.enable = mkDefault true;
+        enableCompletion = mkDefault true;
         enableVteIntegration = mkDefault true;
         bashrcExtra = ''
-          shopt -s autocd
+                 source <(carapace bash)
+                 shopt -s autocd
                  shopt -s checkwinsize
                  shopt -s histappend
                  shopt -s no_empty_cmd_completion
-                 source "$(carapace bash)"
-                 vterm_printf(){
-                                 if [ -n "$TMUX" ]; then
-                            printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-                                 elif [ "''${TERM%%-*}" = "screen" ]; then
-                            printf "\eP\e]%s\007\e\\" "$1"
-                                 else
-                            printf "\e]%s\e\\" "$1"
-                                 fi
+
+                 vterm_prompt_end(){
+                   vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
                  }
-                 vterm_cmd() {
-                                 local vterm_elisp
-                                 vterm_elisp=""
-                                 while [ $# -gt 0 ]; do
-                            vterm_elisp="$vterm_elisp""$(printf '"%s" ' "$(printf "%s" "$1" | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')")"
-                            shift
-                                 done
-                                 vterm_printf "51;E$vterm_elisp"
+
+                 PS1=$PS1'\[$(vterm_prompt_end)\]'
+
+                 vterm_printf() {
+                   if [ -n "$TMUX" ] \
+                   && { [ "''${TERM%%-*}" = "tmux" ] \
+                   || [ "''${TERM%%-*}" = "screen" ]; }; then
+                     # Tell tmux to pass the escape sequences through
+                     printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+                   elif [ "''${TERM%%-*}" = "screen" ]; then
+                     # GNU screen (screen, screen-256color, screen-256color-bce)
+                     printf "\eP\e]%s\007\e\\" "$1"
+                   else
+                     printf "\e]%s\e\\" "$1"
+                   fi
+                 }
+
+          vterm_cmd() {
+                   local vterm_elisp
+                   vterm_elisp=""
+                   while [ $# -gt 0 ]; do
+            vterm_elisp="$vterm_elisp""$(printf '"%s" ' "$(printf "%s" "$1" | sed -e 's|\\|\\\\|g' -e 's|"|\\"|g')")"
+            shift
+                   done
+                   vterm_printf "51;E$vterm_elisp"
                  }
         '';
         shellAliases = {
@@ -99,6 +112,7 @@ in {
           gc = "git commit";
           gca = ''git add . && git commit -m "dev: fast update"'';
           gp = "git push";
+          foot = "footclient";
         };
       };
     };
