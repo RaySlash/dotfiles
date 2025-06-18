@@ -36,10 +36,6 @@
     stylix.url = "github:danth/stylix";
 
     # Applications
-    tt-schemes = {
-      url = "github:tinted-theming/schemes";
-      flake = false;
-    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,6 +58,10 @@
     };
     plugins-lzextras = {
       url = "github:BirdeeHub/lzextras";
+      flake = false;
+    };
+    tt-schemes = {
+      url = "github:tinted-theming/schemes";
       flake = false;
     };
   };
