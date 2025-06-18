@@ -12,7 +12,7 @@ $color_nix: #7eb2df;
 .bar {
   color: $color_fg;
   background-color: $color_bg;
-  border-radius: 1rem;
+  border-radius: 0.2rem;
   font-family:
     Atkinson Hyperlegible,
     IosevkaTerm Nerd Font;
@@ -21,7 +21,7 @@ $color_nix: #7eb2df;
   color: $color_nix;
   background-color: $color_bg-secondary;
   padding: 0 .5rem;
-  border-radius: 1rem;
+  border-radius: 0 1rem 1rem 0;
   font-size: 1.2rem;
 }
 
@@ -34,6 +34,28 @@ $color_nix: #7eb2df;
   padding: 0 0.5rem;
   border-radius: 1rem;
   background-color: $color_bg-secondary;
+}
+
+.systray menu {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: $color_bg;
+    >menuitem {
+	padding: 0.2rem;
+	&:disabled label {
+	    color: gray;
+	}
+	&:hover {
+	    border-radius: 1rem;
+	    background-color: $color_bg-secondary;
+	}
+    }
+    seperator {
+	background-color: #222;
+	&:last-child {
+	    padding: unset;
+	}
+    }
 }
 
 .weatherinfo {
@@ -68,10 +90,13 @@ tooltip {
 .audioinfo > *, .tempinfo > *, .customicons > * {
   padding: 0 0.2rem;
   border-radius: 1rem;
+  &:hover {
+      background-color: $color_bg-secondary;
+  }
 }
 
 .datetime {
   background-color: $color_bg-secondary;
   padding: 0 0.5rem;
-  border-radius: 1rem;
+  border-radius: 1rem 0 0 1rem;
 }
