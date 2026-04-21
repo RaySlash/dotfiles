@@ -6,17 +6,24 @@
 }: let
   cfg = config.custom.zsh;
   options = {
-      custom.zsh = {
-        enable = lib.mkEnableOption "Enable Zsh with user config";
-      };
+    custom.zsh = {
+      enable = lib.mkEnableOption "Enable Zsh with user config";
     };
+  };
 in {
   inherit options;
   config = lib.mkIf cfg.enable {
     programs.zsh = {
-      enable =  true;
+      enable = true;
     };
 
-    environment.systemPackages = [pkgs.customPackages.zsh];
+    environment.systemPackages = with pkgs; [
+      customPackages.zsh
+      zoxide
+      fzf
+      ripgrep
+      fd
+      coreutils-full
+    ];
   };
 }

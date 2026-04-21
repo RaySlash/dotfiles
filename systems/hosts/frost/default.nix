@@ -4,7 +4,9 @@
   pkgs,
   inputs,
   ...
-}: {
+}: let
+  wine-bin = pkgs.wineWow64Packages.waylandFull;
+in {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -32,6 +34,7 @@
     };
     channel.enable = false;
     optimise.automatic = true;
+    gc.automatic = true;
     registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
@@ -43,6 +46,13 @@
         enable = true;
         configurationLimit = 8;
       };
+    };
+    binfmt.registrations."DOSWin" = {
+      wrapInterpreterInShell = false;
+      interpreter = wine-bin;
+      recognitionType = "magic";
+      offset = 0;
+      magicOrExtension = "MZ";
     };
     kernel.sysctl = {
       # 20-shed.conf
@@ -119,7 +129,19 @@
   programs = {
     kdeconnect.enable = true;
     dconf.enable = true;
-    git.enable = true;
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+    git = {
+      enable = true;
+      package = pkgs.customPackages.git;
+    };
+    nh = {
+      enable = true;
+      flake = "~/dotfiles";
+    };
+    gamemode.enable = true;
     steam = {
       enable = true;
       gamescopeSession = {
@@ -156,62 +178,65 @@
       package = pkgs.nix-ld;
       libraries = with pkgs; [
         alsa-lib
-          at-spi2-atk
-          at-spi2-core
-          atk
-          cairo
-          cups
-          curl
-          dbus
-          expat
-          fontconfig
-          freetype
-          fuse3
-          gdk-pixbuf
-          glib
-          gtk3
-          icu
-          libGL
-          libappindicator-gtk3
-          libdrm
-          libglvnd
-          libnotify
-          libpulseaudio
-          libunwind
-          libusb1
-          libuuid
-          libxkbcommon
-          libxml2
-          mesa
-          nspr
-          nss
-          openssl
-          pango
-          pipewire
-          sqlite
-          stdenv.cc.cc
-          systemd
-          vulkan-loader
-          libX11
-          libXScrnSaver
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXext
-          libXfixes
-          libXi
-          libXrandr
-          libXrender
-          libXtst
-          libxcb
-          libxkbfile
-          libxshmfence
-          zlib
-          ];
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cairo
+        cups
+        curl
+        dbus
+        expat
+        fontconfig
+        freetype
+        fuse3
+        gdk-pixbuf
+        glib
+        gtk3
+        icu
+        libGL
+        libappindicator-gtk3
+        libdrm
+        libglvnd
+        libnotify
+        libpulseaudio
+        libunwind
+        libusb1
+        libuuid
+        libxkbcommon
+        libxml2
+        mesa
+        nspr
+        nss
+        openssl
+        pango
+        pipewire
+        sqlite
+        stdenv.cc.cc
+        systemd
+        vulkan-loader
+        libX11
+        libXScrnSaver
+        libXcomposite
+        libXcursor
+        libXdamage
+        libXext
+        libXfixes
+        libXi
+        libXrandr
+        libXrender
+        libXtst
+        libxcb
+        libxkbfile
+        libxshmfence
+        zlib
+      ];
     };
   };
 
   environment.pathsToLink = ["/share/zsh"];
+  environment.sessionVariables = {
+    WINE_BIN = lib.getExe wine-bin;
+  };
   environment.systemPackages = with pkgs; [
     man-pages
     man-pages-posix
@@ -224,7 +249,8 @@
     mesa-demos
     lshw
     wget
-    coreutils-full
+    gnomeExtensions.appindicator
+    gnomeExtensions.gsconnect
   ];
 
   users.users.smj = {
@@ -241,13 +267,16 @@
       "adbusers"
     ];
     packages = with pkgs; [
-      neovim
       zen-browser
       nerd-fonts.iosevka
-      emacs-pgtk
       alejandra
       nil
       nixd
+      customPackages.emacs
+      customPackages.neovim
+      customPackages.foot
+      (discord.override {withVencord = true;})
+      openrgb-with-all-plugins
     ];
   };
 

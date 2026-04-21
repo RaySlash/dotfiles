@@ -17,15 +17,20 @@
   wrapped-packages = [
     "zsh"
     "git"
+    "emacs"
+    "neovim"
+    "foot"
+    "fuzzel"
+    "yazi"
   ];
 in
-# Map normal nix packages
+  # Map normal nix packages
   builtins.listToAttrs (map (name: {
       name = name;
       value = pkgs.callPackage ./${name} {};
     })
     packages)
-# Map wrapped packages
+  # Map wrapped packages
   // builtins.listToAttrs (map (name: {
       name = name;
       value = (inputs.wrappers.lib.evalModule ./${name}.nix).config.wrap {

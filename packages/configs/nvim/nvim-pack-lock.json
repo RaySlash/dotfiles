@@ -1,0 +1,24 @@
+{
+  "plugins": {
+    "fzf-lua": {
+      "rev": "ddab8eb5de418f0cb066c21d46e83d63c47dfd19",
+      "src": "https://github.com/ibhagwan/fzf-lua.git"
+    },
+    "kanagawa": {
+      "rev": "aef7f5cec0a40dbe7f3304214850c472e2264b10",
+      "src": "https://github.com/rebelot/kanagawa.nvim.git"
+    },
+    "lze": {
+      "rev": "cf5430a701ab6795ff837e6b56c483ecbcf9043a",
+      "src": "https://github.com/BirdeeHub/lze.git"
+    },
+    "lzextras": {
+      "rev": "940083fcc3e11b7c6f6f716daa77c02ac13d5c05",
+      "src": "https://github.com/BirdeeHub/lzextras.git"
+    },
+    "oil.nvim": {
+      "rev": "01cb3a8ad7d5e8707041edc775af83dbf33838f4",
+      "src": "https://github.com/stevearc/oil.nvim.git"
+    }
+  }
+}
