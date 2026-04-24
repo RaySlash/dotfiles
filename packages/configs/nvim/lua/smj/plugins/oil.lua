@@ -1,6 +1,7 @@
 return {
   {
     'stevearc/oil.nvim',
+    lazy = false,
     dependencies = { { 'nvim-mini/mini.icons', opts = {} }, 'benomahony/oil-git.nvim' },
     ---@module 'oil'
     ---@type oil.SetupOpts
@@ -36,8 +37,7 @@ return {
       local function new_git_status()
         return setmetatable({}, {
           __index = function(self, key)
-            local ignore_proc = vim.system(
-            { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }, {
+            local ignore_proc = vim.system({ 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }, {
               cwd = key,
               text = true,
             })

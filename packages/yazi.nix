@@ -4,8 +4,9 @@
   lib,
   pkgs,
   ...
-}: {
-  imports = [wlib.wrapperModules.yazi];
+}:
+{
+  imports = [ wlib.wrapperModules.yazi ];
 
   config.package = pkgs.yazi;
   config.settings.theme.flavor = {

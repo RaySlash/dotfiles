@@ -17,6 +17,7 @@ in {
       enable = true;
     };
 
+    environment.pathsToLink = ["/share/zsh"];
     environment.systemPackages = with pkgs; [
       customPackages.zsh
       zoxide

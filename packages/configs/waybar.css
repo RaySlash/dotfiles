@@ -1,0 +1,71 @@
+/* overall bar style */
+window#waybar {
+    color: #fff; /* base00 */
+    background-color: rgba(0,0,0,0.5);           /* base05 */
+    font-family: "Atkinson Hyperlegible", "Iosevka Nerd Font", sans-serif;
+    font-size: 14px;
+}
+
+/* logo module styling */
+/* #module-logo { */
+/*   color: #c4746e;           /\* base08 – subtle red accent *\/ */
+/*   padding: 0 10px; */
+/*   font-size: 1.2em; */
+/* } */
+
+/* clock module */
+#clock {
+    font-weight: bold;
+    background-color: #901E3E;           /* base0B – mild green */
+    color: #F5C9B0;           /* base0B – mild green */
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+
+#tray {
+    background-color: #0e0e0e;           /* base0B – mild green */
+    color: #ffffff;
+    border-radius: 1rem;
+    padding: 0 1rem;
+}
+
+#pulseaudio {
+    background-color: #1C352D;           /* base0B – mild green */
+    color: #ADB2D4;
+    border-radius: 1rem;
+    padding: 0 1rem;
+}
+
+/* battery / network modules */
+/* #network { */
+/*     background-color: #3B3B1A; */
+/*     color: #8AA624;           /\* base0A – soft yellow *\/ */
+/*     border-radius: 1rem; */
+/*     padding: 0 1rem; */
+/* } */
+
+#custom-power, #custom-logo {
+    padding: 0 1rem;
+    background-color: #000;
+}
+#custom-power {border-radius: 1rem 0 0 1rem;}
+#custom-logo {
+    border-radius: 0 1rem 1rem 0;
+    color: #5277C3;
+    font-size: 2rem;
+}
+
+/* workspace module */
+#workspaces {
+    color: #ffffff;           /* base0D – cool blue */
+}
+
+#workspaces.active {
+    background-color: #0e0e0e;
+    color: #c5c9c5;
+}
+
+#workspaces.focused {
+    background-color: #0d4f67; /* deep blue; variant of base02 */
+    color: #c5c9c5;
+}

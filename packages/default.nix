@@ -2,7 +2,8 @@
   pkgs,
   inputs,
   ...
-}: let
+}:
+let
   packages = [
     # "meteorbom"
     # "wezterm"
@@ -22,19 +23,25 @@
     "foot"
     "fuzzel"
     "yazi"
+    "niri"
+    "swaylock"
+    "swayidle"
+    "waybar"
   ];
 in
-  # Map normal nix packages
-  builtins.listToAttrs (map (name: {
-      name = name;
-      value = pkgs.callPackage ./${name} {};
-    })
-    packages)
-  # Map wrapped packages
-  // builtins.listToAttrs (map (name: {
-      name = name;
-      value = (inputs.wrappers.lib.evalModule ./${name}.nix).config.wrap {
-        inherit pkgs;
-      };
-    })
-    wrapped-packages)
+# Map normal nix packages
+builtins.listToAttrs (
+  map (name: {
+    name = name;
+    value = pkgs.callPackage ./${name} { };
+  }) packages
+)
+# Map wrapped packages
+// builtins.listToAttrs (
+  map (name: {
+    name = name;
+    value = (inputs.wrappers.lib.evalModule ./${name}.nix).config.wrap {
+      inherit pkgs;
+    };
+  }) wrapped-packages
+)

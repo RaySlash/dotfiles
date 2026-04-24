@@ -4,11 +4,14 @@
   pkgs,
   inputs,
   ...
-}: let
+}:
+let
   wine-bin = pkgs.wineWow64Packages.waylandFull;
-in {
+in
+{
   imports = [
     ./hardware-configuration.nix
+    inputs.nix-index-database.nixosModules.default
   ];
 
   documentation = {
@@ -16,28 +19,30 @@ in {
     man.enable = true;
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      experimental-features = "nix-command flakes";
-      # flake-registry =  "";
-      nix-path = config.nix.nixPath;
-      auto-optimise-store = true;
-      substituters = [
-        "https://nix-community.cachix.org"
-        "https://cache.nixos.org/"
-      ];
-      trusted-public-keys = [
-        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      ];
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        experimental-features = "nix-command flakes";
+        # flake-registry =  "";
+        nix-path = config.nix.nixPath;
+        auto-optimise-store = true;
+        substituters = [
+          "https://nix-community.cachix.org"
+          "https://cache.nixos.org/"
+        ];
+        trusted-public-keys = [
+          "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+        ];
+      };
+      channel.enable = false;
+      optimise.automatic = true;
+      gc.automatic = true;
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
-    channel.enable = false;
-    optimise.automatic = true;
-    gc.automatic = true;
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-  };
 
   boot = {
     loader = {
@@ -72,9 +77,13 @@ in {
     };
     tmp.cleanOnBoot = true;
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelModules = ["i2c-dev" "hid-tmff2" "ntsync"];
-    blacklistedKernelModules = ["hid-thrustmaster"];
-    extraModulePackages = with config.boot.kernelPackages; [hid-tmff2];
+    kernelModules = [
+      "i2c-dev"
+      "hid-tmff2"
+      "ntsync"
+    ];
+    blacklistedKernelModules = [ "hid-thrustmaster" ];
+    extraModulePackages = with config.boot.kernelPackages; [ hid-tmff2 ];
   };
 
   networking = {
@@ -118,17 +127,32 @@ in {
     };
     printing.enable = true;
     fstrim.enable = true;
+    flatpak.enable = true;
     btrfs.autoScrub = {
       enable = true;
       interval = "monthly";
     };
-    displayManager.gdm.enable = true;
+    displayManager = {
+      gdm.enable = true;
+      defaultSession = "niri";
+    };
     desktopManager.gnome.enable = true;
   };
 
   programs = {
     kdeconnect.enable = true;
+    nm-applet.enable = true;
     dconf.enable = true;
+    nix-index-database.comma.enable = true;
+    bat = {
+      enable = true;
+      extraPackages = with pkgs.bat-extras; [
+        batdiff
+        batman
+        batgrep
+        batwatch
+      ];
+    };
     direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -142,6 +166,10 @@ in {
       flake = "~/dotfiles";
     };
     gamemode.enable = true;
+    niri = {
+      enable = true;
+      package = pkgs.customPackages.niri;
+    };
     steam = {
       enable = true;
       gamescopeSession = {
@@ -162,12 +190,12 @@ in {
           # OBS_VKCAPTURE = true;
           # RADV_TEX_ANISO = 16;
         };
-        extraLibraries = p:
-          with p; [
+        extraLibraries =
+          p: with p; [
             atk
           ];
       };
-      extraCompatPackages = with pkgs; [proton-ge-bin];
+      extraCompatPackages = with pkgs; [ proton-ge-bin ];
       extraPackages = with pkgs; [
         gamescope
         mangohud
@@ -175,7 +203,6 @@ in {
     };
     nix-ld = {
       enable = true;
-      package = pkgs.nix-ld;
       libraries = with pkgs; [
         alsa-lib
         at-spi2-atk
@@ -233,24 +260,24 @@ in {
     };
   };
 
-  environment.pathsToLink = ["/share/zsh"];
   environment.sessionVariables = {
     WINE_BIN = lib.getExe wine-bin;
   };
   environment.systemPackages = with pkgs; [
     man-pages
     man-pages-posix
+    btop
     sbctl
     gcc
+    clang
     gnumake
+    unzip
     pciutils
     vulkan-tools
     android-tools
     mesa-demos
     lshw
     wget
-    gnomeExtensions.appindicator
-    gnomeExtensions.gsconnect
   ];
 
   users.users.smj = {
@@ -269,14 +296,26 @@ in {
     packages = with pkgs; [
       zen-browser
       nerd-fonts.iosevka
-      alejandra
-      nil
-      nixd
+      atkinson-hyperlegible
+      apple-cursor
+      papirus-icon-theme
+      prismlauncher
+      typst
+      imv
+      vlc
+      qbittorrent
+      gnomeExtensions.appindicator
+      gnomeExtensions.gsconnect
       customPackages.emacs
       customPackages.neovim
       customPackages.foot
-      (discord.override {withVencord = true;})
+      customPackages.swaylock
+      customPackages.swayidle
+      customPackages.waybar
+      customPackages.fuzzel
+      (discord.override { withVencord = true; })
       openrgb-with-all-plugins
+      onlyoffice-desktopeditors
     ];
   };
 

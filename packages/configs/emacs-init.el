@@ -82,7 +82,10 @@
 
 ;; Emacs defaults
 (use-package emacs
-  :custom (tab-always-indent 'complete)
+  :custom
+  (setq-default tab-width 4)
+  (setq-default c-basic-offset 4)
+  (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
   (read-extended-command-predicate #'command-completion-default-include-p)
   (enable-recursive-minibuffers t)
@@ -363,19 +366,19 @@
 ;;   :straight '(typst-preview :type git :host github :repo "havarddj/typst-preview.el")
 ;;   :config (setq typst-preview-invert-colors "never"))
 
-(use-package format-all
-  :commands format-all-mode
-  :hook (prog-mode . format-all-mode)
-  :config (setq-default format-all-formatters '(
-						("Typst" (typstyle))
-						("C" (clang-format))
-						("Nix" (alejandra))))
-  (define-format-all-formatter typstyle
-    (:executable "typstyle")
-    (:install "cargo install typstyle")
-    (:languages "Typst")
-    (:features)
-    (:format (format-all--buffer-easy executable))))
+; (use-package format-all
+;   :commands format-all-mode
+;   :hook (prog-mode . format-all-mode)
+;   :config (setq-default format-all-formatters '(
+; 						("Typst" (typstyle))
+; 						("C" (clang-format))
+; 						("Nix" (alejandra))))
+;   (define-format-all-formatter typstyle
+;     (:executable "typstyle")
+;     (:install "cargo install typstyle")
+;     (:languages "Typst")
+;     (:features)
+;     (:format (format-all--buffer-easy executable))))
 
 (use-package vterm :defer t)
 
@@ -393,7 +396,10 @@
 (use-package glsl-mode
   :mode "\\.glsl\\'")
 (use-package lua-mode
-  :mode "\\.lua\\'")
+  :mode "\\.lua\\'"
+  :custom
+  (setq-default lua-indent-level 2)
+  (setq-default lua-indent-string-contents t))
 (use-package ebuild-mode
   :straight (ebuild-mode :type git :repo "https://gitweb.gentoo.org/proj/ebuild-mode.git/"))
 (use-package elm-mode
@@ -438,8 +444,23 @@
 ;; (use-package lsp-tailwindcss
 ;;   :straight (:type git :host github :repo "merrickluo/lsp-tailwindcss"))
 (use-package eglot
+  :hook ((nix-mode . eglot-ensure)
+	 (python-mode . eglot-ensure)
+	 (c-mode . eglot-ensure)
+	 (c++-mode . eglot-ensure)
+	 (bash-mode . eglot-ensure)
+	 (zig-mode . eglot-ensure)
+	 (rust-ts-mode . eglot-ensure)
+	 (elm-mode . eglot-ensure)
+	 (lua-mode . eglot-ensure)
+	 (markdown-mode . eglot-ensure)
+	 (eglot-managed-mode . (lambda ()
+				  (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+	  )
   :config (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
+(use-package kdl-mode
+  :mode "\\.kdl\\'")
 
 (use-package tree-sitter
   :config (global-tree-sitter-mode)
