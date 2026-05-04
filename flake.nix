@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.11";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     wrappers = {
@@ -57,7 +58,7 @@
         };
       flake = {
         overlays = import ./overlays.nix { inherit inputs; };
-        wrappers = import ./wrappers.nix { inherit inputs; };
+        # wrappers = import ./wrappers.nix { inherit inputs; };
         flakeModules.default = import ./flake-module.nix { inherit inputs lib; };
         nixosConfigurations = import ./systems { inherit inputs lib; };
         nixosModules = import ./systems/modules { inherit inputs lib; };

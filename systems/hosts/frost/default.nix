@@ -14,11 +14,6 @@ in
     inputs.nix-index-database.nixosModules.default
   ];
 
-  documentation = {
-    dev.enable = true;
-    man.enable = true;
-  };
-
   nix =
     let
       flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -76,7 +71,7 @@ in
       "vm.max_map_count" = 2147483642;
     };
     tmp.cleanOnBoot = true;
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
     kernelModules = [
       "i2c-dev"
       "hid-tmff2"
@@ -92,14 +87,27 @@ in
     networkmanager.enable = true;
     firewall = {
       enable = true;
-      # allowedTCPPorts = ["25565"];
-      # allowedUDPPorts = ["25565"];
+      allowedTCPPorts = [ 
+        25565 #minecraft
+        11000 #subnautica-nitrox
+      ];
+      allowedUDPPorts = [
+        25565 #minecraft
+        24454 #minecraft-voice
+        11000 #subnautica-nitrox
+      ];
     };
   };
 
   hardware = {
     enableAllFirmware = true;
     graphics.enable32Bit = true;
+    xone.enable = true;
+  };
+
+  documentation = {
+    dev.enable = true;
+    man.enable = true;
   };
 
   systemd.settings.Manager = {
@@ -141,8 +149,6 @@ in
 
   programs = {
     kdeconnect.enable = true;
-    nm-applet.enable = true;
-    dconf.enable = true;
     nix-index-database.comma.enable = true;
     bat = {
       enable = true;
@@ -166,10 +172,6 @@ in
       flake = "~/dotfiles";
     };
     gamemode.enable = true;
-    niri = {
-      enable = true;
-      package = pkgs.customPackages.niri;
-    };
     steam = {
       enable = true;
       gamescopeSession = {
@@ -184,20 +186,21 @@ in
       protontricks.enable = true;
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
-      package = pkgs.steam.override {
-        extraEnv = {
-          # MANGOHUD = true;
-          # OBS_VKCAPTURE = true;
-          # RADV_TEX_ANISO = 16;
-        };
-        extraLibraries =
-          p: with p; [
-            atk
-          ];
-      };
+      # package = pkgs.steam.override {
+      #   extraEnv = {
+      #     # MANGOHUD = true;
+      #     # OBS_VKCAPTURE = true;
+      #     # RADV_TEX_ANISO = 16;
+      #   };
+      #   extraLibraries =
+      #     p: with p; [
+      #       atk
+      #     ];
+      # };
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
       extraPackages = with pkgs; [
         gamescope
+        gamemode
         mangohud
       ];
     };
@@ -260,25 +263,28 @@ in
     };
   };
 
-  environment.sessionVariables = {
-    WINE_BIN = lib.getExe wine-bin;
+  environment = {
+    sessionVariables = {
+      WINE_BIN = lib.getExe wine-bin;
+      DOTNET_ROOT = "${pkgs.dotnet-sdk_9}/share/dotnet";
+    };
+    systemPackages = with pkgs; [
+      man-pages
+      man-pages-posix
+      btop
+      sbctl
+      gcc
+      clang
+      gnumake
+      unzip
+      pciutils
+      vulkan-tools
+      android-tools
+      mesa-demos
+      lshw
+      wget
+    ];
   };
-  environment.systemPackages = with pkgs; [
-    man-pages
-    man-pages-posix
-    btop
-    sbctl
-    gcc
-    clang
-    gnumake
-    unzip
-    pciutils
-    vulkan-tools
-    android-tools
-    mesa-demos
-    lshw
-    wget
-  ];
 
   users.users.smj = {
     shell = pkgs.customPackages.zsh;
@@ -295,31 +301,32 @@ in
     ];
     packages = with pkgs; [
       zen-browser
-      nerd-fonts.iosevka
-      atkinson-hyperlegible
-      apple-cursor
-      papirus-icon-theme
       prismlauncher
+      dotnet-sdk_9
+      dotnet-runtime_9
+      dotnet-sdk_10
+      dotnet-runtime_10
       typst
       imv
       vlc
       qbittorrent
+      retroarch-full
+      pokemmo-installer
+      godot
+      sgdboop
       gnomeExtensions.appindicator
       gnomeExtensions.gsconnect
       customPackages.emacs
-      customPackages.neovim
-      customPackages.foot
-      customPackages.swaylock
-      customPackages.swayidle
-      customPackages.waybar
-      customPackages.fuzzel
       (discord.override { withVencord = true; })
       openrgb-with-all-plugins
       onlyoffice-desktopeditors
     ];
   };
 
-  custom.zsh.enable = true;
+  custom = {
+    niri.enable = true;
+    zsh.enable = true;
+  };
 
   system.stateVersion = "25.11";
 }

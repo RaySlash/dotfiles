@@ -34,6 +34,6 @@
       };
     };
   };
-
+  nix-cachyos-kernel = inputs.nix-cachyos-kernel.overlays.default;
   nurpkgs = inputs.nurpkgs.overlays.default;
 }
