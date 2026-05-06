@@ -409,7 +409,8 @@
 ;;   :mode ("\\.md\\'" . markdown-ts-mode))
 
 (use-package gdscript-mode
-  :straight (gdscript-mode :type git :host github :repo "godotengine/emacs-gdscript-mode"))
+  :straight (gdscript-mode :type git :host github :repo "godotengine/emacs-gdscript-mode")
+  :config (setq-default gdscript-gdformat-save-and-format t))
 
 ;; (use-package typst-decent
 ;;   :straight (typst-decent :type git :repo "https://codeberg.org/rayslash/typst-decent.el.git/")
@@ -446,6 +447,7 @@
 (use-package eglot
   :hook ((nix-mode . eglot-ensure)
 	 (python-mode . eglot-ensure)
+	 (less-css-mode . eglot-ensure)
 	 (c-mode . eglot-ensure)
 	 (c++-mode . eglot-ensure)
 	 (bash-mode . eglot-ensure)
@@ -454,13 +456,14 @@
 	 (elm-mode . eglot-ensure)
 	 (lua-mode . eglot-ensure)
 	 (markdown-mode . eglot-ensure)
-	 (eglot-managed-mode . (lambda ()
-				  (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
-	  )
+	 (gdscript-mode . eglot-ensure))
   :config (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
 (use-package kdl-mode
   :mode "\\.kdl\\'")
+
+(use-package apheleia
+  :config (apheleia-global-mode 1))
 
 (use-package tree-sitter
   :config (global-tree-sitter-mode)

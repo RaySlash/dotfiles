@@ -4,8 +4,9 @@
   lib,
   pkgs,
   ...
-}: {
-  imports = [wlib.wrapperModules.emacs];
+}:
+{
+  imports = [ wlib.wrapperModules.emacs ];
 
   config.configFile = builtins.readFile ./configs/emacs-init.el;
   config.userDirectory = "~/.emacs.d";
@@ -13,11 +14,25 @@
   config.extraPackages = with pkgs; [
     # Formatters
     elmPackages.elm-format
+    cmake-format
     sql-formatter
-    alejandra
+    clang-tools
+    gdtoolkit_4
+    gawk
+    html-tidy
+    jq
+    meson-tools
     stylua
     shfmt
+    prettierd
+    nixfmt
+    black
     tidyp
+    shfmt
+    stylua
+    typstyle
+    taplo
+    rustfmt
     # LSPs
     ccls
     nil
@@ -37,15 +52,14 @@
     haskell-language-server
     elmPackages.elm-language-server
     #Tools
-    clang-tools
     typst
     coreutils-full
     ripgrep
     fzf
     fd
   ];
-  config.emacsPackages = epkgs:
-    with epkgs; [
+  config.emacsPackages =
+    epkgs: with epkgs; [
       pdf-tools
       nerd-icons
     ];

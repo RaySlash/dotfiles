@@ -7,6 +7,17 @@
 }:
 let
   wine-bin = pkgs.wineWow64Packages.waylandFull;
+  cachy-kernel = pkgs.cachyosKernels.linux-cachyos-latest.override {
+    # inherit pname version src;
+     lto = "none";
+     processorOpt = "x86_64-v3";
+     cpusched = "bore";
+     hzTicks = "1000";
+     autofdo = false;
+     hardened = false;
+     rt = false;
+     autoModules = true;
+    };
 in
 {
   imports = [
@@ -71,7 +82,9 @@ in
       "vm.max_map_count" = 2147483642;
     };
     tmp.cleanOnBoot = true;
-    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxKernel.packagesFor cachy-kernel;
+
     kernelModules = [
       "i2c-dev"
       "hid-tmff2"
