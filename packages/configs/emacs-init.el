@@ -366,19 +366,19 @@
 ;;   :straight '(typst-preview :type git :host github :repo "havarddj/typst-preview.el")
 ;;   :config (setq typst-preview-invert-colors "never"))
 
-; (use-package format-all
-;   :commands format-all-mode
-;   :hook (prog-mode . format-all-mode)
-;   :config (setq-default format-all-formatters '(
-; 						("Typst" (typstyle))
-; 						("C" (clang-format))
-; 						("Nix" (alejandra))))
-;   (define-format-all-formatter typstyle
-;     (:executable "typstyle")
-;     (:install "cargo install typstyle")
-;     (:languages "Typst")
-;     (:features)
-;     (:format (format-all--buffer-easy executable))))
+					; (use-package format-all
+					;   :commands format-all-mode
+					;   :hook (prog-mode . format-all-mode)
+					;   :config (setq-default format-all-formatters '(
+					; 						("Typst" (typstyle))
+					; 						("C" (clang-format))
+					; 						("Nix" (alejandra))))
+					;   (define-format-all-formatter typstyle
+					;     (:executable "typstyle")
+					;     (:install "cargo install typstyle")
+					;     (:languages "Typst")
+					;     (:features)
+					;     (:format (format-all--buffer-easy executable))))
 
 (use-package vterm :defer t)
 

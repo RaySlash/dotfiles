@@ -7,17 +7,6 @@
 }:
 let
   wine-bin = pkgs.wineWow64Packages.waylandFull;
-  cachy-kernel = pkgs.cachyosKernels.linux-cachyos-latest.override {
-    # inherit pname version src;
-     lto = "none";
-     processorOpt = "x86_64-v3";
-     cpusched = "bore";
-     hzTicks = "1000";
-     autofdo = false;
-     hardened = false;
-     rt = false;
-     autoModules = true;
-    };
 in
 {
   imports = [
@@ -82,8 +71,7 @@ in
       "vm.max_map_count" = 2147483642;
     };
     tmp.cleanOnBoot = true;
-    # kernelPackages = pkgs.linuxPackages_latest;
-    kernelPackages = pkgs.linuxKernel.packagesFor cachy-kernel;
+    kernelPackages = pkgs.v3-kernel;
 
     kernelModules = [
       "i2c-dev"
@@ -135,6 +123,11 @@ in
     udev.packages = with pkgs; [
       openrgb-with-all-plugins
       (pkgs.writeTextFile {
+        name = "keychron-no-joystick-rules";
+        text = ''SUBSYSTEM=="input", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0311", ENV{ID_INPUT_JOYSTICK}=""'';
+        destination = "/etc/udev/rules.d/99-keychron-no-joystick.rules";
+      })
+      (pkgs.writeTextFile {
         name = "ntsync-udev-rules";
         text = ''KERNEL=="ntsync", MODE="0660", TAG+="uaccess"'';
         destination = "/etc/udev/rules.d/70-ntsync.rules";
@@ -163,6 +156,7 @@ in
   programs = {
     kdeconnect.enable = true;
     nix-index-database.comma.enable = true;
+    obs-studio.enable= true;
     bat = {
       enable = true;
       extraPackages = with pkgs.bat-extras; [

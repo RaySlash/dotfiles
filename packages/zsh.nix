@@ -167,16 +167,9 @@
     " --color=fg:#a6a69c,header:#8ba4b0,info:#c4b28a,pointer:#8ea4a2"\
     " --color=marker:#8ea4a2,fg+:#7a8382,prompt:#c4b28a,hl+:#8ba4b0"
   '';
-in {
-  imports = [wlib.wrapperModules.zsh];
-
-  config."zshrc".content = ''
-      HISTFILE="$HOME/.zsh-history"
-      HISTSIZE="1000"
-      SAVEHIST="1000"
-      setopt autocd extendedglob append_history extended_history hist_expire_dups_first hist_find_no_dups hist_ignore_all_dups hist_ignore_dups hist_ignore_space hist_reduce_blanks hist_save_no_dups hist_verify inc_append_history share_history  auto_cd auto_list auto_pushd bang_hist interactive_comments multios no_beep prompt_subst pushd_ignore_dups pushd_minus
-      bindkey -e
-
+  compinit-load = ''
+      ZSH_CACHE_DIR="$HOME/.cache/zsh"
+      mkdir -p "$ZSH_CACHE_DIR"
       zstyle :compinstall filename '$HOME/.zshrc'
       zstyle ':completion:*' use-cache true
       zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/.zsh/.zcompcache"
@@ -207,11 +200,52 @@ in {
       zstyle ':completion:*:*:kill:*' list-colors '=(#b) #([0-9]#)*( *[a-z])*=34=31=33'
 
       autoload -Uz compinit
-      fpath=($HOME/.zsh/zsh-completions/src $fpath) #zsh-completions
-      compinit
+      if [[ -n $ZSH_CACHE_DIR/.zcompdump(#qN.m-24) ]]; then
+        compinit -d "$ZSH_CACHE_DIR/.zcompdump" -C
+      else
+        compinit -d "$ZSH_CACHE_DIR/.zcompdump"
+      fi
 
-      eval "$(${pkgs.starship}/bin/starship init zsh)"
-      eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
+      {
+        # Speed up the actually loading of the dump file
+        # Compile zcompdump in the background for next time
+        zcompile "$ZSH_CACHE_DIR/.zcompdump"
+      } &!
+  '';
+in {
+  imports = [wlib.wrapperModules.zsh];
+
+  config."zshrc".content = ''
+      zcompile_file() {
+        local file=$1
+          if [[ -f "$file" && ! -f "$file.zwc" ]]; then
+            zcompile "$file"
+              fi
+      }
+
+      if [[ -t 1 && "$BASE16_THEME" != "kanagawa-dragon" ]]; then
+        ${base16-kanagawa-dragon}
+      fi
+
+      ${compinit-load}
+
+      HISTFILE="$HOME/.zsh-history"
+      HISTSIZE="1000"
+      SAVEHIST="1000"
+      setopt autocd extendedglob append_history extended_history hist_expire_dups_first hist_find_no_dups hist_ignore_all_dups hist_ignore_dups hist_ignore_space hist_reduce_blanks hist_save_no_dups hist_verify inc_append_history share_history  auto_cd auto_list auto_pushd bang_hist interactive_comments multios no_beep prompt_subst pushd_ignore_dups pushd_minus
+
+      bindkey -e
+
+      # Load direnv dynamically on directory entry
+      _direnv_hook() {
+        eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
+          add-zsh-hook -d precmd _direnv_hook
+      }
+      autoload -Uz add-zsh-hook
+      add-zsh-hook precmd _direnv_hook
+
+      source <(${pkgs.starship}/bin/starship init zsh --print-full-init)
+
       eval "$(${pkgs.zoxide}/bin/zoxide init zsh --cmd cd)"
       eval "$(${pkgs.fzf}/bin/fzf --zsh)"
 
@@ -220,7 +254,6 @@ in {
       source ${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
       export EDITOR=emacs
-      ${base16-kanagawa-dragon}
   '';
 
   config.zshAliases = let

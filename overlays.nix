@@ -34,6 +34,19 @@
       };
     };
   };
-  nix-cachyos-kernel = inputs.nix-cachyos-kernel.overlays.default;
+
   nurpkgs = inputs.nurpkgs.overlays.default;
+
+  custom-kernel = (final: prev: {
+    v3-kernel = final.pkgs.linuxPackagesFor (final.pkgs.linux_latest.override {
+      structuredExtraConfig = with final.lib.kernel; {
+        HZ_1000 = yes;
+        LRU_GEN = yes;
+        SCHED_MC = yes;
+        SCHED_CLUSTER = yes;
+        X86_NATIVE_CPU = yes; 
+        X86_AMD_PSTATE = yes;
+      };
+    });
+  });
 }
